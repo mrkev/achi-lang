@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Definition 1`] = `
+Object {
+  "identifier": "x",
+  "kind": "Definition",
+  "type": "number",
+}
+`;
+
+exports[`Identifier 1`] = `"fooBar"`;
+
+exports[`NamedRecordDefinition 1`] = `
+Object {
+  "identifier": "Point",
+  "kind": "NamedRecordDefinition",
+  "record": Object {
+    "definitions": Array [
+      Object {
+        "identifier": "x",
+        "kind": "Definition",
+        "type": "number",
+      },
+      Object {
+        "identifier": "y",
+        "kind": "Definition",
+        "type": "number",
+      },
+    ],
+    "kind": "RecordDefinition",
+  },
+}
+`;
+
+exports[`NamedTupleDefinition 1`] = `
+Object {
+  "identifier": "Point",
+  "kind": "NamedTupleDefinition",
+  "tuple": Object {
+    "definitions": Array [
+      "number",
+      "number",
+    ],
+    "kind": "TupleDefinition",
+  },
+}
+`;
+
+exports[`RecordDefinition 1`] = `
+Object {
+  "definitions": Array [
+    Object {
+      "identifier": "x",
+      "kind": "Definition",
+      "type": "number",
+    },
+    Object {
+      "identifier": "y",
+      "kind": "Definition",
+      "type": "number",
+    },
+  ],
+  "kind": "RecordDefinition",
+}
+`;
+
+exports[`TupleDefinition 1`] = `
+Object {
+  "definitions": Array [
+    "number",
+    "number",
+  ],
+  "kind": "TupleDefinition",
+}
+`;
