@@ -1,74 +1,157 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Definition 1`] = `
+exports[`ConstantAssignment 1`] = `
 Object {
-  "identifier": "x",
-  "kind": "Definition",
-  "type": "number",
-}
-`;
-
-exports[`Identifier 1`] = `"fooBar"`;
-
-exports[`NamedRecordDefinition 1`] = `
-Object {
-  "identifier": "Point",
-  "kind": "NamedRecordDefinition",
-  "record": Object {
-    "definitions": Array [
-      Object {
-        "identifier": "x",
-        "kind": "Definition",
-        "type": "number",
-      },
-      Object {
-        "identifier": "y",
-        "kind": "Definition",
-        "type": "number",
-      },
-    ],
-    "kind": "RecordDefinition",
+  "expression": Object {
+    "kind": "NumberLiteral",
+    "value": 3,
   },
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "x",
+  },
+  "kind": "ConstantAssignment",
 }
 `;
 
 exports[`NamedTupleDefinition 1`] = `
 Object {
-  "identifier": "Point",
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "Point",
+  },
   "kind": "NamedTupleDefinition",
   "tuple": Object {
     "definitions": Array [
-      "number",
-      "number",
+      Object {
+        "kind": "Identifier",
+        "value": "number",
+      },
+      Object {
+        "kind": "Identifier",
+        "value": "number",
+      },
     ],
     "kind": "TupleDefinition",
   },
 }
 `;
 
-exports[`RecordDefinition 1`] = `
-Object {
-  "definitions": Array [
-    Object {
-      "identifier": "x",
-      "kind": "Definition",
-      "type": "number",
+exports[`Program 1`] = `
+Array [
+  Object {
+    "identifier": Object {
+      "kind": "Identifier",
+      "value": "Point",
     },
-    Object {
-      "identifier": "y",
-      "kind": "Definition",
-      "type": "number",
+    "kind": "NamedRecordDefinition",
+    "record": Object {
+      "definitions": Array [
+        Object {
+          "identifier": Object {
+            "kind": "Identifier",
+            "value": "x",
+          },
+          "kind": "Definition",
+          "typeTag": Object {
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "number",
+            },
+            "kind": "TypeTag",
+          },
+        },
+        Object {
+          "identifier": Object {
+            "kind": "Identifier",
+            "value": "y",
+          },
+          "kind": "Definition",
+          "typeTag": Object {
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "number",
+            },
+            "kind": "TypeTag",
+          },
+        },
+      ],
+      "kind": "RecordDefinition",
     },
-  ],
-  "kind": "RecordDefinition",
-}
+  },
+  Object {
+    "expression": Object {
+      "kind": "NumberLiteral",
+      "value": 1,
+    },
+    "identifier": Object {
+      "kind": "Identifier",
+      "value": "one",
+    },
+    "kind": "ConstantAssignment",
+  },
+  Object {
+    "expression": Object {
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "Point",
+      },
+      "kind": "NamedRecordLiteral",
+      "recordLiteral": Object {
+        "definitions": Array [
+          Object {
+            "expression": Object {
+              "kind": "Identifier",
+              "value": "one",
+            },
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "x",
+            },
+            "kind": "NamedLiteral",
+          },
+          Object {
+            "expression": Object {
+              "kind": "NumberLiteral",
+              "value": 2,
+            },
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "y",
+            },
+            "kind": "NamedLiteral",
+          },
+        ],
+        "kind": "RecordLiteral",
+      },
+    },
+    "identifier": Object {
+      "kind": "Identifier",
+      "value": "point",
+    },
+    "kind": "ConstantAssignment",
+  },
+  Object {
+    "expression": Object {
+      "kind": "Identifier",
+      "value": "point",
+    },
+    "kind": "DEBUG_Log",
+  },
+]
 `;
 
 exports[`TupleDefinition 1`] = `
 Object {
   "definitions": Array [
-    "number",
-    "number",
+    Object {
+      "kind": "Identifier",
+      "value": "number",
+    },
+    Object {
+      "kind": "Identifier",
+      "value": "number",
+    },
   ],
   "kind": "TupleDefinition",
 }

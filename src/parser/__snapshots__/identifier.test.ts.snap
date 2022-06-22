@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Identifier 1`] = `
+Object {
+  "kind": "Identifier",
+  "value": "fooBar",
+}
+`;

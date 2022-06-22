@@ -1,0 +1,178 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NamedDefinition 1`] = `
+Object {
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "x",
+  },
+  "kind": "Definition",
+  "typeTag": Object {
+    "identifier": Object {
+      "kind": "Identifier",
+      "value": "number",
+    },
+    "kind": "TypeTag",
+  },
+}
+`;
+
+exports[`NamedLiteral 1`] = `
+Object {
+  "expression": Object {
+    "kind": "NumberLiteral",
+    "value": 5,
+  },
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "x",
+  },
+  "kind": "NamedLiteral",
+}
+`;
+
+exports[`NamedRecordDefinition 1`] = `
+Object {
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "Point",
+  },
+  "kind": "NamedRecordDefinition",
+  "record": Object {
+    "definitions": Array [
+      Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "x",
+        },
+        "kind": "Definition",
+        "typeTag": Object {
+          "identifier": Object {
+            "kind": "Identifier",
+            "value": "number",
+          },
+          "kind": "TypeTag",
+        },
+      },
+      Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "y",
+        },
+        "kind": "Definition",
+        "typeTag": Object {
+          "identifier": Object {
+            "kind": "Identifier",
+            "value": "number",
+          },
+          "kind": "TypeTag",
+        },
+      },
+    ],
+    "kind": "RecordDefinition",
+  },
+}
+`;
+
+exports[`NamedRecordLiteral 1`] = `
+Object {
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "Point",
+  },
+  "kind": "NamedRecordLiteral",
+  "recordLiteral": Object {
+    "definitions": Array [
+      Object {
+        "expression": Object {
+          "kind": "NumberLiteral",
+          "value": 5,
+        },
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "x",
+        },
+        "kind": "NamedLiteral",
+      },
+      Object {
+        "expression": Object {
+          "kind": "NumberLiteral",
+          "value": 3,
+        },
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "y",
+        },
+        "kind": "NamedLiteral",
+      },
+    ],
+    "kind": "RecordLiteral",
+  },
+}
+`;
+
+exports[`RecordDefinition 1`] = `
+Object {
+  "definitions": Array [
+    Object {
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "x",
+      },
+      "kind": "Definition",
+      "typeTag": Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "number",
+        },
+        "kind": "TypeTag",
+      },
+    },
+    Object {
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "y",
+      },
+      "kind": "Definition",
+      "typeTag": Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "number",
+        },
+        "kind": "TypeTag",
+      },
+    },
+  ],
+  "kind": "RecordDefinition",
+}
+`;
+
+exports[`RecordLiteral 1`] = `
+Object {
+  "definitions": Array [
+    Object {
+      "expression": Object {
+        "kind": "NumberLiteral",
+        "value": 5,
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "x",
+      },
+      "kind": "NamedLiteral",
+    },
+    Object {
+      "expression": Object {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "y",
+      },
+      "kind": "NamedLiteral",
+    },
+  ],
+  "kind": "RecordLiteral",
+}
+`;

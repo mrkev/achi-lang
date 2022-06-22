@@ -20,9 +20,23 @@ enum NodeKind {
   NamedTupleDefinition = "NamedTupleDefinition",
   TupleDefinition = "TupleDefinition",
   NamedRecordDefinition = "NamedRecordDefinition",
+  TypeTag = "TypeTag",
 }
 
-export const Lang = Parsimmon.createLanguage({
+type LangType = {
+  _: string;
+  __: string;
+  _comma: string;
+  _nl: string;
+
+  // Expressions
+  Identifier: { kind: "Identifier"; value: string };
+  NumberLiteral: { kind: "NumberLiteral"; value: number };
+
+  [key: string]: any;
+};
+
+export const Lang = Parsimmon.createLanguage<LangType>({
   _: () => {
     return Parsimmon.optWhitespace;
   },
@@ -32,26 +46,134 @@ export const Lang = Parsimmon.createLanguage({
   _comma: (r) => {
     return Parsimmon.string(",").trim(r._);
   },
-  Value: (r) => {
-    return Parsimmon.alt(r.Number, r.Identifier, r.List);
+  _nl: (r) => {
+    return Parsimmon.alt(Parsimmon.string(";"), Parsimmon.string("\n")).trim(
+      r._
+    );
   },
-  Number: () => {
-    return Parsimmon.regexp(/[0-9]+/).map(Number);
+
+  ////////////////////////////////////////////////////////////// Expressions ///
+
+  NumberLiteral: () => {
+    return Parsimmon.regexp(/[0-9]+/).map((v) => ({
+      kind: "NumberLiteral",
+      value: Number(v),
+    }));
   },
+
   Identifier: () => {
-    return Parsimmon.regexp(/[a-zA-Z]+/);
+    return Parsimmon.regexp(/[a-zA-Z]+/).map((v) => ({
+      kind: "Identifier",
+      value: v,
+    }));
   },
+
+  // TODO: remove?
   List: (r) => {
     return Parsimmon.string("[")
-      .then(r.Value.sepBy(r._))
+      .then(r.Expression.sepBy(r._))
       .skip(Parsimmon.string("]"));
+  },
+
+  Expression: (r) => {
+    return Parsimmon.alt(
+      r.NumberLiteral,
+      r.NamedRecordLiteral,
+      r.Identifier,
+      r.RecordLiteral
+    );
+  },
+
+  ////////
+
+  Program: (r) => {
+    return Parsimmon.sepBy(r.Statement, r._nl)
+      .trim(r._)
+      .skip(r._nl.times(0, 1));
+  },
+
+  Statement: (r) => {
+    return Parsimmon.alt(
+      r.NamedRecordDefinition,
+      r.ConstantAssignment,
+      r.DEBUG_Log
+    );
+  },
+
+  // #log <expression> logs for debugging
+  // we don't have function calls yet but this will do
+  DEBUG_Log: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("#log"),
+      r.__,
+      r.Expression,
+      function (_0, _1, expression) {
+        return {
+          kind: "DEBUG_Log",
+          expression,
+        };
+      }
+    );
+  },
+
+  //////////////
+
+  // const x = 3
+  ConstantAssignment: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("const"),
+      r.__,
+      r.Identifier,
+      // TODO
+      // r.TypeTag,
+      r._,
+      Parsimmon.string("="),
+      r._,
+      r.Expression,
+      function (_0, _1, identifier, _2, _3, _4, expression) {
+        return {
+          kind: "ConstantAssignment",
+          identifier,
+          expression,
+        };
+      }
+    );
+  },
+
+  /* 
+  TODO;
+  const add = (x: number, y: number) => number {
+  }
+
+  function foo(x: number): number {
+    return x + 3;
+  }
+   */
+  FunctionDefinition: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("function"),
+      r.__,
+      r.Identifier,
+      r._,
+      // TODO no args?
+      r.RecordDefinition,
+      r._,
+      r.TypeTag,
+      function (_fn, _1, identifier, _2, tuple) {
+        return {
+          kind: "FunctionDefinition",
+          identifier,
+          tuple,
+        };
+      }
+    );
   },
 
   // type Point(number, number)
   NamedTupleDefinition: (r) => {
     return Parsimmon.seqMap(
       Parsimmon.string("type"),
-      r._,
+      r.__,
       r.Identifier,
       r._,
       r.TupleDefinition,
@@ -78,10 +200,27 @@ export const Lang = Parsimmon.createLanguage({
       });
   },
 
+  ////////////////////////////////////////////////////////////////// Records ///
+
+  //* Point(x: 5, y: 5)
+  NamedRecordLiteral: (r) => {
+    return Parsimmon.seqMap(
+      r.Identifier,
+      r.RecordLiteral,
+      function (identifier, recordLiteral) {
+        return {
+          kind: "NamedRecordLiteral",
+          identifier,
+          recordLiteral,
+        };
+      }
+    );
+  },
+
   //* type Point(x: number, y: number)
   NamedRecordDefinition: (r) => {
     return Parsimmon.seqMap(
-      Parsimmon.string("type"),
+      Parsimmon.string("class"),
       r._,
       r.Identifier,
       r._,
@@ -96,10 +235,23 @@ export const Lang = Parsimmon.createLanguage({
     );
   },
 
+  //* (x: 5, y: 5)
+  RecordLiteral: (r) => {
+    return Parsimmon.string("(")
+      .then(Parsimmon.sepBy1(r.NamedLiteral, r._comma))
+      .skip(Parsimmon.string(")"))
+      .map((definitions) => {
+        return {
+          kind: "RecordLiteral",
+          definitions,
+        };
+      });
+  },
+
   //* (x: number, y: number)
   RecordDefinition: (r) => {
     return Parsimmon.string("(")
-      .then(Parsimmon.sepBy1(r.Definition, r._comma))
+      .then(Parsimmon.sepBy1(r.NamedDefinition, r._comma))
       .skip(Parsimmon.string(")"))
       .map((definitions) => {
         return {
@@ -109,19 +261,52 @@ export const Lang = Parsimmon.createLanguage({
       });
   },
 
-  // x: number
-  Definition: (r) => {
+  /////////////////////////////////////////////////////// Naming expressions ///
+
+  // x: 5
+  NamedLiteral: (r) => {
     return Parsimmon.seqMap(
       r.Identifier,
       r._,
       Parsimmon.string(":"),
       r._,
+      r.Expression,
+      (identifier, _1, _2, _3, expression) => {
+        return {
+          kind: "NamedLiteral",
+          identifier,
+          expression,
+        };
+      }
+    );
+  },
+
+  // x: number
+  NamedDefinition: (r) => {
+    return Parsimmon.seqMap(
       r.Identifier,
-      (identifier, _1, _2, _3, type) => {
+      r._,
+      r.TypeTag,
+      (identifier, _3, typeTag) => {
         return {
           kind: NodeKind.Definition,
           identifier,
-          type,
+          typeTag,
+        };
+      }
+    );
+  },
+
+  // :string
+  TypeTag: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string(":"),
+      r._,
+      r.Identifier,
+      (_2, _3, identifier) => {
+        return {
+          kind: NodeKind.TypeTag,
+          identifier,
         };
       }
     );
@@ -129,10 +314,73 @@ export const Lang = Parsimmon.createLanguage({
 });
 
 const program = `
-type Point (
+export type Point (
   x: number,
   y: number,
 )
+
+*.add(a: Point, b: Point) => Point {
+  return (
+    x: a.x + b.x, 
+    y: a.y + b.y
+  )
+}
+
+.origin() => Point {
+  return (x: 0, y: 0)
+}
+
+.double Point {
+  return (x: arg.x * 2, b: arg.x * 2)
+}
+
+.double(a: Point) {
+  return (x: a.x * 2, b: b.x * 2)
+}
+
+//////////  point.achi
+//////////  point.extra.achi // Can extend point.
+////////////////// if named differently, error when attempting
+////////////////// to define a new function in point
+
+import { Point } from "./point"
+
+Point.unit() => Point {
+  return (x: 1, y: 1)
+}
+
+
+const foo = Point(x:3, y:3)
+
+foo = foo
+  .double()
+  .add(Point(x:3, y:3))
+
+
+
+// index.achi
+
+type LinkedMap<T>(
+  _map: Map<string, T>,
+) as Subbable<T> (
+  subscriptors: Set<() => void>,
+) as StateHashable (
+  mutationHash: number,
+)
+
+.set<T>(lm: LinkedMap<T>, key: string, val: T) {
+  lm._map.set(key, val);
+  Subbable.notify(lm)
+  StateHashable.didMutate(lm)
+}
+
+
+
+
+// Usage
+
+Point.add(a, b)
+
 
 const x = Point(x: 1, y: 2)
 
