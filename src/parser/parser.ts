@@ -14,16 +14,15 @@ const a = {} => {
 
 */
 
-enum NodeKind {
-  Definition = "Definition",
+export enum NodeKind {
+  NamedDefinition = "NamedDefinition",
   RecordDefinition = "RecordDefinition",
   NamedTupleDefinition = "NamedTupleDefinition",
   TupleDefinition = "TupleDefinition",
-  NamedRecordDefinition = "NamedRecordDefinition",
   TypeTag = "TypeTag",
 }
 
-type LangType = {
+export type LangType = {
   _: string;
   __: string;
   _comma: string;
@@ -33,7 +32,80 @@ type LangType = {
   Identifier: { kind: "Identifier"; value: string };
   NumberLiteral: { kind: "NumberLiteral"; value: number };
 
-  [key: string]: any;
+  Expression:
+    | LangType["NumberLiteral"]
+    | LangType["NamedRecordLiteral"]
+    | LangType["Identifier"]
+    | LangType["RecordLiteral"];
+
+  ConstantAssignment: {
+    kind: "ConstantAssignment";
+    identifier: LangType["Identifier"];
+    expression: LangType["Expression"];
+  };
+
+  // Records
+
+  // type Point(x: number, y: number)
+  NamedRecordDefinition: {
+    kind: "NamedRecordDefinition";
+    identifier: LangType["Identifier"];
+    record: LangType["RecordDefinition"];
+  };
+
+  // Point(x: 5, y: 3)
+  NamedRecordLiteral: {
+    kind: "NamedRecordLiteral";
+    identifier: LangType["Identifier"];
+    recordLiteral: LangType["RecordLiteral"];
+  };
+
+  //* (x: 5, y: 5)
+  RecordLiteral: {
+    kind: "RecordLiteral";
+    definitions: Array<LangType["NamedLiteral"]>;
+  };
+
+  //* (x: number, y: number)
+  RecordDefinition: {
+    kind: NodeKind.RecordDefinition;
+    definitions: Array<LangType["NamedDefinition"]>;
+  };
+
+  // x: 5
+  NamedLiteral: {
+    kind: "NamedLiteral";
+    identifier: LangType["Identifier"];
+    expression: any;
+  };
+
+  // x: number
+  NamedDefinition: {
+    kind: NodeKind.NamedDefinition;
+    identifier: LangType["Identifier"];
+    typeTag: LangType["TypeTag"];
+  };
+
+  // :string
+  TypeTag: {
+    kind: NodeKind.TypeTag;
+    identifier: LangType["Identifier"];
+  };
+
+  List: any;
+  TupleDefinition: any;
+  NamedTupleDefinition: any;
+  DEBUG_Log: {
+    kind: "DEBUG_Log";
+    expression: LangType["Expression"];
+  };
+  Statement:
+    | LangType["NamedRecordDefinition"]
+    | LangType["ConstantAssignment"]
+    | LangType["DEBUG_Log"];
+  Program: Array<LangType["Statement"]>;
+
+  // [key: string]: any;
 };
 
 export const Lang = Parsimmon.createLanguage<LangType>({
@@ -149,25 +221,25 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return x + 3;
   }
    */
-  FunctionDefinition: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("function"),
-      r.__,
-      r.Identifier,
-      r._,
-      // TODO no args?
-      r.RecordDefinition,
-      r._,
-      r.TypeTag,
-      function (_fn, _1, identifier, _2, tuple) {
-        return {
-          kind: "FunctionDefinition",
-          identifier,
-          tuple,
-        };
-      }
-    );
-  },
+  // FunctionDefinition: (r) => {
+  //   return Parsimmon.seqMap(
+  //     Parsimmon.string("function"),
+  //     r.__,
+  //     r.Identifier,
+  //     r._,
+  //     // TODO no args?
+  //     r.RecordDefinition,
+  //     r._,
+  //     r.TypeTag,
+  //     function (_fn, _1, identifier, _2, tuple) {
+  //       return {
+  //         kind: "FunctionDefinition",
+  //         identifier,
+  //         tuple,
+  //       };
+  //     }
+  //   );
+  // },
 
   // type Point(number, number)
   NamedTupleDefinition: (r) => {
@@ -227,7 +299,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r.RecordDefinition,
       function (_0, _1, identifier, _2, record) {
         return {
-          kind: NodeKind.NamedRecordDefinition,
+          kind: "NamedRecordDefinition",
           identifier,
           record,
         };
@@ -289,7 +361,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r.TypeTag,
       (identifier, _3, typeTag) => {
         return {
-          kind: NodeKind.Definition,
+          kind: NodeKind.NamedDefinition,
           identifier,
           typeTag,
         };
@@ -312,6 +384,11 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     );
   },
 });
+
+export function tryParse(str: string) {
+  const result = Lang.Program.tryParse(str);
+  return result;
+}
 
 const program = `
 export type Point (

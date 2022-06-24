@@ -6,7 +6,7 @@ Object {
     "kind": "Identifier",
     "value": "x",
   },
-  "kind": "Definition",
+  "kind": "NamedDefinition",
   "typeTag": Object {
     "identifier": Object {
       "kind": "Identifier",
@@ -45,7 +45,7 @@ Object {
           "kind": "Identifier",
           "value": "x",
         },
-        "kind": "Definition",
+        "kind": "NamedDefinition",
         "typeTag": Object {
           "identifier": Object {
             "kind": "Identifier",
@@ -59,7 +59,7 @@ Object {
           "kind": "Identifier",
           "value": "y",
         },
-        "kind": "Definition",
+        "kind": "NamedDefinition",
         "typeTag": Object {
           "identifier": Object {
             "kind": "Identifier",
@@ -119,7 +119,7 @@ Object {
         "kind": "Identifier",
         "value": "x",
       },
-      "kind": "Definition",
+      "kind": "NamedDefinition",
       "typeTag": Object {
         "identifier": Object {
           "kind": "Identifier",
@@ -133,7 +133,7 @@ Object {
         "kind": "Identifier",
         "value": "y",
       },
-      "kind": "Definition",
+      "kind": "NamedDefinition",
       "typeTag": Object {
         "identifier": Object {
           "kind": "Identifier",

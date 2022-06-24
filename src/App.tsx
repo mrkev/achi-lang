@@ -1,44 +1,48 @@
-import { useState } from "react";
-import logo from "./logo.svg";
+import { useEffect, useState } from "react";
 import "./App.css";
-import { Lang } from "./parser/parser";
+import { evaluate } from "./interpreter/interpreter";
+import { tryParse } from "./parser/parser";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [program] = useState(`
+  class Point(x: number, y: number);
+  const one = 1;
+  const point = Point(x: one, y: 2);
+  #log point
+  `);
+  const [log, setLog] = useState<(Error | string)[]>([]);
+
+  // TODO: can return from top-level
+
+  useEffect(() => {
+    const newlog: (Error | string)[] = [];
+
+    try {
+      const ast = tryParse(program);
+      evaluate(ast, newlog);
+    } catch (e) {
+      newlog.push(e as Error);
+    }
+    setLog(newlog);
+  }, [program]);
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <pre>
+        {log.map((msg) => {
+          return msg instanceof Error ? (
+            <span style={{ color: "red" }}>
+              {msg.message}
+              <br />
+            </span>
+          ) : (
+            <span>
+              {msg}
+              <br />
+            </span>
+          );
+        })}
+      </pre>
     </div>
   );
 }
