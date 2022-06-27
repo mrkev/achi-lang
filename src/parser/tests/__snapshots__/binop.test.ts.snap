@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BinaryOperation 1`] = `
+Object {
+  "kind": "BinaryOperation",
+  "left": Object {
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+  "operator": "+",
+  "right": Object {
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+}
+`;
+
+exports[`BinaryOperation 2`] = `
+Object {
+  "kind": "BinaryOperation",
+  "left": Object {
+    "kind": "Identifier",
+    "value": "hello",
+  },
+  "operator": "+",
+  "right": Object {
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+}
+`;

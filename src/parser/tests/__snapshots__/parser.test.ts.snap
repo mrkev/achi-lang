@@ -14,6 +14,32 @@ Object {
 }
 `;
 
+exports[`FunctionCall 1`] = `
+Object {
+  "argument": Object {
+    "definitions": Array [
+      Object {
+        "expression": Object {
+          "kind": "StringLiteral",
+          "value": "hello",
+        },
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "msg",
+        },
+        "kind": "NamedLiteral",
+      },
+    ],
+    "kind": "RecordLiteral",
+  },
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "log",
+  },
+  "kind": "FunctionCall",
+}
+`;
+
 exports[`NamedTupleDefinition 1`] = `
 Object {
   "identifier": Object {
@@ -154,5 +180,20 @@ Object {
     },
   ],
   "kind": "TupleDefinition",
+}
+`;
+
+exports[`string 1`] = `
+Object {
+  "kind": "StringLiteral",
+  "value": "hello world",
+}
+`;
+
+exports[`string 2`] = `
+Object {
+  "kind": "StringLiteral",
+  "value": "hello
+ world",
 }
 `;

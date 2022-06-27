@@ -1,4 +1,7 @@
 import * as Parsimmon from "parsimmon";
+import { LangType_BinOp, LangDef_BinOp } from "./parser.binop";
+
+// console.log(Lang.NamedTupleDefinition.tryParse("type Point(number, number)"));
 
 /*
 
@@ -22,7 +25,40 @@ export enum NodeKind {
   TypeTag = "TypeTag",
 }
 
-export type LangType = {
+// From: https://github.com/jneen/parsimmon/blob/master/examples/json.js
+
+// Use the JSON standard's definition of whitespace rather than Parsimmon's.
+let whitespace = Parsimmon.regexp(/\s*/m);
+
+// JSON is pretty relaxed about whitespace, so let's make it easy to ignore
+// after most text.
+function token<T>(parser: Parsimmon.Parser<T>) {
+  return parser.skip(whitespace);
+}
+
+// Turn escaped characters into real ones (e.g. "\\n" becomes "\n").
+function interpretEscapes(str: string) {
+  const escapes = {
+    b: "\b",
+    f: "\f",
+    n: "\n",
+    r: "\r",
+    t: "\t",
+  };
+  return str.replace(/\\(u[0-9a-fA-F]{4}|[^u])/, (_, escape: string) => {
+    let type = escape.charAt(0);
+    let hex = escape.slice(1);
+    if (type === "u") {
+      return String.fromCharCode(parseInt(hex, 16));
+    }
+    if (escapes.hasOwnProperty(type)) {
+      return (escapes as any)[type];
+    }
+    return type;
+  });
+}
+
+export type LangType = LangType_BinOp & {
   _: string;
   __: string;
   _comma: string;
@@ -31,12 +67,20 @@ export type LangType = {
   // Expressions
   Identifier: { kind: "Identifier"; value: string };
   NumberLiteral: { kind: "NumberLiteral"; value: number };
+  StringLiteral: { kind: "StringLiteral"; value: string };
 
   Expression:
     | LangType["NumberLiteral"]
     | LangType["NamedRecordLiteral"]
     | LangType["Identifier"]
-    | LangType["RecordLiteral"];
+    | LangType["RecordLiteral"]
+    | LangType["StringLiteral"];
+
+  FunctionCall: {
+    kind: "FunctionCall";
+    identifier: LangType["Identifier"];
+    argument: LangType["RecordLiteral"];
+  };
 
   ConstantAssignment: {
     kind: "ConstantAssignment";
@@ -76,7 +120,7 @@ export type LangType = {
   NamedLiteral: {
     kind: "NamedLiteral";
     identifier: LangType["Identifier"];
-    expression: any;
+    expression: LangType["Expression"];
   };
 
   // x: number
@@ -104,8 +148,6 @@ export type LangType = {
     | LangType["ConstantAssignment"]
     | LangType["DEBUG_Log"];
   Program: Array<LangType["Statement"]>;
-
-  // [key: string]: any;
 };
 
 export const Lang = Parsimmon.createLanguage<LangType>({
@@ -123,6 +165,18 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r._
     );
   },
+  // Regexp based parsers should generally be named for better error reporting.
+  StringLiteral: () =>
+    token(Parsimmon.regexp(/"((?:\\.|.)*?)"/, 1))
+      .map(interpretEscapes)
+      .map(
+        (str) =>
+          ({
+            kind: "StringLiteral",
+            value: str,
+          } as const)
+      )
+      .desc("string"),
 
   ////////////////////////////////////////////////////////////// Expressions ///
 
@@ -132,6 +186,8 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       value: Number(v),
     }));
   },
+
+  ...LangDef_BinOp,
 
   Identifier: () => {
     return Parsimmon.regexp(/[a-zA-Z]+/).map((v) => ({
@@ -152,7 +208,8 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r.NumberLiteral,
       r.NamedRecordLiteral,
       r.Identifier,
-      r.RecordLiteral
+      r.RecordLiteral,
+      r.StringLiteral
     );
   },
 
@@ -240,6 +297,20 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //     }
   //   );
   // },
+
+  FunctionCall: (r) => {
+    return Parsimmon.seqMap(
+      r.Identifier,
+      r.RecordLiteral,
+      function (identifier, argument) {
+        return {
+          kind: "FunctionCall",
+          identifier,
+          argument,
+        };
+      }
+    );
+  },
 
   // type Point(number, number)
   NamedTupleDefinition: (r) => {
@@ -472,5 +543,3 @@ const serialize(this: Point) {
 x.serialize()
 
 `;
-
-// console.log(Lang.NamedTupleDefinition.tryParse("type Point(number, number)"));

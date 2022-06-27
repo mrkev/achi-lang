@@ -1,6 +1,7 @@
 import { LangType } from "../parser/parser";
+import { evaluateExpression } from "./evaluateExpression";
 
-function exhaustive(a: never) {
+export function exhaustive(a: never) {
   throw new Error("");
 }
 
@@ -27,7 +28,7 @@ class NamedRecordConstructor {
   }
 }
 
-class NamedRecordInstance {
+export class NamedRecordInstance {
   readonly konstructor: NamedRecordConstructor;
   readonly props: Map<string, Value>;
   constructor(konstructor: NamedRecordConstructor, props: Map<string, Value>) {
@@ -65,7 +66,7 @@ class NamedRecordInstance {
   }
 }
 
-type Value =
+export type Value =
   | { kind: "number"; value: number }
   | { kind: "string"; value: string }
   | { kind: "boolean"; value: boolean }
@@ -95,42 +96,7 @@ function stringOfValue(value: Value): string {
   }
 }
 
-export function evaluateExpression(
-  expression: LangType["Expression"],
-  context: Context
-): Value {
-  const { kind } = expression;
-
-  switch (kind) {
-    case "Identifier": {
-      const foundValue = context.values.get(expression.value);
-      if (!foundValue) {
-        throw new Error(`Name ${expression.value} not found`);
-      }
-      return foundValue;
-    }
-
-    case "NamedRecordLiteral": {
-      const instance = NamedRecordInstance.fromNamedRecordLiteral(
-        expression,
-        context
-      );
-      return { kind: "NamedRecord", value: instance };
-    }
-
-    case "NumberLiteral": {
-      return { kind: "number", value: expression.value };
-    }
-
-    case "RecordLiteral": {
-      throw new Error("Not implemented; RecordLiteral evaluation");
-    }
-    default:
-      throw exhaustive(kind);
-  }
-}
-
-type Context = Readonly<{
+export type Context = Readonly<{
   types: Map<string, NamedRecordConstructor>;
   values: Map<string, Value>;
 }>;

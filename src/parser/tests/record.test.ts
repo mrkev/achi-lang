@@ -1,4 +1,4 @@
-import { Lang } from "./parser";
+import { Lang } from "../parser";
 
 test("NamedRecordDefinition", () => {
   const result = Lang.NamedRecordDefinition.tryParse(

@@ -1,4 +1,4 @@
-import { Lang } from "./parser";
+import { Lang } from "../parser";
 
 test("Identifier", () => {
   const result = Lang.Identifier.tryParse("fooBar");

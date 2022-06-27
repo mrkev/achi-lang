@@ -1,4 +1,4 @@
-import { Lang } from "./parser";
+import { Lang } from "../parser";
 
 test("Program", () => {
   const result = Lang.Program.tryParse(`
@@ -14,6 +14,16 @@ test("Program", () => {
 test("ConstantAssignment", () => {
   const result = Lang.ConstantAssignment.tryParse("const x = 3");
   expect(result).toMatchSnapshot();
+});
+
+test("FunctionCall", () => {
+  const result = Lang.FunctionCall.tryParse(`log(msg: "hello")`);
+  expect(result).toMatchSnapshot();
+});
+
+test("string", () => {
+  expect(Lang.StringLiteral.tryParse(`"hello world"`)).toMatchSnapshot();
+  expect(Lang.StringLiteral.tryParse(`"hello\\n world"`)).toMatchSnapshot();
 });
 
 // Types
