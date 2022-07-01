@@ -31,6 +31,11 @@ export function evaluateExpression(
     case "RecordLiteral": {
       throw new Error("Not implemented; RecordLiteral evaluation");
     }
+
+    case "StringLiteral": {
+      throw new Error("Not implemented; StringLiteral evaluation");
+    }
+
     default:
       throw exhaustive(kind);
   }

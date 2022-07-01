@@ -11,8 +11,48 @@ test("Program", () => {
   expect(result).toMatchSnapshot();
 });
 
+test("Program.2", () => {
+  const result = Lang.Program.tryParse(`
+  class Point(x: number, y: number);
+  const increment = (point: Point) => {
+    
+  };
+  const point = Point(x: one, y: 2);
+  increment(point: point);
+
+  #log point
+`);
+  expect(result).toMatchSnapshot();
+});
+
+// TODO: is this what I want to do for booleans? would require
+// lowercase named records, implicit unit for empty named record definitiosn
+// or using the class itself for comparisons
+test("boolean definition", () => {
+  const result = Lang.Program.tryParse(`
+  class true();
+  class false();
+  const one = true;
+
+  #log one
+`);
+  expect(result).toMatchSnapshot();
+});
+
 test("ConstantAssignment", () => {
   const result = Lang.ConstantAssignment.tryParse("const x = 3");
+  expect(result).toMatchSnapshot();
+});
+
+test("Block", () => {
+  const result = Lang.Block.tryParse(`{ log(msg: "hello"); const x = 4; }`);
+  expect(result).toMatchSnapshot();
+});
+
+test("FunctionDefinition", () => {
+  const result = Lang.FunctionDefinition.tryParse(
+    `(msg: string) => { hello(msg: msg) }`
+  );
   expect(result).toMatchSnapshot();
 });
 

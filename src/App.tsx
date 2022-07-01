@@ -29,14 +29,14 @@ function App() {
   return (
     <div className="App">
       <pre>
-        {log.map((msg) => {
+        {log.map((msg, i) => {
           return msg instanceof Error ? (
-            <span style={{ color: "red" }}>
+            <span style={{ color: "red" }} key={i}>
               {msg.message}
               <br />
             </span>
           ) : (
-            <span>
+            <span key={i}>
               {msg}
               <br />
             </span>

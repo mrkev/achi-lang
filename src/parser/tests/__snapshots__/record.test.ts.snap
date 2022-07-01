@@ -74,6 +74,20 @@ Object {
 }
 `;
 
+exports[`NamedRecordDefinition.empty 1`] = `
+Object {
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "True",
+  },
+  "kind": "NamedRecordDefinition",
+  "record": Object {
+    "definitions": Array [],
+    "kind": "RecordDefinition",
+  },
+}
+`;
+
 exports[`NamedRecordLiteral 1`] = `
 Object {
   "identifier": Object {

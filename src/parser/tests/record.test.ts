@@ -7,6 +7,10 @@ test("NamedRecordDefinition", () => {
   expect(result).toMatchSnapshot();
 });
 
+test("NamedRecordDefinition.empty", () => {
+  expect(Lang.NamedRecordDefinition.tryParse("class True()")).toMatchSnapshot();
+});
+
 test("NamedRecordLiteral", () => {
   const result = Lang.NamedRecordLiteral.tryParse("Point(x: 5, y: 3)");
   expect(result).toMatchSnapshot();

@@ -1,0 +1,89 @@
+/**
+class Lion()
+class Tiger()
+class Elephant()
+
+type Animal = 
+| Lion 
+| Tiger 
+| Elephant
+
+enum Animal = {
+  Lion 
+  Tiger 
+  Elephant
+}
+
+union card {
+  class King();
+  class Queen();
+  class Jack();
+  class Number(value: number);
+}
+
+union status {
+  "this"
+  (a: number, b: number) => string
+  (a: number, b: number) => boolean
+  (foo: number) => string
+  number
+}
+
+match card with {
+  King => 
+  Queen =>
+  Jack => 
+  Number(value)
+}
+
+match x with {
+  "this" => {
+
+  };
+
+  x as ((a: number, b: number) => string) => {
+
+  };
+
+  x: ((a: number, b: number) => _)) => {
+
+  }
+
+  x: (_ => _) {
+
+  }
+
+  x: number {
+
+  }
+
+}
+
+
+
+type card =
+| class King()
+| class Queen()
+| class Jack()
+| class Number(value: number)
+
+class Point(
+  x: number, 
+  y: number,
+) methods (
+  add: () => {
+
+  },
+
+  ...Point_extra,
+  ...Point_more,
+  ...Point_etc,
+) 
+
+const one = 1;
+const point = Point(x: one, y: 2);
+
+#log point
+
+
+ */

@@ -24,7 +24,23 @@ class NamedRecordConstructor {
     for (const prop of def.record.definitions) {
       valueSpec.set(prop.identifier.value, prop.typeTag.identifier.value);
     }
-    return new NamedRecordConstructor(classname, valueSpec);
+    const res = new NamedRecordConstructor(classname, valueSpec);
+    console.log(res.asClass());
+    return res;
+  }
+
+  asClass(): string {
+    const props = [...this.valueSpec.keys()];
+    return `
+    class ${this.classname} {
+      ${props.join(";")};
+      constructor(${props.join(",")}) {
+        ${props.map((prop) => {
+          return `this.${prop}=${prop}`;
+        })}
+      }
+    }
+    `;
   }
 }
 

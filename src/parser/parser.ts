@@ -82,6 +82,12 @@ export type LangType = LangType_BinOp & {
     argument: LangType["RecordLiteral"];
   };
 
+  FunctionDefinition: {
+    kind: "FunctionDefinition";
+    argument: LangType["RecordDefinition"];
+    body: LangType["Block"];
+  };
+
   ConstantAssignment: {
     kind: "ConstantAssignment";
     identifier: LangType["Identifier"];
@@ -148,6 +154,8 @@ export type LangType = LangType_BinOp & {
     | LangType["ConstantAssignment"]
     | LangType["DEBUG_Log"];
   Program: Array<LangType["Statement"]>;
+  StatementList: Array<LangType["Statement"]>;
+  Block: { kind: "Block"; statements: Array<LangType["Statement"]> };
 };
 
 export const Lang = Parsimmon.createLanguage<LangType>({
@@ -165,6 +173,16 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r._
     );
   },
+
+  ////////////////////////////////////////////////////////////// Expressions ///
+
+  NumberLiteral: () => {
+    return Parsimmon.regexp(/[0-9]+/).map((v) => ({
+      kind: "NumberLiteral",
+      value: Number(v),
+    }));
+  },
+
   // Regexp based parsers should generally be named for better error reporting.
   StringLiteral: () =>
     token(Parsimmon.regexp(/"((?:\\.|.)*?)"/, 1))
@@ -177,15 +195,6 @@ export const Lang = Parsimmon.createLanguage<LangType>({
           } as const)
       )
       .desc("string"),
-
-  ////////////////////////////////////////////////////////////// Expressions ///
-
-  NumberLiteral: () => {
-    return Parsimmon.regexp(/[0-9]+/).map((v) => ({
-      kind: "NumberLiteral",
-      value: Number(v),
-    }));
-  },
 
   ...LangDef_BinOp,
 
@@ -205,6 +214,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   Expression: (r) => {
     return Parsimmon.alt(
+      r.FunctionDefinition,
       r.NumberLiteral,
       r.NamedRecordLiteral,
       r.Identifier,
@@ -216,6 +226,10 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   ////////
 
   Program: (r) => {
+    return r.StatementList;
+  },
+
+  StatementList: (r) => {
     return Parsimmon.sepBy(r.Statement, r._nl)
       .trim(r._)
       .skip(r._nl.times(0, 1));
@@ -225,6 +239,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return Parsimmon.alt(
       r.NamedRecordDefinition,
       r.ConstantAssignment,
+      r.FunctionCall,
       r.DEBUG_Log
     );
   },
@@ -278,26 +293,40 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return x + 3;
   }
    */
-  // FunctionDefinition: (r) => {
-  //   return Parsimmon.seqMap(
-  //     Parsimmon.string("function"),
-  //     r.__,
-  //     r.Identifier,
-  //     r._,
-  //     // TODO no args?
-  //     r.RecordDefinition,
-  //     r._,
-  //     r.TypeTag,
-  //     function (_fn, _1, identifier, _2, tuple) {
-  //       return {
-  //         kind: "FunctionDefinition",
-  //         identifier,
-  //         tuple,
-  //       };
-  //     }
-  //   );
-  // },
+  FunctionDefinition: (r) => {
+    return Parsimmon.seqMap(
+      r.RecordDefinition,
+      r._,
+      Parsimmon.string("=>"),
+      // TODO: type tag?
+      r._,
+      r.Block,
+      function (argument, _1, _2, _3, body) {
+        return {
+          kind: "FunctionDefinition",
+          argument,
+          body,
+        };
+      }
+    );
+  },
 
+  Block: (r) => {
+    return (
+      Parsimmon.string("{")
+        // TBD: sepBy1 and make a different parser for Unit?
+        .then(r.StatementList)
+        .skip(Parsimmon.string("}"))
+        .map((statements) => {
+          return {
+            kind: "Block",
+            statements,
+          };
+        })
+    );
+  },
+
+  // log(msg: "hello")
   FunctionCall: (r) => {
     return Parsimmon.seqMap(
       r.Identifier,
@@ -393,15 +422,18 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   //* (x: number, y: number)
   RecordDefinition: (r) => {
-    return Parsimmon.string("(")
-      .then(Parsimmon.sepBy1(r.NamedDefinition, r._comma))
-      .skip(Parsimmon.string(")"))
-      .map((definitions) => {
-        return {
-          kind: NodeKind.RecordDefinition,
-          definitions,
-        };
-      });
+    return (
+      Parsimmon.string("(")
+        // TBD: sepBy1 and make a different parser for Unit?
+        .then(Parsimmon.sepBy(r.NamedDefinition, r._comma))
+        .skip(Parsimmon.string(")"))
+        .map((definitions) => {
+          return {
+            kind: NodeKind.RecordDefinition,
+            definitions,
+          };
+        })
+    );
   },
 
   /////////////////////////////////////////////////////// Naming expressions ///
