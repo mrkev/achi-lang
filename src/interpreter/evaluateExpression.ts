@@ -33,7 +33,12 @@ export function evaluateExpression(
     }
 
     case "StringLiteral": {
-      throw new Error("Not implemented; StringLiteral evaluation");
+      return { kind: "string", value: expression.value };
+      // throw new Error("Not implemented; StringLiteral evaluation");
+    }
+
+    case "FunctionDefinition": {
+      throw new Error("Not implemented; FunctionDefinition evaluation");
     }
 
     default:

@@ -15,6 +15,13 @@ const a = {} => {
 }
 
 
+classes {
+  King()
+  Queen()
+  Jack()
+  Number(value: number)
+}
+
 */
 
 export enum NodeKind {
@@ -24,6 +31,35 @@ export enum NodeKind {
   TupleDefinition = "TupleDefinition",
   TypeTag = "TypeTag",
 }
+
+const list: ReadonlyArray<Parsimmon.Parser<LangType["Statement"]>> = [
+  // r.ReturnStatement,
+  // r.IfStatement,
+  // r.NamedRecordDefinitionStatement,
+  // r.NamedRecordDefinitionGroup,
+  // r.ConstantAssignment,
+  // r.FunctionCall,
+  // r.DEBUG_Log,
+] as const;
+
+type LT_NonNodeKeys = {
+  [Key in keyof LangType]: LangType[Key] extends string | number | symbol
+    ? Key
+    : never;
+}[keyof LangType];
+
+// LangType, but skipping any entry that isn't an object
+type LT_OnlyNodes = Omit<LangType, LT_NonNodeKeys>;
+type ValueOf<T> = T[keyof T];
+// example:
+//   ExhaustiveParsers<LangType["Statement"]>
+// can only be satisfied by an object that entries for all the types
+// that make up LangType["Statement"]. Each entry maps to a Parsimmon.Parser.
+type ExhaustiveParsers<T extends ValueOf<LT_OnlyNodes>> = {
+  [key in T["kind"]]: Parsimmon.Parser<LangType[key]>;
+};
+
+type x = Parsimmon.UnParser<typeof list[number]>;
 
 // From: https://github.com/jneen/parsimmon/blob/master/examples/json.js
 
@@ -69,7 +105,23 @@ export type LangType = LangType_BinOp & {
   NumberLiteral: { kind: "NumberLiteral"; value: number };
   StringLiteral: { kind: "StringLiteral"; value: string };
 
+  ReturnStatement: {
+    kind: "ReturnStatement";
+    expression: LangType["Expression"];
+  };
+
+  IfStatement: {
+    kind: "IfStatement";
+    guard: LangType["Expression"];
+    block: LangType["Block"];
+  };
+
+  // Maybe just methods instead?
+  // ForStatement: {
+  // },
+
   Expression:
+    | LangType["FunctionDefinition"]
     | LangType["NumberLiteral"]
     | LangType["NamedRecordLiteral"]
     | LangType["Identifier"]
@@ -96,11 +148,22 @@ export type LangType = LangType_BinOp & {
 
   // Records
 
-  // type Point(x: number, y: number)
   NamedRecordDefinition: {
     kind: "NamedRecordDefinition";
     identifier: LangType["Identifier"];
     record: LangType["RecordDefinition"];
+  };
+
+  // class Point(x: number, y: number)
+  NamedRecordDefinitionStatement: {
+    kind: "NamedRecordDefinitionStatement";
+    namedRecordDefinition: LangType["NamedRecordDefinition"];
+  };
+
+  NamedRecordDefinitionGroup: {
+    kind: "NamedRecordDefinitionGroup";
+    identifier: LangType["Identifier"];
+    namedRecordDefinitions: Array<LangType["NamedRecordDefinition"]>;
   };
 
   // Point(x: 5, y: 3)
@@ -142,20 +205,30 @@ export type LangType = LangType_BinOp & {
     identifier: LangType["Identifier"];
   };
 
-  List: any;
-  TupleDefinition: any;
-  NamedTupleDefinition: any;
   DEBUG_Log: {
     kind: "DEBUG_Log";
     expression: LangType["Expression"];
   };
+
   Statement:
-    | LangType["NamedRecordDefinition"]
+    | LangType["ReturnStatement"]
+    | LangType["IfStatement"]
+    | LangType["NamedRecordDefinitionStatement"]
+    | LangType["NamedRecordDefinitionGroup"]
     | LangType["ConstantAssignment"]
+    | LangType["FunctionCall"]
     | LangType["DEBUG_Log"];
-  Program: Array<LangType["Statement"]>;
-  StatementList: Array<LangType["Statement"]>;
+
+  Program: { kind: "Program"; statements: Array<LangType["Statement"]> };
+  StatementList: {
+    kind: "StatementList";
+    statements: Array<LangType["Statement"]>;
+  };
   Block: { kind: "Block"; statements: Array<LangType["Statement"]> };
+
+  List: any;
+  TupleDefinition: any;
+  NamedTupleDefinition: any;
 };
 
 export const Lang = Parsimmon.createLanguage<LangType>({
@@ -213,7 +286,14 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   },
 
   Expression: (r) => {
-    return Parsimmon.alt(
+    return Parsimmon.alt<
+      | LangType["FunctionDefinition"]
+      | LangType["NumberLiteral"]
+      | LangType["NamedRecordLiteral"]
+      | LangType["Identifier"]
+      | LangType["RecordLiteral"]
+      | LangType["StringLiteral"]
+    >(
       r.FunctionDefinition,
       r.NumberLiteral,
       r.NamedRecordLiteral,
@@ -226,21 +306,75 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   ////////
 
   Program: (r) => {
-    return r.StatementList;
+    return r.StatementList.map(({ statements }) => {
+      return {
+        kind: "Program",
+        statements,
+      };
+    });
   },
 
   StatementList: (r) => {
     return Parsimmon.sepBy(r.Statement, r._nl)
       .trim(r._)
-      .skip(r._nl.times(0, 1));
+      .skip(r._nl.times(0, 1))
+      .map((statements) => {
+        return {
+          kind: "StatementList",
+          statements,
+        };
+      });
   },
 
   Statement: (r) => {
-    return Parsimmon.alt(
-      r.NamedRecordDefinition,
-      r.ConstantAssignment,
-      r.FunctionCall,
-      r.DEBUG_Log
+    const statementParsers: ExhaustiveParsers<LangType["Statement"]> = {
+      ReturnStatement: r.ReturnStatement,
+      IfStatement: r.IfStatement,
+      NamedRecordDefinitionStatement: r.NamedRecordDefinitionStatement,
+      NamedRecordDefinitionGroup: r.NamedRecordDefinitionGroup,
+      ConstantAssignment: r.ConstantAssignment,
+      FunctionCall: r.FunctionCall,
+      DEBUG_Log: r.DEBUG_Log,
+    };
+    return Parsimmon.alt<LangType["Statement"]>(
+      ...Object.values(statementParsers)
+    );
+  },
+
+  // return 5
+  ReturnStatement: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("return"),
+      r.__,
+      r.Expression,
+      (_0, _1, expression) => {
+        return {
+          kind: "ReturnStatement",
+          expression,
+        };
+      }
+    );
+  },
+
+  // NOTE: maybe support no parentheses too
+  IfStatement: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("if"),
+      r._,
+      Parsimmon.string("("),
+      r._,
+      r.Expression,
+      r._,
+      Parsimmon.string(")"),
+      r._,
+      r.Block,
+      (_0, _1, _2, _3, expression, _5, _6, _7, block) => {
+        return {
+          kind: "IfStatement",
+          guard: expression,
+          block,
+        };
+      }
     );
   },
 
@@ -317,7 +451,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         // TBD: sepBy1 and make a different parser for Unit?
         .then(r.StatementList)
         .skip(Parsimmon.string("}"))
-        .map((statements) => {
+        .map(({ statements }) => {
           return {
             kind: "Block",
             statements,
@@ -389,19 +523,52 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     );
   },
 
-  //* type Point(x: number, y: number)
+  //* Point(x: number, y: number)
   NamedRecordDefinition: (r) => {
     return Parsimmon.seqMap(
-      Parsimmon.string("class"),
-      r._,
       r.Identifier,
-      r._,
       r.RecordDefinition,
-      function (_0, _1, identifier, _2, record) {
+      function (identifier, record) {
         return {
           kind: "NamedRecordDefinition",
           identifier,
           record,
+        };
+      }
+    );
+  },
+
+  //* class Point(x: number, y: number)
+  NamedRecordDefinitionStatement: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("class"),
+      r._,
+      r.NamedRecordDefinition,
+      function (_0, _1, namedRecordDefinition) {
+        return {
+          kind: "NamedRecordDefinitionStatement",
+          namedRecordDefinition,
+        };
+      }
+    );
+  },
+
+  NamedRecordDefinitionGroup: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("classes"),
+      r._,
+      r.Identifier,
+      r._,
+      Parsimmon.string("{"),
+      r._,
+      Parsimmon.sepBy1(r.NamedRecordDefinition, r._nl),
+      r._,
+      Parsimmon.string("}"),
+      function (_0, _1, identifier, _3, _4, _5, nrdList, _7, _8) {
+        return {
+          kind: "NamedRecordDefinitionGroup",
+          identifier,
+          namedRecordDefinitions: nrdList,
         };
       }
     );

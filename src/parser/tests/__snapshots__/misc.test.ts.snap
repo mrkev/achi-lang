@@ -1,0 +1,590 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Block 1`] = `
+Object {
+  "kind": "Block",
+  "statements": Array [
+    Object {
+      "argument": Object {
+        "definitions": Array [
+          Object {
+            "expression": Object {
+              "kind": "StringLiteral",
+              "value": "hello",
+            },
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "msg",
+            },
+            "kind": "NamedLiteral",
+          },
+        ],
+        "kind": "RecordLiteral",
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "log",
+      },
+      "kind": "FunctionCall",
+    },
+    Object {
+      "expression": Object {
+        "kind": "NumberLiteral",
+        "value": 4,
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "x",
+      },
+      "kind": "ConstantAssignment",
+    },
+  ],
+}
+`;
+
+exports[`ConstantAssignment 1`] = `
+Object {
+  "expression": Object {
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "x",
+  },
+  "kind": "ConstantAssignment",
+}
+`;
+
+exports[`FunctionCall 1`] = `
+Object {
+  "argument": Object {
+    "definitions": Array [
+      Object {
+        "expression": Object {
+          "kind": "StringLiteral",
+          "value": "hello",
+        },
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "msg",
+        },
+        "kind": "NamedLiteral",
+      },
+    ],
+    "kind": "RecordLiteral",
+  },
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "log",
+  },
+  "kind": "FunctionCall",
+}
+`;
+
+exports[`FunctionDefinition 1`] = `
+Object {
+  "argument": Object {
+    "definitions": Array [
+      Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "msg",
+        },
+        "kind": "NamedDefinition",
+        "typeTag": Object {
+          "identifier": Object {
+            "kind": "Identifier",
+            "value": "string",
+          },
+          "kind": "TypeTag",
+        },
+      },
+    ],
+    "kind": "RecordDefinition",
+  },
+  "body": Object {
+    "kind": "Block",
+    "statements": Array [
+      Object {
+        "argument": Object {
+          "definitions": Array [
+            Object {
+              "expression": Object {
+                "kind": "Identifier",
+                "value": "msg",
+              },
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "msg",
+              },
+              "kind": "NamedLiteral",
+            },
+          ],
+          "kind": "RecordLiteral",
+        },
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "hello",
+        },
+        "kind": "FunctionCall",
+      },
+    ],
+  },
+  "kind": "FunctionDefinition",
+}
+`;
+
+exports[`IfStatement 1`] = `
+Object {
+  "block": Object {
+    "kind": "Block",
+    "statements": Array [
+      Object {
+        "expression": Object {
+          "kind": "StringLiteral",
+          "value": "hello",
+        },
+        "kind": "ReturnStatement",
+      },
+    ],
+  },
+  "guard": Object {
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+  "kind": "IfStatement",
+}
+`;
+
+exports[`NamedTupleDefinition 1`] = `
+Object {
+  "identifier": Object {
+    "kind": "Identifier",
+    "value": "Point",
+  },
+  "kind": "NamedTupleDefinition",
+  "tuple": Object {
+    "definitions": Array [
+      Object {
+        "kind": "Identifier",
+        "value": "number",
+      },
+      Object {
+        "kind": "Identifier",
+        "value": "number",
+      },
+    ],
+    "kind": "TupleDefinition",
+  },
+}
+`;
+
+exports[`Program 1`] = `
+Object {
+  "kind": "Program",
+  "statements": Array [
+    Object {
+      "kind": "NamedRecordDefinitionStatement",
+      "namedRecordDefinition": Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "Point",
+        },
+        "kind": "NamedRecordDefinition",
+        "record": Object {
+          "definitions": Array [
+            Object {
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "x",
+              },
+              "kind": "NamedDefinition",
+              "typeTag": Object {
+                "identifier": Object {
+                  "kind": "Identifier",
+                  "value": "number",
+                },
+                "kind": "TypeTag",
+              },
+            },
+            Object {
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "y",
+              },
+              "kind": "NamedDefinition",
+              "typeTag": Object {
+                "identifier": Object {
+                  "kind": "Identifier",
+                  "value": "number",
+                },
+                "kind": "TypeTag",
+              },
+            },
+          ],
+          "kind": "RecordDefinition",
+        },
+      },
+    },
+    Object {
+      "expression": Object {
+        "kind": "NumberLiteral",
+        "value": 1,
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "one",
+      },
+      "kind": "ConstantAssignment",
+    },
+    Object {
+      "expression": Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "Point",
+        },
+        "kind": "NamedRecordLiteral",
+        "recordLiteral": Object {
+          "definitions": Array [
+            Object {
+              "expression": Object {
+                "kind": "Identifier",
+                "value": "one",
+              },
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "x",
+              },
+              "kind": "NamedLiteral",
+            },
+            Object {
+              "expression": Object {
+                "kind": "NumberLiteral",
+                "value": 2,
+              },
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "y",
+              },
+              "kind": "NamedLiteral",
+            },
+          ],
+          "kind": "RecordLiteral",
+        },
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "point",
+      },
+      "kind": "ConstantAssignment",
+    },
+    Object {
+      "expression": Object {
+        "kind": "Identifier",
+        "value": "point",
+      },
+      "kind": "DEBUG_Log",
+    },
+  ],
+}
+`;
+
+exports[`Program.2 1`] = `
+Object {
+  "kind": "Program",
+  "statements": Array [
+    Object {
+      "kind": "NamedRecordDefinitionStatement",
+      "namedRecordDefinition": Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "Point",
+        },
+        "kind": "NamedRecordDefinition",
+        "record": Object {
+          "definitions": Array [
+            Object {
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "x",
+              },
+              "kind": "NamedDefinition",
+              "typeTag": Object {
+                "identifier": Object {
+                  "kind": "Identifier",
+                  "value": "number",
+                },
+                "kind": "TypeTag",
+              },
+            },
+            Object {
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "y",
+              },
+              "kind": "NamedDefinition",
+              "typeTag": Object {
+                "identifier": Object {
+                  "kind": "Identifier",
+                  "value": "number",
+                },
+                "kind": "TypeTag",
+              },
+            },
+          ],
+          "kind": "RecordDefinition",
+        },
+      },
+    },
+    Object {
+      "expression": Object {
+        "argument": Object {
+          "definitions": Array [
+            Object {
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "point",
+              },
+              "kind": "NamedDefinition",
+              "typeTag": Object {
+                "identifier": Object {
+                  "kind": "Identifier",
+                  "value": "Point",
+                },
+                "kind": "TypeTag",
+              },
+            },
+          ],
+          "kind": "RecordDefinition",
+        },
+        "body": Object {
+          "kind": "Block",
+          "statements": Array [
+            Object {
+              "expression": Object {
+                "kind": "Identifier",
+                "value": "point",
+              },
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "x",
+              },
+              "kind": "ConstantAssignment",
+            },
+            Object {
+              "expression": Object {
+                "identifier": Object {
+                  "kind": "Identifier",
+                  "value": "Point",
+                },
+                "kind": "NamedRecordLiteral",
+                "recordLiteral": Object {
+                  "definitions": Array [
+                    Object {
+                      "expression": Object {
+                        "kind": "Identifier",
+                        "value": "x",
+                      },
+                      "identifier": Object {
+                        "kind": "Identifier",
+                        "value": "x",
+                      },
+                      "kind": "NamedLiteral",
+                    },
+                    Object {
+                      "expression": Object {
+                        "kind": "Identifier",
+                        "value": "y",
+                      },
+                      "identifier": Object {
+                        "kind": "Identifier",
+                        "value": "y",
+                      },
+                      "kind": "NamedLiteral",
+                    },
+                  ],
+                  "kind": "RecordLiteral",
+                },
+              },
+              "kind": "ReturnStatement",
+            },
+          ],
+        },
+        "kind": "FunctionDefinition",
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "increment",
+      },
+      "kind": "ConstantAssignment",
+    },
+    Object {
+      "expression": Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "Point",
+        },
+        "kind": "NamedRecordLiteral",
+        "recordLiteral": Object {
+          "definitions": Array [
+            Object {
+              "expression": Object {
+                "kind": "Identifier",
+                "value": "one",
+              },
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "x",
+              },
+              "kind": "NamedLiteral",
+            },
+            Object {
+              "expression": Object {
+                "kind": "NumberLiteral",
+                "value": 2,
+              },
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "y",
+              },
+              "kind": "NamedLiteral",
+            },
+          ],
+          "kind": "RecordLiteral",
+        },
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "point",
+      },
+      "kind": "ConstantAssignment",
+    },
+    Object {
+      "argument": Object {
+        "definitions": Array [
+          Object {
+            "expression": Object {
+              "kind": "Identifier",
+              "value": "point",
+            },
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "point",
+            },
+            "kind": "NamedLiteral",
+          },
+        ],
+        "kind": "RecordLiteral",
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "increment",
+      },
+      "kind": "FunctionCall",
+    },
+    Object {
+      "expression": Object {
+        "kind": "Identifier",
+        "value": "point",
+      },
+      "kind": "DEBUG_Log",
+    },
+  ],
+}
+`;
+
+exports[`ReturnStatement 1`] = `
+Object {
+  "expression": Object {
+    "kind": "StringLiteral",
+    "value": "string",
+  },
+  "kind": "ReturnStatement",
+}
+`;
+
+exports[`TupleDefinition 1`] = `
+Object {
+  "definitions": Array [
+    Object {
+      "kind": "Identifier",
+      "value": "number",
+    },
+    Object {
+      "kind": "Identifier",
+      "value": "number",
+    },
+  ],
+  "kind": "TupleDefinition",
+}
+`;
+
+exports[`boolean definition 1`] = `
+Object {
+  "kind": "Program",
+  "statements": Array [
+    Object {
+      "kind": "NamedRecordDefinitionStatement",
+      "namedRecordDefinition": Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "true",
+        },
+        "kind": "NamedRecordDefinition",
+        "record": Object {
+          "definitions": Array [],
+          "kind": "RecordDefinition",
+        },
+      },
+    },
+    Object {
+      "kind": "NamedRecordDefinitionStatement",
+      "namedRecordDefinition": Object {
+        "identifier": Object {
+          "kind": "Identifier",
+          "value": "false",
+        },
+        "kind": "NamedRecordDefinition",
+        "record": Object {
+          "definitions": Array [],
+          "kind": "RecordDefinition",
+        },
+      },
+    },
+    Object {
+      "expression": Object {
+        "kind": "Identifier",
+        "value": "true",
+      },
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "one",
+      },
+      "kind": "ConstantAssignment",
+    },
+    Object {
+      "expression": Object {
+        "kind": "Identifier",
+        "value": "one",
+      },
+      "kind": "DEBUG_Log",
+    },
+  ],
+}
+`;
+
+exports[`string 1`] = `
+Object {
+  "kind": "StringLiteral",
+  "value": "hello world",
+}
+`;
+
+exports[`string 2`] = `
+Object {
+  "kind": "StringLiteral",
+  "value": "hello
+ world",
+}
+`;

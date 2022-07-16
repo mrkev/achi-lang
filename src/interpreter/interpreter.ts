@@ -2,11 +2,12 @@ import { LangType } from "../parser/parser";
 import { evaluateExpression } from "./evaluateExpression";
 
 export function exhaustive(a: never) {
-  throw new Error("");
+  throw new Error(`Non-exhaustive: ${a} went through`);
 }
 
 /**
- * Represents the constructor for a named record
+ * Represents the constructor for a named record, as it sits in memory
+ * ready to be instantiated.
  */
 class NamedRecordConstructor {
   readonly classname: string;
@@ -25,10 +26,12 @@ class NamedRecordConstructor {
       valueSpec.set(prop.identifier.value, prop.typeTag.identifier.value);
     }
     const res = new NamedRecordConstructor(classname, valueSpec);
-    console.log(res.asClass());
+    // console.log(res.asClass());
     return res;
   }
 
+  // TODO: this is an in-memory runtime object. Compilation should be done from
+  // the AST (or some IR) so it can be done statically.
   asClass(): string {
     const props = [...this.valueSpec.keys()];
     return `
@@ -125,34 +128,73 @@ function newContext(): Context {
   };
 }
 
-export function evaluate(ast: LangType["Program"], log: (string | Error)[]) {
+export function evaluate(
+  block: LangType["Program"] | LangType["Block"] | LangType["StatementList"],
+  log: (string | Error)[]
+) {
   const context = newContext();
 
-  for (const statement of ast) {
+  for (const statement of block.statements) {
     const { kind } = statement;
     switch (kind) {
-      case "NamedRecordDefinition":
-        if (context.types.has(statement.identifier.value)) {
-          console.warn("Overriding definition for", statement.identifier.value);
+      case "NamedRecordDefinitionStatement": {
+        if (
+          context.types.has(statement.namedRecordDefinition.identifier.value)
+        ) {
+          console.warn(
+            "Overriding definition for",
+            statement.namedRecordDefinition.identifier.value
+          );
         }
-        const konstructor =
-          NamedRecordConstructor.fromNamedRecordDefinition(statement);
-        context.types.set(statement.identifier.value, konstructor);
+        const konstructor = NamedRecordConstructor.fromNamedRecordDefinition(
+          statement.namedRecordDefinition
+        );
+        context.types.set(
+          statement.namedRecordDefinition.identifier.value,
+          konstructor
+        );
         break;
+      }
 
-      case "ConstantAssignment":
+      case "NamedRecordDefinitionGroup": {
+        console.log("TODO NamedRecordDefinitionGroup");
+        break;
+      }
+
+      case "IfStatement": {
+        const guardValue = evaluateExpression(statement.guard, context);
+        // TODO: determine truthiness
+        if (guardValue) {
+          // TODO: scoping!
+          evaluate(statement.block, log);
+        }
+        break;
+      }
+
+      case "ConstantAssignment": {
         if (context.values.has(statement.identifier.value)) {
           console.warn("Overriding definition for", statement.identifier.value);
         }
         const result = evaluateExpression(statement.expression, context);
         context.values.set(statement.identifier.value, result);
         break;
+      }
 
-      case "DEBUG_Log":
+      case "DEBUG_Log": {
         const value = evaluateExpression(statement.expression, context);
         console.log("#log", stringOfValue(value), value);
         log.push(stringOfValue(value));
         break;
+      }
+
+      case "ReturnStatement": {
+        throw new Error("Not implemented: ReturnStatement");
+      }
+
+      case "FunctionCall": {
+        throw new Error("Not implemented: FunctionCall");
+      }
+
       default:
         exhaustive(kind);
     }

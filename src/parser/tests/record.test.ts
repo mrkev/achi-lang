@@ -1,14 +1,28 @@
 import { Lang } from "../parser";
 
+test("NamedRecordDefinitionGroup", () => {
+  const result = Lang.NamedRecordDefinitionGroup.tryParse(
+    `classes Card {
+      King();
+      Queen();
+      Jack();
+      Number(value: number)
+    }`
+  );
+  expect(result).toMatchSnapshot();
+});
+
 test("NamedRecordDefinition", () => {
-  const result = Lang.NamedRecordDefinition.tryParse(
+  const result = Lang.NamedRecordDefinitionStatement.tryParse(
     "class Point(x: number, y: number)"
   );
   expect(result).toMatchSnapshot();
 });
 
 test("NamedRecordDefinition.empty", () => {
-  expect(Lang.NamedRecordDefinition.tryParse("class True()")).toMatchSnapshot();
+  expect(
+    Lang.NamedRecordDefinitionStatement.tryParse("class True()")
+  ).toMatchSnapshot();
 });
 
 test("NamedRecordLiteral", () => {

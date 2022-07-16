@@ -33,58 +33,135 @@ Object {
 
 exports[`NamedRecordDefinition 1`] = `
 Object {
-  "identifier": Object {
-    "kind": "Identifier",
-    "value": "Point",
-  },
-  "kind": "NamedRecordDefinition",
-  "record": Object {
-    "definitions": Array [
-      Object {
-        "identifier": Object {
-          "kind": "Identifier",
-          "value": "x",
-        },
-        "kind": "NamedDefinition",
-        "typeTag": Object {
+  "kind": "NamedRecordDefinitionStatement",
+  "namedRecordDefinition": Object {
+    "identifier": Object {
+      "kind": "Identifier",
+      "value": "Point",
+    },
+    "kind": "NamedRecordDefinition",
+    "record": Object {
+      "definitions": Array [
+        Object {
           "identifier": Object {
             "kind": "Identifier",
-            "value": "number",
+            "value": "x",
           },
-          "kind": "TypeTag",
+          "kind": "NamedDefinition",
+          "typeTag": Object {
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "number",
+            },
+            "kind": "TypeTag",
+          },
         },
-      },
-      Object {
-        "identifier": Object {
-          "kind": "Identifier",
-          "value": "y",
-        },
-        "kind": "NamedDefinition",
-        "typeTag": Object {
+        Object {
           "identifier": Object {
             "kind": "Identifier",
-            "value": "number",
+            "value": "y",
           },
-          "kind": "TypeTag",
+          "kind": "NamedDefinition",
+          "typeTag": Object {
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "number",
+            },
+            "kind": "TypeTag",
+          },
         },
-      },
-    ],
-    "kind": "RecordDefinition",
+      ],
+      "kind": "RecordDefinition",
+    },
   },
 }
 `;
 
 exports[`NamedRecordDefinition.empty 1`] = `
 Object {
+  "kind": "NamedRecordDefinitionStatement",
+  "namedRecordDefinition": Object {
+    "identifier": Object {
+      "kind": "Identifier",
+      "value": "True",
+    },
+    "kind": "NamedRecordDefinition",
+    "record": Object {
+      "definitions": Array [],
+      "kind": "RecordDefinition",
+    },
+  },
+}
+`;
+
+exports[`NamedRecordDefinitionGroup 1`] = `
+Object {
   "identifier": Object {
     "kind": "Identifier",
-    "value": "True",
+    "value": "Card",
   },
-  "kind": "NamedRecordDefinition",
-  "record": Object {
-    "definitions": Array [],
-    "kind": "RecordDefinition",
-  },
+  "kind": "NamedRecordDefinitionGroup",
+  "namedRecordDefinitions": Array [
+    Object {
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "King",
+      },
+      "kind": "NamedRecordDefinition",
+      "record": Object {
+        "definitions": Array [],
+        "kind": "RecordDefinition",
+      },
+    },
+    Object {
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "Queen",
+      },
+      "kind": "NamedRecordDefinition",
+      "record": Object {
+        "definitions": Array [],
+        "kind": "RecordDefinition",
+      },
+    },
+    Object {
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "Jack",
+      },
+      "kind": "NamedRecordDefinition",
+      "record": Object {
+        "definitions": Array [],
+        "kind": "RecordDefinition",
+      },
+    },
+    Object {
+      "identifier": Object {
+        "kind": "Identifier",
+        "value": "Number",
+      },
+      "kind": "NamedRecordDefinition",
+      "record": Object {
+        "definitions": Array [
+          Object {
+            "identifier": Object {
+              "kind": "Identifier",
+              "value": "value",
+            },
+            "kind": "NamedDefinition",
+            "typeTag": Object {
+              "identifier": Object {
+                "kind": "Identifier",
+                "value": "number",
+              },
+              "kind": "TypeTag",
+            },
+          },
+        ],
+        "kind": "RecordDefinition",
+      },
+    },
+  ],
 }
 `;
 

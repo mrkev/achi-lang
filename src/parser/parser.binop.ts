@@ -1,17 +1,6 @@
 import * as Parsimmon from "parsimmon";
 import { LangType } from "./parser";
-
-type SublangTypedRule<TLanguageSpec, TSubLangSpec> = {
-  [P in keyof TSubLangSpec]: (
-    r: Parsimmon.TypedLanguage<TLanguageSpec>
-  ) => Parsimmon.Parser<TSubLangSpec[P]>;
-};
-
-export function sublang<TLanguageSpec, TSubLangSpec>(
-  rules: SublangTypedRule<TLanguageSpec, TSubLangSpec>
-): SublangTypedRule<TLanguageSpec, TSubLangSpec> {
-  return rules;
-}
+import { sublang } from "./sublang";
 
 export type LangType_BinOp = {
   BinaryOperator: string;
@@ -23,6 +12,9 @@ export type LangType_BinOp = {
   };
 };
 
+/**
+ * Defines binary operations
+ */
 export const LangDef_BinOp = sublang<LangType, LangType_BinOp>({
   // Arithmetic: + - / * %
   // Comparison: all double << >> == !=
