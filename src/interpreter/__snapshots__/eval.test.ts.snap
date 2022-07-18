@@ -1,3 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`example.1 1`] = `"hi"`;
+exports[`class.1 1`] = `Array []`;
+
+exports[`if.1 1`] = `
+Array [
+  "pass",
+]
+`;
+
+exports[`simple.1 1`] = `
+Array [
+  "hi",
+]
+`;

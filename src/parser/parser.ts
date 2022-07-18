@@ -1,5 +1,6 @@
 import * as Parsimmon from "parsimmon";
 import { LangType_BinOp, LangDef_BinOp } from "./parser.binop";
+import { LangType_Match, LangDef_Match } from "./parser.match";
 
 // console.log(Lang.NamedTupleDefinition.tryParse("type Point(number, number)"));
 
@@ -94,144 +95,148 @@ function interpretEscapes(str: string) {
   });
 }
 
-export type LangType = LangType_BinOp & {
-  _: string;
-  __: string;
-  _comma: string;
-  _nl: string;
-  __nl: string;
-  blockComment: string;
+export type LangType = LangType_BinOp &
+  LangType_Match & {
+    _: string;
+    __: string;
+    _comma: string;
+    _nl: string;
+    __nl: string;
+    blockComment: string;
 
-  // Expressions
-  Identifier: { kind: "Identifier"; value: string };
-  NumberLiteral: { kind: "NumberLiteral"; value: number };
-  StringLiteral: { kind: "StringLiteral"; value: string };
+    // Expressions
+    Identifier: { kind: "Identifier"; value: string };
+    NumberLiteral: { kind: "NumberLiteral"; value: number };
+    StringLiteral: { kind: "StringLiteral"; value: string };
 
-  ReturnStatement: {
-    kind: "ReturnStatement";
-    expression: LangType["Expression"];
+    ReturnStatement: {
+      kind: "ReturnStatement";
+      expression: LangType["Expression"];
+    };
+
+    IfStatement: {
+      kind: "IfStatement";
+      guard: LangType["Expression"];
+      block: LangType["Block"];
+    };
+
+    // Maybe just methods instead?
+    // ForStatement: {
+    // },
+
+    Expression:
+      | LangType["FunctionDefinition"]
+      | LangType["NumberLiteral"]
+      | LangType["NamedRecordLiteral"]
+      | LangType["Identifier"]
+      | LangType["RecordLiteral"]
+      | LangType["StringLiteral"];
+
+    FunctionCall: {
+      kind: "FunctionCall";
+      identifier: LangType["Identifier"];
+      argument: LangType["RecordLiteral"];
+    };
+
+    FunctionDefinition: {
+      kind: "FunctionDefinition";
+      argument: LangType["RecordDefinition"];
+      body: LangType["Block"];
+    };
+
+    ConstantAssignment: {
+      kind: "ConstantAssignment";
+      identifier: LangType["Identifier"];
+      expression: LangType["Expression"];
+    };
+
+    // Records
+
+    NamedRecordDefinition: {
+      kind: "NamedRecordDefinition";
+      identifier: LangType["Identifier"];
+      record: LangType["RecordDefinition"];
+    };
+
+    // class Point(x: number, y: number)
+    NamedRecordDefinitionStatement: {
+      kind: "NamedRecordDefinitionStatement";
+      namedRecordDefinition: LangType["NamedRecordDefinition"];
+    };
+
+    NamedRecordDefinitionGroup: {
+      kind: "NamedRecordDefinitionGroup";
+      identifier: LangType["Identifier"];
+      namedRecordDefinitions: Array<LangType["NamedRecordDefinition"]>;
+    };
+
+    // Point(x: 5, y: 3)
+    NamedRecordLiteral: {
+      kind: "NamedRecordLiteral";
+      identifier: LangType["Identifier"];
+      recordLiteral: LangType["RecordLiteral"];
+    };
+
+    //* (x: 5, y: 5)
+    RecordLiteral: {
+      kind: "RecordLiteral";
+      definitions: Array<LangType["NamedLiteral"]>;
+    };
+
+    //* (x: number, y: number)
+    RecordDefinition: {
+      kind: NodeKind.RecordDefinition;
+      definitions: Array<LangType["NamedDefinition"]>;
+    };
+
+    // x: 5
+    NamedLiteral: {
+      kind: "NamedLiteral";
+      identifier: LangType["Identifier"];
+      expression: LangType["Expression"];
+    };
+
+    // x: number
+    NamedDefinition: {
+      kind: NodeKind.NamedDefinition;
+      identifier: LangType["Identifier"];
+      typeTag: LangType["TypeTag"];
+    };
+
+    Type: LangType["RecordDefinition"] | LangType["Identifier"];
+
+    // :string
+    TypeTag: {
+      kind: NodeKind.TypeTag;
+      identifier: LangType["Identifier"];
+    };
+
+    DEBUG_Log: {
+      kind: "DEBUG_Log";
+      expression: LangType["Expression"];
+    };
+
+    Statement:
+      | LangType["ReturnStatement"]
+      | LangType["IfStatement"]
+      | LangType["NamedRecordDefinitionStatement"]
+      | LangType["NamedRecordDefinitionGroup"]
+      | LangType["ConstantAssignment"]
+      | LangType["MatchFunction"]
+      | LangType["FunctionCall"]
+      | LangType["DEBUG_Log"];
+
+    Program: { kind: "Program"; statements: Array<LangType["Statement"]> };
+    StatementList: {
+      kind: "StatementList";
+      statements: Array<LangType["Statement"]>;
+    };
+    Block: { kind: "Block"; statements: Array<LangType["Statement"]> };
+
+    List: any;
+    TupleDefinition: any;
+    NamedTupleDefinition: any;
   };
-
-  IfStatement: {
-    kind: "IfStatement";
-    guard: LangType["Expression"];
-    block: LangType["Block"];
-  };
-
-  // Maybe just methods instead?
-  // ForStatement: {
-  // },
-
-  Expression:
-    | LangType["FunctionDefinition"]
-    | LangType["NumberLiteral"]
-    | LangType["NamedRecordLiteral"]
-    | LangType["Identifier"]
-    | LangType["RecordLiteral"]
-    | LangType["StringLiteral"];
-
-  FunctionCall: {
-    kind: "FunctionCall";
-    identifier: LangType["Identifier"];
-    argument: LangType["RecordLiteral"];
-  };
-
-  FunctionDefinition: {
-    kind: "FunctionDefinition";
-    argument: LangType["RecordDefinition"];
-    body: LangType["Block"];
-  };
-
-  ConstantAssignment: {
-    kind: "ConstantAssignment";
-    identifier: LangType["Identifier"];
-    expression: LangType["Expression"];
-  };
-
-  // Records
-
-  NamedRecordDefinition: {
-    kind: "NamedRecordDefinition";
-    identifier: LangType["Identifier"];
-    record: LangType["RecordDefinition"];
-  };
-
-  // class Point(x: number, y: number)
-  NamedRecordDefinitionStatement: {
-    kind: "NamedRecordDefinitionStatement";
-    namedRecordDefinition: LangType["NamedRecordDefinition"];
-  };
-
-  NamedRecordDefinitionGroup: {
-    kind: "NamedRecordDefinitionGroup";
-    identifier: LangType["Identifier"];
-    namedRecordDefinitions: Array<LangType["NamedRecordDefinition"]>;
-  };
-
-  // Point(x: 5, y: 3)
-  NamedRecordLiteral: {
-    kind: "NamedRecordLiteral";
-    identifier: LangType["Identifier"];
-    recordLiteral: LangType["RecordLiteral"];
-  };
-
-  //* (x: 5, y: 5)
-  RecordLiteral: {
-    kind: "RecordLiteral";
-    definitions: Array<LangType["NamedLiteral"]>;
-  };
-
-  //* (x: number, y: number)
-  RecordDefinition: {
-    kind: NodeKind.RecordDefinition;
-    definitions: Array<LangType["NamedDefinition"]>;
-  };
-
-  // x: 5
-  NamedLiteral: {
-    kind: "NamedLiteral";
-    identifier: LangType["Identifier"];
-    expression: LangType["Expression"];
-  };
-
-  // x: number
-  NamedDefinition: {
-    kind: NodeKind.NamedDefinition;
-    identifier: LangType["Identifier"];
-    typeTag: LangType["TypeTag"];
-  };
-
-  // :string
-  TypeTag: {
-    kind: NodeKind.TypeTag;
-    identifier: LangType["Identifier"];
-  };
-
-  DEBUG_Log: {
-    kind: "DEBUG_Log";
-    expression: LangType["Expression"];
-  };
-
-  Statement:
-    | LangType["ReturnStatement"]
-    | LangType["IfStatement"]
-    | LangType["NamedRecordDefinitionStatement"]
-    | LangType["NamedRecordDefinitionGroup"]
-    | LangType["ConstantAssignment"]
-    | LangType["FunctionCall"]
-    | LangType["DEBUG_Log"];
-
-  Program: { kind: "Program"; statements: Array<LangType["Statement"]> };
-  StatementList: {
-    kind: "StatementList";
-    statements: Array<LangType["Statement"]>;
-  };
-  Block: { kind: "Block"; statements: Array<LangType["Statement"]> };
-
-  List: any;
-  TupleDefinition: any;
-  NamedTupleDefinition: any;
-};
 
 export const Lang = Parsimmon.createLanguage<LangType>({
   _: (r) => {
@@ -340,6 +345,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     const statementParsers: ExhaustiveParsers<LangType["Statement"]> = {
       ReturnStatement: r.ReturnStatement,
       IfStatement: r.IfStatement,
+      MatchFunction: r.MatchFunction,
       NamedRecordDefinitionStatement: r.NamedRecordDefinitionStatement,
       NamedRecordDefinitionGroup: r.NamedRecordDefinitionGroup,
       ConstantAssignment: r.ConstantAssignment,
@@ -350,6 +356,8 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       ...Object.values(statementParsers)
     );
   },
+
+  ...LangDef_Match,
 
   // return 5
   ReturnStatement: (r) => {
@@ -587,7 +595,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //* (x: 5, y: 5)
   RecordLiteral: (r) => {
     return Parsimmon.string("(")
-      .then(Parsimmon.sepBy1(r.NamedLiteral, r._comma))
+      .then(Parsimmon.sepBy(r.NamedLiteral, r._comma))
       .skip(Parsimmon.string(")"))
       .map((definitions) => {
         return {
@@ -647,6 +655,14 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         };
       }
     );
+  },
+
+  Type: (r) => {
+    const typeParsers: ExhaustiveParsers<LangType["Type"]> = {
+      Identifier: r.Identifier,
+      RecordDefinition: r.RecordDefinition,
+    };
+    return Parsimmon.alt<LangType["Type"]>(...Object.values(typeParsers));
   },
 
   // :string

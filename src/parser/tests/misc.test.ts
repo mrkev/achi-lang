@@ -31,6 +31,11 @@ test("ReturnStatement", () => {
   expect(result).toMatchSnapshot();
 });
 
+test("Block.empty", () => {
+  const result = Lang.Block.tryParse(`{}`);
+  expect(result).toMatchSnapshot();
+});
+
 test("IfStatement", () => {
   const result = Lang.IfStatement.tryParse(`if (3) { return "hello" }`);
   expect(result).toMatchSnapshot();

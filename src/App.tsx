@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-import { evaluate } from "./interpreter/interpreter";
-import { tryParse } from "./parser/parser";
 import Editor from "@monaco-editor/react";
 import type { Monaco } from "@monaco-editor/react";
 import monaco, { editor } from "monaco-editor";
 import useLocalStorage from "react-use-localstorage";
 import { System } from "./interpreter/System";
+import { interpret } from "./interpreter/interpreter";
 
 const DEFAULT_SCRIPT =
   `
@@ -57,7 +56,6 @@ function App() {
   }, []);
 
   function doEvaluate() {
-    const newlog: (Error | string)[] = [];
     const system = new System();
 
     try {
@@ -68,15 +66,13 @@ function App() {
 
       const script = editor.getValue();
       setInitialScript(script);
-      const ast = tryParse(script);
-      console.log(script);
-      evaluate(ast, newlog, system);
+
+      interpret(script, system);
     } catch (e) {
       system.console.log(e as Error);
-      newlog.push(e as Error);
       console.error(e);
     }
-    console.log("DONE", system.console._log);
+    console.log("done.");
     setLog(system.console._log);
   }
 

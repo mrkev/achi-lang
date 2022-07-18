@@ -2,7 +2,7 @@
  * System handles I/O, other APIs
  */
 export class System {
-  console: Console = new Console();
+  readonly console: Console = new Console();
 }
 
 class Console {

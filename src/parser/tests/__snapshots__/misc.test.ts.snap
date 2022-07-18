@@ -42,6 +42,13 @@ Object {
 }
 `;
 
+exports[`Block.empty 1`] = `
+Object {
+  "kind": "Block",
+  "statements": Array [],
+}
+`;
+
 exports[`ConstantAssignment 1`] = `
 Object {
   "expression": Object {
