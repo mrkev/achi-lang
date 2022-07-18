@@ -1,15 +1,16 @@
 import { LangType } from "../parser/parser";
 import { evaluateExpression } from "./evaluateExpression";
+import { Context } from "./Context";
+import { System } from "./System";
+import { exhaustive } from "./nullthrows";
 
-export function exhaustive(a: never) {
-  throw new Error(`Non-exhaustive: ${a} went through`);
-}
+// TODO: evaluation tests
 
 /**
  * Represents the constructor for a named record, as it sits in memory
  * ready to be instantiated.
  */
-class NamedRecordConstructor {
+export class NamedRecordConstructor {
   readonly classname: string;
   readonly valueSpec: Map<string, string> = new Map(); // identifer => type
   constructor(classname: string, valueSpec: Map<string, string>) {
@@ -59,9 +60,9 @@ export class NamedRecordInstance {
     expression: LangType["NamedRecordLiteral"],
     context: Context
   ) {
-    if (!context.types.has(expression.identifier.value)) {
-      throw new Error(`No definition for ${expression.identifier.value} found`);
-    }
+    // if (!context.types.has(expression.identifier.value)) {
+    //   throw new Error(`No definition for ${expression.identifier.value} found`);
+    // }
     const konstructor = context.types.get(expression.identifier.value);
     if (!(konstructor instanceof NamedRecordConstructor)) {
       throw new Error(
@@ -115,27 +116,16 @@ function stringOfValue(value: Value): string {
   }
 }
 
-export type Context = Readonly<{
-  types: Map<string, NamedRecordConstructor>;
-  values: Map<string, Value>;
-}>;
-
-function newContext(): Context {
-  return {
-    types: new Map(),
-    // TODO: standard types, like records?
-    values: new Map(),
-  };
-}
-
-export function evaluate(
-  block: LangType["Program"] | LangType["Block"] | LangType["StatementList"],
-  log: (string | Error)[]
+export function evaluateStatements(
+  statements: LangType["Statement"][],
+  context: Context,
+  log: (string | Error)[],
+  system: System
 ) {
-  const context = newContext();
-
-  for (const statement of block.statements) {
+  console.log("statements", statements);
+  for (const statement of statements) {
     const { kind } = statement;
+    console.log("eval", kind);
     switch (kind) {
       case "NamedRecordDefinitionStatement": {
         if (
@@ -166,24 +156,27 @@ export function evaluate(
         // TODO: determine truthiness
         if (guardValue) {
           // TODO: scoping!
-          evaluate(statement.block, log);
+          evaluate(statement.block, log, system);
         }
         break;
       }
 
       case "ConstantAssignment": {
-        if (context.values.has(statement.identifier.value)) {
+        if (context.values().has(statement.identifier.value)) {
           console.warn("Overriding definition for", statement.identifier.value);
         }
         const result = evaluateExpression(statement.expression, context);
-        context.values.set(statement.identifier.value, result);
+        context.values().define(statement.identifier.value, result);
         break;
       }
 
       case "DEBUG_Log": {
         const value = evaluateExpression(statement.expression, context);
         console.log("#log", stringOfValue(value), value);
+        console.log("LOGGED");
         log.push(stringOfValue(value));
+        system.console.log(stringOfValue(value));
+
         break;
       }
 
@@ -199,4 +192,14 @@ export function evaluate(
         exhaustive(kind);
     }
   }
+}
+
+export function evaluate(
+  block: LangType["Program"] | LangType["Block"] | LangType["StatementList"],
+  log: (string | Error)[],
+  system: System
+) {
+  const context = Context.create();
+  console.log("block", block);
+  return evaluateStatements(block.statements, context, log, system);
 }

@@ -99,6 +99,8 @@ export type LangType = LangType_BinOp & {
   __: string;
   _comma: string;
   _nl: string;
+  __nl: string;
+  blockComment: string;
 
   // Expressions
   Identifier: { kind: "Identifier"; value: string };
@@ -232,8 +234,8 @@ export type LangType = LangType_BinOp & {
 };
 
 export const Lang = Parsimmon.createLanguage<LangType>({
-  _: () => {
-    return Parsimmon.optWhitespace;
+  _: (r) => {
+    return Parsimmon.alt(r.blockComment, Parsimmon.optWhitespace);
   },
   __: () => {
     return Parsimmon.whitespace;
@@ -242,9 +244,17 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return Parsimmon.string(",").trim(r._);
   },
   _nl: (r) => {
+    return Parsimmon.regex(/[\s;]*/).trim(r._);
+  },
+  __nl: (r) => {
     return Parsimmon.alt(Parsimmon.string(";"), Parsimmon.string("\n")).trim(
       r._
     );
+  },
+
+  // /* ... */
+  blockComment: (r) => {
+    return Parsimmon.regex(/\/\*[\s\S]*\*\//);
   },
 
   ////////////////////////////////////////////////////////////// Expressions ///
@@ -314,10 +324,10 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     });
   },
 
+  // return 5; f(); class Point()
   StatementList: (r) => {
-    return Parsimmon.sepBy(r.Statement, r._nl)
-      .trim(r._)
-      .skip(r._nl.times(0, 1))
+    return Parsimmon.sepBy(r.Statement, r.__nl)
+      .trim(r._nl)
       .map((statements) => {
         return {
           kind: "StatementList",
@@ -561,7 +571,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r._,
       Parsimmon.string("{"),
       r._,
-      Parsimmon.sepBy1(r.NamedRecordDefinition, r._nl),
+      Parsimmon.sepBy1(r.NamedRecordDefinition, r.__nl),
       r._,
       Parsimmon.string("}"),
       function (_0, _1, identifier, _3, _4, _5, nrdList, _7, _8) {

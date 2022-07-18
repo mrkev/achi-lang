@@ -6,6 +6,7 @@ import Editor from "@monaco-editor/react";
 import type { Monaco } from "@monaco-editor/react";
 import monaco, { editor } from "monaco-editor";
 import useLocalStorage from "react-use-localstorage";
+import { System } from "./interpreter/System";
 
 const DEFAULT_SCRIPT =
   `
@@ -18,7 +19,7 @@ const point = Point(x: one, y: 2);
 // TODO: can return from top-level, print that?
 
 const options: editor.IStandaloneEditorConstructionOptions = {
-  fontSize: 20,
+  fontSize: 18,
   insertSpaces: true,
   tabSize: 2,
   detectIndentation: false,
@@ -57,6 +58,8 @@ function App() {
 
   function doEvaluate() {
     const newlog: (Error | string)[] = [];
+    const system = new System();
+
     try {
       const editor = editorRef.current;
       if (!editor) {
@@ -66,12 +69,15 @@ function App() {
       const script = editor.getValue();
       setInitialScript(script);
       const ast = tryParse(script);
-      evaluate(ast, newlog);
+      console.log(script);
+      evaluate(ast, newlog, system);
     } catch (e) {
+      system.console.log(e as Error);
       newlog.push(e as Error);
       console.error(e);
     }
-    setLog(newlog);
+    console.log("DONE", system.console._log);
+    setLog(system.console._log);
   }
 
   return (
@@ -80,7 +86,7 @@ function App() {
         language="achi"
         theme="vs-dark"
         options={options}
-        height="30vh"
+        height="40vh"
         // defaultLanguage="text"
         defaultValue={initialScript}
         beforeMount={handleEditorWillMount}
@@ -113,14 +119,47 @@ function handleEditorWillMount(monaco: Monaco) {
   monaco.languages.register({ id: "achi" });
   monaco.languages.setMonarchTokensProvider("achi", {
     keywords: [
+      "abstract",
+      "and",
+      "break",
+      "case",
+      "catch",
       "class",
       "classes",
       "const",
-      "function",
-      "return",
-      "match",
-      "if",
+      "continue",
+      "do",
+      "else",
+      "enum",
+      "false",
+      "finally",
       "for",
+      "from",
+      "function",
+      "if",
+      "import",
+      "interface",
+      "match",
+      "matches",
+      "methods",
+      "new",
+      "or",
+      "private",
+      "protected",
+      "public",
+      "return",
+      "static",
+      "statics",
+      "super",
+      "switch",
+      "this",
+      "throw",
+      "true",
+      "try",
+      "unless",
+      "when",
+      "while",
+      "with",
     ],
     symbols: /[=><!~?:&|+\-*\/\^%]+/,
     // This and other things taken from https://microsoft.github.io/monaco-editor/monarch.html
@@ -138,6 +177,9 @@ function handleEditorWillMount(monaco: Monaco) {
             },
           },
         ],
+        // whitespace
+        { include: "@whitespace" },
+
         // delimiters and operators
         [/[{}()\[\]]/, "@brackets"],
         [/[<>](?!@symbols)/, "@brackets"],
@@ -151,11 +193,25 @@ function handleEditorWillMount(monaco: Monaco) {
         [/\/\//, "comment"],
         [/\d+/, "number"],
       ],
+
+      comment: [
+        [/[^\/*]+/, "comment"],
+        [/\/\*/, "comment", "@push"], // nested comment
+        ["\\*/", "comment", "@pop"],
+        [/[\/*]/, "comment"],
+      ],
+
       string: [
         [/[^\\"]+/, "string"],
         [/@escapes/, "string.escape"],
         [/\\./, "string.escape.invalid"],
         [/"/, { token: "string.quote", bracket: "@close", next: "@pop" }],
+      ],
+
+      whitespace: [
+        [/[ \t\r\n]+/, "white"],
+        [/\/\*/, "comment", "@comment"],
+        // [/\/\/.*$/, "comment"],
       ],
     },
 

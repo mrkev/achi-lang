@@ -1,15 +1,16 @@
 import { LangType } from "../parser/parser";
-import { Context, Value, NamedRecordInstance, exhaustive } from "./interpreter";
+import { Value, NamedRecordInstance } from "./interpreter";
+import { exhaustive } from "./nullthrows";
+import { Context } from "./Context";
 
 export function evaluateExpression(
   expression: LangType["Expression"],
   context: Context
 ): Value {
   const { kind } = expression;
-
   switch (kind) {
     case "Identifier": {
-      const foundValue = context.values.get(expression.value);
+      const foundValue = context.values().get(expression.value);
       if (!foundValue) {
         throw new Error(`Name ${expression.value} not found`);
       }
