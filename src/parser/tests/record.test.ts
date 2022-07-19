@@ -30,6 +30,16 @@ test("NamedRecordLiteral", () => {
   expect(result).toMatchSnapshot();
 });
 
+test("NestedTypeIdentifier", () => {
+  const result = Lang.NestedTypeIdentifier.tryParse("Card.King");
+  expect(result).toMatchSnapshot();
+});
+
+test("NamedRecordLiteral.nestedIdentifier", () => {
+  const result = Lang.NamedRecordLiteral.tryParse("Card.King(x: 5, y: 3)");
+  expect(result).toMatchSnapshot();
+});
+
 test("RecordLiteral", () => {
   const result = Lang.RecordLiteral.tryParse("(x: 5, y: 3)");
   expect(result).toMatchSnapshot();

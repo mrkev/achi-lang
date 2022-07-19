@@ -2,7 +2,7 @@ import { LangType, tryParse } from "../parser/parser";
 import { evaluateExpression } from "./evaluateExpression";
 import { Context } from "./Context";
 import { System } from "./System";
-import { exhaustive } from "./nullthrows";
+import { exhaustive, nullthrows } from "./nullthrows";
 import { evaluateStatements } from "./evaluateStatements";
 import {
   NamedRecordKlass,
@@ -40,11 +40,15 @@ export class NamedRecordInstance {
     // if (!context.types.has(expression.identifier.value)) {
     //   throw new Error(`No definition for ${expression.identifier.value} found`);
     // }
-    const konstructor = context.types.get(expression.identifier.value);
+
+    const identifierValue = resolveTypeIdentifier(
+      expression.identifier,
+      context
+    );
+
+    const konstructor = context.types.get(identifierValue);
     if (!(konstructor instanceof NamedRecordKlass)) {
-      throw new Error(
-        `Type ${expression.identifier.value} is not a named record`
-      );
+      throw new Error(`Type ${identifierValue} is not a named record`);
     }
 
     // TODO: typecheck
@@ -112,5 +116,25 @@ export function stringOfValue(value: Value): string {
 
     default:
       throw exhaustive(kind);
+  }
+}
+
+function resolveTypeIdentifier(
+  identifier: LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"],
+  context: Context
+) {
+  // TODO: implement
+  const { kind } = identifier;
+  switch (kind) {
+    case "TypeIdentifier": {
+      return identifier.value;
+    }
+
+    case "NestedTypeIdentifier": {
+      return nullthrows(
+        identifier.path[identifier.path.length - 1]?.value,
+        "parser error: parser should ensure NestedTypeIdentifier is never of length < 2"
+      );
+    }
   }
 }

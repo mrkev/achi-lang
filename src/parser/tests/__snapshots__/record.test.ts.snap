@@ -202,6 +202,68 @@ Object {
 }
 `;
 
+exports[`NamedRecordLiteral.nestedIdentifier 1`] = `
+Object {
+  "identifier": Object {
+    "kind": "NestedTypeIdentifier",
+    "path": Array [
+      Object {
+        "kind": "TypeIdentifier",
+        "value": "Card",
+      },
+      Object {
+        "kind": "TypeIdentifier",
+        "value": "King",
+      },
+    ],
+  },
+  "kind": "NamedRecordLiteral",
+  "recordLiteral": Object {
+    "definitions": Array [
+      Object {
+        "expression": Object {
+          "kind": "NumberLiteral",
+          "value": 5,
+        },
+        "identifier": Object {
+          "kind": "ValueIdentifier",
+          "value": "x",
+        },
+        "kind": "NamedLiteral",
+      },
+      Object {
+        "expression": Object {
+          "kind": "NumberLiteral",
+          "value": 3,
+        },
+        "identifier": Object {
+          "kind": "ValueIdentifier",
+          "value": "y",
+        },
+        "kind": "NamedLiteral",
+      },
+    ],
+    "kind": "RecordLiteral",
+  },
+}
+`;
+
+exports[`NestedTypeIdentifier 1`] = `
+Object {
+  "kind": "NestedTypeIdentifier",
+  "path": Array [
+    Object {
+      "kind": "TypeIdentifier",
+      "value": "Card",
+    },
+    Object {
+      "kind": "TypeIdentifier",
+      "value": "King",
+    },
+  ],
+}
+`;
+
 exports[`RecordDefinition 1`] = `
 Object {
   "definitions": Array [

@@ -110,6 +110,11 @@ export type LangType = LangType_BinOp &
     NumberLiteral: { kind: "NumberLiteral"; value: number };
     StringLiteral: { kind: "StringLiteral"; value: string };
 
+    NestedTypeIdentifier: {
+      kind: "NestedTypeIdentifier";
+      path: Array<LangType["TypeIdentifier"]>;
+    };
+
     ReturnStatement: {
       kind: "ReturnStatement";
       expression: LangType["Expression"];
@@ -120,10 +125,6 @@ export type LangType = LangType_BinOp &
       guard: LangType["Expression"];
       block: LangType["Block"];
     };
-
-    // Maybe just methods instead?
-    // ForStatement: {
-    // },
 
     Expression:
       | LangType["FunctionDefinition"]
@@ -154,6 +155,7 @@ export type LangType = LangType_BinOp &
 
     // Records
 
+    // Point(x: number, y: number)
     NamedRecordDefinition: {
       kind: "NamedRecordDefinition";
       identifier: LangType["TypeIdentifier"];
@@ -166,6 +168,7 @@ export type LangType = LangType_BinOp &
       namedRecordDefinition: LangType["NamedRecordDefinition"];
     };
 
+    // classes Card { King(); Queen(); Jack(); Number(value: number) }
     NamedRecordDefinitionGroup: {
       kind: "NamedRecordDefinitionGroup";
       identifier: LangType["TypeIdentifier"];
@@ -175,7 +178,7 @@ export type LangType = LangType_BinOp &
     // Point(x: 5, y: 3)
     NamedRecordLiteral: {
       kind: "NamedRecordLiteral";
-      identifier: LangType["TypeIdentifier"];
+      identifier: LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"];
       recordLiteral: LangType["RecordLiteral"];
     };
 
@@ -300,6 +303,18 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       kind: "TypeIdentifier",
       value: v,
     }));
+  },
+
+  // TODO: test
+  NestedTypeIdentifier: (r) => {
+    return Parsimmon.sepBy1(r.TypeIdentifier, Parsimmon.string(".")).map(
+      (path) => {
+        return {
+          kind: "NestedTypeIdentifier",
+          path,
+        };
+      }
+    );
   },
 
   // card, point, doThisOrThat
@@ -545,7 +560,12 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //* Point(x: 5, y: 5)
   NamedRecordLiteral: (r) => {
     return Parsimmon.seqMap(
-      r.TypeIdentifier,
+      Parsimmon.alt<
+        LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"]
+      >(
+        r.TypeIdentifier.notFollowedBy(Parsimmon.string(".")),
+        r.NestedTypeIdentifier
+      ),
       r.RecordLiteral,
       function (identifier, recordLiteral) {
         return {
