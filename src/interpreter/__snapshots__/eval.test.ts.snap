@@ -2,6 +2,12 @@
 
 exports[`class.1 1`] = `Array []`;
 
+exports[`func.1 1`] = `
+Array [
+  "[Function: foo]",
+]
+`;
+
 exports[`if.1 1`] = `
 Array [
   "pass",

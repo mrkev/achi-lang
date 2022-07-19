@@ -1,4 +1,5 @@
-import { Value, NamedRecordConstructor } from "./interpreter";
+import { Value } from "./interpreter";
+import { NamedRecordKlass } from "./runtime/NamedRecordConstructor";
 import { nullthrows } from "./nullthrows";
 
 /**
@@ -12,7 +13,7 @@ export class Context {
   private valueScopes: Scope<Value>[] = [new Scope(null)];
 
   // TODO: standard types, like records?
-  types: Map<string, NamedRecordConstructor> = new Map();
+  types: Map<string, NamedRecordKlass> = new Map();
 
   pushScope() {
     const currentScope = this.valueScopes.at(-1);
@@ -23,6 +24,7 @@ export class Context {
   }
 
   popScope() {
+    console.log(this.valueScopes);
     if (this.valueScopes.length === 1) {
       throw new Error("Attempting to pop global (frist) scope!");
     }
@@ -30,7 +32,9 @@ export class Context {
   }
 
   values(): Scope<Value> {
-    const currentScope = nullthrows(this.valueScopes.at(-1));
+    const currentScope = nullthrows(
+      this.valueScopes[this.valueScopes.length - 1]
+    );
     return currentScope;
   }
 }
@@ -70,12 +74,20 @@ class Scope<T> {
   }
 
   get(identifer: string): T | null {
-    if (this.has(identifer)) {
-      return this.get(identifer);
+    if (this.map.has(identifer)) {
+      return nullthrows(this.map.get(identifer), "checked for existance above");
     }
     if (this.parent != null) {
       return this.parent.get(identifer);
     }
     return null;
+  }
+
+  getOrThrow(identifer: string, errorMsg: string): T {
+    const value = this.get(identifer);
+    if (value == null) {
+      throw new Error(errorMsg);
+    }
+    return value;
   }
 }

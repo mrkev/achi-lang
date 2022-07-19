@@ -1,3 +1,6 @@
+import { Lang } from "../parser/parser";
+import { Context } from "./Context";
+import { evaluateExpression } from "./evaluateExpression";
 import { interpret } from "./interpreter";
 import { System } from "./System";
 
@@ -26,4 +29,20 @@ test("class.1", () => {
   class Point(x: number, y: number)
   `);
   expect(logs).toMatchSnapshot();
+});
+
+test("func.1", () => {
+  const logs = logsFor(`
+  function foo matches Card {
+    case King(): { }
+  };
+  #log foo;
+  `);
+  expect(logs).toMatchSnapshot();
+});
+
+test("evaluateExpression.NamedRecordLiteral", () => {
+  // const context = Context.create();
+  // context.values().set("Point");
+  // evaluateExpression();
 });

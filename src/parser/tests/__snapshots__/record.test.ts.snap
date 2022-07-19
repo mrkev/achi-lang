@@ -3,13 +3,13 @@
 exports[`NamedDefinition 1`] = `
 Object {
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "ValueIdentifier",
     "value": "x",
   },
   "kind": "NamedDefinition",
   "typeTag": Object {
     "identifier": Object {
-      "kind": "Identifier",
+      "kind": "TypeIdentifier",
       "value": "number",
     },
     "kind": "TypeTag",
@@ -24,7 +24,7 @@ Object {
     "value": 5,
   },
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "ValueIdentifier",
     "value": "x",
   },
   "kind": "NamedLiteral",
@@ -36,7 +36,7 @@ Object {
   "kind": "NamedRecordDefinitionStatement",
   "namedRecordDefinition": Object {
     "identifier": Object {
-      "kind": "Identifier",
+      "kind": "TypeIdentifier",
       "value": "Point",
     },
     "kind": "NamedRecordDefinition",
@@ -44,13 +44,13 @@ Object {
       "definitions": Array [
         Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "ValueIdentifier",
             "value": "x",
           },
           "kind": "NamedDefinition",
           "typeTag": Object {
             "identifier": Object {
-              "kind": "Identifier",
+              "kind": "TypeIdentifier",
               "value": "number",
             },
             "kind": "TypeTag",
@@ -58,13 +58,13 @@ Object {
         },
         Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "ValueIdentifier",
             "value": "y",
           },
           "kind": "NamedDefinition",
           "typeTag": Object {
             "identifier": Object {
-              "kind": "Identifier",
+              "kind": "TypeIdentifier",
               "value": "number",
             },
             "kind": "TypeTag",
@@ -82,7 +82,7 @@ Object {
   "kind": "NamedRecordDefinitionStatement",
   "namedRecordDefinition": Object {
     "identifier": Object {
-      "kind": "Identifier",
+      "kind": "TypeIdentifier",
       "value": "True",
     },
     "kind": "NamedRecordDefinition",
@@ -97,14 +97,14 @@ Object {
 exports[`NamedRecordDefinitionGroup 1`] = `
 Object {
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "TypeIdentifier",
     "value": "Card",
   },
   "kind": "NamedRecordDefinitionGroup",
   "namedRecordDefinitions": Array [
     Object {
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "TypeIdentifier",
         "value": "King",
       },
       "kind": "NamedRecordDefinition",
@@ -115,7 +115,7 @@ Object {
     },
     Object {
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "TypeIdentifier",
         "value": "Queen",
       },
       "kind": "NamedRecordDefinition",
@@ -126,7 +126,7 @@ Object {
     },
     Object {
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "TypeIdentifier",
         "value": "Jack",
       },
       "kind": "NamedRecordDefinition",
@@ -137,7 +137,7 @@ Object {
     },
     Object {
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "TypeIdentifier",
         "value": "Number",
       },
       "kind": "NamedRecordDefinition",
@@ -145,13 +145,13 @@ Object {
         "definitions": Array [
           Object {
             "identifier": Object {
-              "kind": "Identifier",
+              "kind": "ValueIdentifier",
               "value": "value",
             },
             "kind": "NamedDefinition",
             "typeTag": Object {
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "TypeIdentifier",
                 "value": "number",
               },
               "kind": "TypeTag",
@@ -168,7 +168,7 @@ Object {
 exports[`NamedRecordLiteral 1`] = `
 Object {
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "TypeIdentifier",
     "value": "Point",
   },
   "kind": "NamedRecordLiteral",
@@ -180,7 +180,7 @@ Object {
           "value": 5,
         },
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "x",
         },
         "kind": "NamedLiteral",
@@ -191,7 +191,7 @@ Object {
           "value": 3,
         },
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "y",
         },
         "kind": "NamedLiteral",
@@ -207,13 +207,13 @@ Object {
   "definitions": Array [
     Object {
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "x",
       },
       "kind": "NamedDefinition",
       "typeTag": Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "TypeIdentifier",
           "value": "number",
         },
         "kind": "TypeTag",
@@ -221,13 +221,13 @@ Object {
     },
     Object {
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "y",
       },
       "kind": "NamedDefinition",
       "typeTag": Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "TypeIdentifier",
           "value": "number",
         },
         "kind": "TypeTag",
@@ -247,7 +247,7 @@ Object {
         "value": 5,
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "x",
       },
       "kind": "NamedLiteral",
@@ -258,7 +258,7 @@ Object {
         "value": 3,
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "y",
       },
       "kind": "NamedLiteral",

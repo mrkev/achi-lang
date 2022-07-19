@@ -6,6 +6,7 @@ import monaco, { editor } from "monaco-editor";
 import useLocalStorage from "react-use-localstorage";
 import { System } from "./interpreter/System";
 import { interpret } from "./interpreter/interpreter";
+import { tryParse } from "./parser/parser";
 
 const DEFAULT_SCRIPT =
   `
@@ -30,13 +31,21 @@ function App() {
     DEFAULT_SCRIPT
   );
   const [log, setLog] = useState<(Error | string)[]>([]);
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const scriptEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(
+    null
+  );
+  const astEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+
+  const handleAstEditorDidMount = useCallback(
+    (editor: monaco.editor.IStandaloneCodeEditor) => {
+      astEditorRef.current = editor;
+    },
+    []
+  );
 
   const handleEditorDidMount = useCallback(
     (editor: monaco.editor.IStandaloneCodeEditor) => {
-      // here is the editor instance
-      // you can store it in `useRef` for further usage
-      editorRef.current = editor;
+      scriptEditorRef.current = editor;
     },
     []
   );
@@ -59,7 +68,7 @@ function App() {
     const system = new System();
 
     try {
-      const editor = editorRef.current;
+      const editor = scriptEditorRef.current;
       if (!editor) {
         throw new Error("no editor");
       }
@@ -67,7 +76,10 @@ function App() {
       const script = editor.getValue();
       setInitialScript(script);
 
-      interpret(script, system);
+      const ast = tryParse(script);
+      astEditorRef.current?.setValue(JSON.stringify(ast, null, 2));
+
+      interpret(ast, system);
     } catch (e) {
       system.console.log(e as Error);
       console.error(e);
@@ -78,16 +90,28 @@ function App() {
 
   return (
     <div className="App">
-      <Editor
-        language="achi"
-        theme="vs-dark"
-        options={options}
-        height="40vh"
-        // defaultLanguage="text"
-        defaultValue={initialScript}
-        beforeMount={handleEditorWillMount}
-        onMount={handleEditorDidMount}
-      />
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <Editor
+          language="achi"
+          theme="vs-dark"
+          options={options}
+          height="50vh"
+          // defaultLanguage="text"
+          defaultValue={initialScript}
+          beforeMount={handleScriptEditorWillMount}
+          onMount={handleEditorDidMount}
+        />
+        <Editor
+          language="json"
+          theme="vs-dark"
+          // options={options}
+          height="50vh"
+          // defaultLanguage="text"
+          // defaultValue={initialScript}
+          onMount={handleAstEditorDidMount}
+        />
+      </div>
+
       <button onClick={doEvaluate}>Evaluate</button>
       <pre>
         {log.map((msg, i) => {
@@ -110,7 +134,7 @@ function App() {
 
 export default App;
 
-function handleEditorWillMount(monaco: Monaco) {
+function handleScriptEditorWillMount(monaco: Monaco) {
   // https://ohdarling88.medium.com/4-steps-to-add-custom-language-support-to-monaco-editor-5075eafa156d
   monaco.languages.register({ id: "achi" });
   monaco.languages.setMonarchTokensProvider("achi", {

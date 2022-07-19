@@ -13,7 +13,7 @@ Object {
               "value": "hello",
             },
             "identifier": Object {
-              "kind": "Identifier",
+              "kind": "ValueIdentifier",
               "value": "msg",
             },
             "kind": "NamedLiteral",
@@ -22,7 +22,7 @@ Object {
         "kind": "RecordLiteral",
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "log",
       },
       "kind": "FunctionCall",
@@ -33,7 +33,7 @@ Object {
         "value": 4,
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "x",
       },
       "kind": "ConstantAssignment",
@@ -56,7 +56,40 @@ Object {
     "value": 3,
   },
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "ValueIdentifier",
+    "value": "x",
+  },
+  "kind": "ConstantAssignment",
+}
+`;
+
+exports[`ConstantAssignment.functionCall 1`] = `
+Object {
+  "expression": Object {
+    "argument": Object {
+      "definitions": Array [
+        Object {
+          "expression": Object {
+            "kind": "ValueIdentifier",
+            "value": "point",
+          },
+          "identifier": Object {
+            "kind": "ValueIdentifier",
+            "value": "point",
+          },
+          "kind": "NamedLiteral",
+        },
+      ],
+      "kind": "RecordLiteral",
+    },
+    "identifier": Object {
+      "kind": "ValueIdentifier",
+      "value": "foo",
+    },
+    "kind": "FunctionCall",
+  },
+  "identifier": Object {
+    "kind": "ValueIdentifier",
     "value": "x",
   },
   "kind": "ConstantAssignment",
@@ -73,7 +106,7 @@ Object {
           "value": "hello",
         },
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "msg",
         },
         "kind": "NamedLiteral",
@@ -82,7 +115,7 @@ Object {
     "kind": "RecordLiteral",
   },
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "ValueIdentifier",
     "value": "log",
   },
   "kind": "FunctionCall",
@@ -95,13 +128,13 @@ Object {
     "definitions": Array [
       Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "msg",
         },
         "kind": "NamedDefinition",
         "typeTag": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "string",
           },
           "kind": "TypeTag",
@@ -118,11 +151,11 @@ Object {
           "definitions": Array [
             Object {
               "expression": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "msg",
               },
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "msg",
               },
               "kind": "NamedLiteral",
@@ -131,7 +164,7 @@ Object {
           "kind": "RecordLiteral",
         },
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "hello",
         },
         "kind": "FunctionCall",
@@ -167,18 +200,18 @@ Object {
 exports[`NamedTupleDefinition 1`] = `
 Object {
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "TypeIdentifier",
     "value": "Point",
   },
   "kind": "NamedTupleDefinition",
   "tuple": Object {
     "definitions": Array [
       Object {
-        "kind": "Identifier",
+        "kind": "TypeIdentifier",
         "value": "number",
       },
       Object {
-        "kind": "Identifier",
+        "kind": "TypeIdentifier",
         "value": "number",
       },
     ],
@@ -195,7 +228,7 @@ Object {
       "kind": "NamedRecordDefinitionStatement",
       "namedRecordDefinition": Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "TypeIdentifier",
           "value": "Point",
         },
         "kind": "NamedRecordDefinition",
@@ -203,13 +236,13 @@ Object {
           "definitions": Array [
             Object {
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "x",
               },
               "kind": "NamedDefinition",
               "typeTag": Object {
                 "identifier": Object {
-                  "kind": "Identifier",
+                  "kind": "TypeIdentifier",
                   "value": "number",
                 },
                 "kind": "TypeTag",
@@ -217,13 +250,13 @@ Object {
             },
             Object {
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "y",
               },
               "kind": "NamedDefinition",
               "typeTag": Object {
                 "identifier": Object {
-                  "kind": "Identifier",
+                  "kind": "TypeIdentifier",
                   "value": "number",
                 },
                 "kind": "TypeTag",
@@ -240,7 +273,7 @@ Object {
         "value": 1,
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "one",
       },
       "kind": "ConstantAssignment",
@@ -248,7 +281,7 @@ Object {
     Object {
       "expression": Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "TypeIdentifier",
           "value": "Point",
         },
         "kind": "NamedRecordLiteral",
@@ -256,11 +289,11 @@ Object {
           "definitions": Array [
             Object {
               "expression": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "one",
               },
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "x",
               },
               "kind": "NamedLiteral",
@@ -271,7 +304,7 @@ Object {
                 "value": 2,
               },
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "y",
               },
               "kind": "NamedLiteral",
@@ -281,14 +314,14 @@ Object {
         },
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "point",
       },
       "kind": "ConstantAssignment",
     },
     Object {
       "expression": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "point",
       },
       "kind": "DEBUG_Log",
@@ -305,7 +338,7 @@ Object {
       "kind": "NamedRecordDefinitionStatement",
       "namedRecordDefinition": Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "TypeIdentifier",
           "value": "Point",
         },
         "kind": "NamedRecordDefinition",
@@ -313,13 +346,13 @@ Object {
           "definitions": Array [
             Object {
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "x",
               },
               "kind": "NamedDefinition",
               "typeTag": Object {
                 "identifier": Object {
-                  "kind": "Identifier",
+                  "kind": "TypeIdentifier",
                   "value": "number",
                 },
                 "kind": "TypeTag",
@@ -327,13 +360,13 @@ Object {
             },
             Object {
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "y",
               },
               "kind": "NamedDefinition",
               "typeTag": Object {
                 "identifier": Object {
-                  "kind": "Identifier",
+                  "kind": "TypeIdentifier",
                   "value": "number",
                 },
                 "kind": "TypeTag",
@@ -350,13 +383,13 @@ Object {
           "definitions": Array [
             Object {
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "point",
               },
               "kind": "NamedDefinition",
               "typeTag": Object {
                 "identifier": Object {
-                  "kind": "Identifier",
+                  "kind": "TypeIdentifier",
                   "value": "Point",
                 },
                 "kind": "TypeTag",
@@ -370,11 +403,11 @@ Object {
           "statements": Array [
             Object {
               "expression": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "point",
               },
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "x",
               },
               "kind": "ConstantAssignment",
@@ -382,7 +415,7 @@ Object {
             Object {
               "expression": Object {
                 "identifier": Object {
-                  "kind": "Identifier",
+                  "kind": "TypeIdentifier",
                   "value": "Point",
                 },
                 "kind": "NamedRecordLiteral",
@@ -390,22 +423,22 @@ Object {
                   "definitions": Array [
                     Object {
                       "expression": Object {
-                        "kind": "Identifier",
+                        "kind": "ValueIdentifier",
                         "value": "x",
                       },
                       "identifier": Object {
-                        "kind": "Identifier",
+                        "kind": "ValueIdentifier",
                         "value": "x",
                       },
                       "kind": "NamedLiteral",
                     },
                     Object {
                       "expression": Object {
-                        "kind": "Identifier",
+                        "kind": "ValueIdentifier",
                         "value": "y",
                       },
                       "identifier": Object {
-                        "kind": "Identifier",
+                        "kind": "ValueIdentifier",
                         "value": "y",
                       },
                       "kind": "NamedLiteral",
@@ -421,7 +454,7 @@ Object {
         "kind": "FunctionDefinition",
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "increment",
       },
       "kind": "ConstantAssignment",
@@ -429,7 +462,7 @@ Object {
     Object {
       "expression": Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "TypeIdentifier",
           "value": "Point",
         },
         "kind": "NamedRecordLiteral",
@@ -437,11 +470,11 @@ Object {
           "definitions": Array [
             Object {
               "expression": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "one",
               },
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "x",
               },
               "kind": "NamedLiteral",
@@ -452,7 +485,7 @@ Object {
                 "value": 2,
               },
               "identifier": Object {
-                "kind": "Identifier",
+                "kind": "ValueIdentifier",
                 "value": "y",
               },
               "kind": "NamedLiteral",
@@ -462,7 +495,7 @@ Object {
         },
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "point",
       },
       "kind": "ConstantAssignment",
@@ -472,11 +505,11 @@ Object {
         "definitions": Array [
           Object {
             "expression": Object {
-              "kind": "Identifier",
+              "kind": "ValueIdentifier",
               "value": "point",
             },
             "identifier": Object {
-              "kind": "Identifier",
+              "kind": "ValueIdentifier",
               "value": "point",
             },
             "kind": "NamedLiteral",
@@ -485,14 +518,14 @@ Object {
         "kind": "RecordLiteral",
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "increment",
       },
       "kind": "FunctionCall",
     },
     Object {
       "expression": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "point",
       },
       "kind": "DEBUG_Log",
@@ -515,11 +548,11 @@ exports[`TupleDefinition 1`] = `
 Object {
   "definitions": Array [
     Object {
-      "kind": "Identifier",
+      "kind": "TypeIdentifier",
       "value": "number",
     },
     Object {
-      "kind": "Identifier",
+      "kind": "TypeIdentifier",
       "value": "number",
     },
   ],
@@ -535,8 +568,8 @@ Object {
       "kind": "NamedRecordDefinitionStatement",
       "namedRecordDefinition": Object {
         "identifier": Object {
-          "kind": "Identifier",
-          "value": "true",
+          "kind": "TypeIdentifier",
+          "value": "True",
         },
         "kind": "NamedRecordDefinition",
         "record": Object {
@@ -549,8 +582,8 @@ Object {
       "kind": "NamedRecordDefinitionStatement",
       "namedRecordDefinition": Object {
         "identifier": Object {
-          "kind": "Identifier",
-          "value": "false",
+          "kind": "TypeIdentifier",
+          "value": "False",
         },
         "kind": "NamedRecordDefinition",
         "record": Object {
@@ -561,18 +594,18 @@ Object {
     },
     Object {
       "expression": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "true",
       },
       "identifier": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "one",
       },
       "kind": "ConstantAssignment",
     },
     Object {
       "expression": Object {
-        "kind": "Identifier",
+        "kind": "ValueIdentifier",
         "value": "one",
       },
       "kind": "DEBUG_Log",

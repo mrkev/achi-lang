@@ -19,7 +19,7 @@ exports[`BinaryOperation 2`] = `
 Object {
   "kind": "BinaryOperation",
   "left": Object {
-    "kind": "Identifier",
+    "kind": "ValueIdentifier",
     "value": "hello",
   },
   "operator": "+",

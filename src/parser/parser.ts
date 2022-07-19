@@ -105,7 +105,8 @@ export type LangType = LangType_BinOp &
     blockComment: string;
 
     // Expressions
-    Identifier: { kind: "Identifier"; value: string };
+    ValueIdentifier: { kind: "ValueIdentifier"; value: string };
+    TypeIdentifier: { kind: "TypeIdentifier"; value: string };
     NumberLiteral: { kind: "NumberLiteral"; value: number };
     StringLiteral: { kind: "StringLiteral"; value: string };
 
@@ -128,13 +129,14 @@ export type LangType = LangType_BinOp &
       | LangType["FunctionDefinition"]
       | LangType["NumberLiteral"]
       | LangType["NamedRecordLiteral"]
-      | LangType["Identifier"]
+      | LangType["FunctionCall"]
+      | LangType["ValueIdentifier"]
       | LangType["RecordLiteral"]
       | LangType["StringLiteral"];
 
     FunctionCall: {
       kind: "FunctionCall";
-      identifier: LangType["Identifier"];
+      identifier: LangType["ValueIdentifier"];
       argument: LangType["RecordLiteral"];
     };
 
@@ -146,7 +148,7 @@ export type LangType = LangType_BinOp &
 
     ConstantAssignment: {
       kind: "ConstantAssignment";
-      identifier: LangType["Identifier"];
+      identifier: LangType["ValueIdentifier"];
       expression: LangType["Expression"];
     };
 
@@ -154,7 +156,7 @@ export type LangType = LangType_BinOp &
 
     NamedRecordDefinition: {
       kind: "NamedRecordDefinition";
-      identifier: LangType["Identifier"];
+      identifier: LangType["TypeIdentifier"];
       record: LangType["RecordDefinition"];
     };
 
@@ -166,14 +168,14 @@ export type LangType = LangType_BinOp &
 
     NamedRecordDefinitionGroup: {
       kind: "NamedRecordDefinitionGroup";
-      identifier: LangType["Identifier"];
+      identifier: LangType["TypeIdentifier"];
       namedRecordDefinitions: Array<LangType["NamedRecordDefinition"]>;
     };
 
     // Point(x: 5, y: 3)
     NamedRecordLiteral: {
       kind: "NamedRecordLiteral";
-      identifier: LangType["Identifier"];
+      identifier: LangType["TypeIdentifier"];
       recordLiteral: LangType["RecordLiteral"];
     };
 
@@ -192,23 +194,26 @@ export type LangType = LangType_BinOp &
     // x: 5
     NamedLiteral: {
       kind: "NamedLiteral";
-      identifier: LangType["Identifier"];
+      identifier: LangType["ValueIdentifier"];
       expression: LangType["Expression"];
     };
 
     // x: number
     NamedDefinition: {
       kind: NodeKind.NamedDefinition;
-      identifier: LangType["Identifier"];
+      identifier: LangType["ValueIdentifier"];
       typeTag: LangType["TypeTag"];
     };
 
-    Type: LangType["RecordDefinition"] | LangType["Identifier"];
+    Type:
+      | LangType["NamedRecordDefinition"]
+      | LangType["RecordDefinition"]
+      | LangType["TypeIdentifier"];
 
     // :string
     TypeTag: {
       kind: NodeKind.TypeTag;
-      identifier: LangType["Identifier"];
+      identifier: LangType["TypeIdentifier"];
     };
 
     DEBUG_Log: {
@@ -286,9 +291,23 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   ...LangDef_BinOp,
 
-  Identifier: () => {
-    return Parsimmon.regexp(/[a-zA-Z]+/).map((v) => ({
-      kind: "Identifier",
+  // Card, Point, SomeDataStructure
+  // TODO: special case "string", "number", "boolean" (,"object", "array" ?)
+  TypeIdentifier: () => {
+    return Parsimmon.regexp(
+      /string|number|boolean|object|array|[A-Z][a-zA-Z]*/
+    ).map((v) => ({
+      kind: "TypeIdentifier",
+      value: v,
+    }));
+  },
+
+  // card, point, doThisOrThat
+  ValueIdentifier: () => {
+    return Parsimmon.regexp(
+      /(?!string|number|boolean|object|array)[a-z][a-zA-Z]*/
+    ).map((v) => ({
+      kind: "ValueIdentifier",
       value: v,
     }));
   },
@@ -301,20 +320,17 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   },
 
   Expression: (r) => {
-    return Parsimmon.alt<
-      | LangType["FunctionDefinition"]
-      | LangType["NumberLiteral"]
-      | LangType["NamedRecordLiteral"]
-      | LangType["Identifier"]
-      | LangType["RecordLiteral"]
-      | LangType["StringLiteral"]
-    >(
-      r.FunctionDefinition,
-      r.NumberLiteral,
-      r.NamedRecordLiteral,
-      r.Identifier,
-      r.RecordLiteral,
-      r.StringLiteral
+    const expressionParsers: ExhaustiveParsers<LangType["Expression"]> = {
+      FunctionDefinition: r.FunctionDefinition,
+      NumberLiteral: r.NumberLiteral,
+      NamedRecordLiteral: r.NamedRecordLiteral,
+      FunctionCall: r.FunctionCall,
+      ValueIdentifier: r.ValueIdentifier,
+      RecordLiteral: r.RecordLiteral,
+      StringLiteral: r.StringLiteral,
+    };
+    return Parsimmon.alt<LangType["Expression"]>(
+      ...Object.values(expressionParsers)
     );
   },
 
@@ -419,7 +435,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return Parsimmon.seqMap(
       Parsimmon.string("const"),
       r.__,
-      r.Identifier,
+      r.ValueIdentifier,
       // TODO
       // r.TypeTag,
       r._,
@@ -481,7 +497,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // log(msg: "hello")
   FunctionCall: (r) => {
     return Parsimmon.seqMap(
-      r.Identifier,
+      r.ValueIdentifier,
       r.RecordLiteral,
       function (identifier, argument) {
         return {
@@ -498,7 +514,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return Parsimmon.seqMap(
       Parsimmon.string("type"),
       r.__,
-      r.Identifier,
+      r.TypeIdentifier,
       r._,
       r.TupleDefinition,
       function (_0, _1, identifier, _2, tuple) {
@@ -514,7 +530,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //* (number, number)
   TupleDefinition: (r) => {
     return Parsimmon.string("(")
-      .then(Parsimmon.sepBy1(r.Identifier, r._comma))
+      .then(Parsimmon.sepBy1(r.TypeIdentifier, r._comma))
       .skip(Parsimmon.string(")"))
       .map((definitions) => {
         return {
@@ -529,7 +545,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //* Point(x: 5, y: 5)
   NamedRecordLiteral: (r) => {
     return Parsimmon.seqMap(
-      r.Identifier,
+      r.TypeIdentifier,
       r.RecordLiteral,
       function (identifier, recordLiteral) {
         return {
@@ -544,7 +560,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //* Point(x: number, y: number)
   NamedRecordDefinition: (r) => {
     return Parsimmon.seqMap(
-      r.Identifier,
+      r.TypeIdentifier,
       r.RecordDefinition,
       function (identifier, record) {
         return {
@@ -571,11 +587,12 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     );
   },
 
+  // classes Card { King(); Queen(); Jack(); Number(value: number); }
   NamedRecordDefinitionGroup: (r) => {
     return Parsimmon.seqMap(
       Parsimmon.string("classes"),
       r._,
-      r.Identifier,
+      r.TypeIdentifier,
       r._,
       Parsimmon.string("{"),
       r._,
@@ -626,7 +643,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // x: 5
   NamedLiteral: (r) => {
     return Parsimmon.seqMap(
-      r.Identifier,
+      r.ValueIdentifier,
       r._,
       Parsimmon.string(":"),
       r._,
@@ -644,7 +661,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // x: number
   NamedDefinition: (r) => {
     return Parsimmon.seqMap(
-      r.Identifier,
+      r.ValueIdentifier,
       r._,
       r.TypeTag,
       (identifier, _3, typeTag) => {
@@ -659,8 +676,9 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   Type: (r) => {
     const typeParsers: ExhaustiveParsers<LangType["Type"]> = {
-      Identifier: r.Identifier,
+      TypeIdentifier: r.TypeIdentifier,
       RecordDefinition: r.RecordDefinition,
+      NamedRecordDefinition: r.NamedRecordDefinition,
     };
     return Parsimmon.alt<LangType["Type"]>(...Object.values(typeParsers));
   },
@@ -670,7 +688,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return Parsimmon.seqMap(
       Parsimmon.string(":"),
       r._,
-      r.Identifier,
+      r.TypeIdentifier,
       (_2, _3, identifier) => {
         return {
           kind: NodeKind.TypeTag,
@@ -681,7 +699,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   },
 });
 
-export function tryParse(str: string) {
+export function tryParse(str: string): LangType["Program"] {
   const result = Lang.Program.tryParse(str);
   return result;
 }

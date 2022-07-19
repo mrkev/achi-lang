@@ -7,7 +7,7 @@ Object {
     "kind": "BlockOfCases",
   },
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "ValueIdentifier",
     "value": "printCard",
   },
   "kind": "MatchFunction",
@@ -15,13 +15,13 @@ Object {
     "definitions": Array [
       Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "card",
         },
         "kind": "NamedDefinition",
         "typeTag": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "Card",
           },
           "kind": "TypeTag",
@@ -44,7 +44,7 @@ Object {
         },
         "guard": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "King",
           },
           "kind": "NamedRecordLiteral",
@@ -59,7 +59,7 @@ Object {
     "kind": "BlockOfCases",
   },
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "ValueIdentifier",
     "value": "printCard",
   },
   "kind": "MatchFunction",
@@ -67,13 +67,13 @@ Object {
     "definitions": Array [
       Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "card",
         },
         "kind": "NamedDefinition",
         "typeTag": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "Card",
           },
           "kind": "TypeTag",
@@ -104,7 +104,7 @@ Object {
         },
         "guard": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "King",
           },
           "kind": "NamedRecordLiteral",
@@ -130,7 +130,7 @@ Object {
         },
         "guard": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "Queen",
           },
           "kind": "NamedRecordLiteral",
@@ -156,7 +156,7 @@ Object {
         },
         "guard": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "Jack",
           },
           "kind": "NamedRecordLiteral",
@@ -182,7 +182,7 @@ Object {
         },
         "guard": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "Number",
           },
           "kind": "NamedRecordLiteral",
@@ -190,11 +190,11 @@ Object {
             "definitions": Array [
               Object {
                 "expression": Object {
-                  "kind": "Identifier",
+                  "kind": "ValueIdentifier",
                   "value": "value",
                 },
                 "identifier": Object {
-                  "kind": "Identifier",
+                  "kind": "ValueIdentifier",
                   "value": "value",
                 },
                 "kind": "NamedLiteral",
@@ -209,7 +209,7 @@ Object {
     "kind": "BlockOfCases",
   },
   "identifier": Object {
-    "kind": "Identifier",
+    "kind": "ValueIdentifier",
     "value": "printCard",
   },
   "kind": "MatchFunction",
@@ -217,13 +217,13 @@ Object {
     "definitions": Array [
       Object {
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "card",
         },
         "kind": "NamedDefinition",
         "typeTag": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "Card",
           },
           "kind": "TypeTag",
@@ -246,7 +246,7 @@ Object {
       Object {
         "expression": Object {
           "identifier": Object {
-            "kind": "Identifier",
+            "kind": "TypeIdentifier",
             "value": "King",
           },
           "kind": "NamedRecordLiteral",
@@ -254,11 +254,11 @@ Object {
             "definitions": Array [
               Object {
                 "expression": Object {
-                  "kind": "Identifier",
+                  "kind": "ValueIdentifier",
                   "value": "value",
                 },
                 "identifier": Object {
-                  "kind": "Identifier",
+                  "kind": "ValueIdentifier",
                   "value": "value",
                 },
                 "kind": "NamedLiteral",
@@ -268,7 +268,7 @@ Object {
           },
         },
         "identifier": Object {
-          "kind": "Identifier",
+          "kind": "ValueIdentifier",
           "value": "card",
         },
         "kind": "NamedLiteral",

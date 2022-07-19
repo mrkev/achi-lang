@@ -11,7 +11,7 @@ export type LangType_Match = {
 
   MatchFunction: {
     kind: "MatchFunction";
-    identifier: LangType["Identifier"];
+    identifier: LangType["ValueIdentifier"];
     matchType: LangType["Type"];
     block: LangType["BlockOfCases"];
   };
@@ -51,7 +51,7 @@ export const LangDef_Match = sublang<LangType, LangType_Match>({
     return Parsimmon.seqMap(
       Parsimmon.string("function"),
       r.__,
-      r.Identifier,
+      r.ValueIdentifier,
       r.__,
       Parsimmon.string("matches"),
       r.__,

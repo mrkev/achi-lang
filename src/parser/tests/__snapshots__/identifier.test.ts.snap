@@ -2,7 +2,7 @@
 
 exports[`Identifier 1`] = `
 Object {
-  "kind": "Identifier",
+  "kind": "ValueIdentifier",
   "value": "fooBar",
 }
 `;
