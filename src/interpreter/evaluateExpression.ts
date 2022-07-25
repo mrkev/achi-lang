@@ -1,11 +1,26 @@
 import { LangType } from "../parser/parser";
-import { Value, NamedRecordInstance } from "./interpreter";
+import { Value } from "./interpreter";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { Context } from "./Context";
 import { evaluateStatements } from "./evaluateStatements";
 import { System } from "./System";
-import { RecordLiteralInstance } from "./runtime/NamedRecordConstructor";
+import {
+  NamedRecordInstance,
+  NamedRecordKlass,
+  RecordLiteralInstance,
+} from "./runtime/runtime.records";
+import { evaluateMatch } from "./runtime/runtime.match";
 
+export function evaluateExpression(
+  expression: LangType["RecordLiteral"],
+  context: Context,
+  system: System
+): { kind: "RecordLiteralInstance"; value: RecordLiteralInstance };
+export function evaluateExpression(
+  expression: LangType["Expression"],
+  context: Context,
+  system: System
+): Value;
 export function evaluateExpression(
   expression: LangType["Expression"],
   context: Context,
@@ -14,21 +29,36 @@ export function evaluateExpression(
   const { kind } = expression;
   switch (kind) {
     case "ValueIdentifier": {
-      const foundValue = context.values().get(expression.value);
-      if (!foundValue) {
-        throw new Error(`Name ${expression.value} not found`);
-      }
+      const foundValue = context
+        .values()
+        .getOrThrow(expression.value, `Name ${expression.value} not found`);
       return foundValue;
     }
 
     case "NamedRecordLiteral": {
-      system.console.log("->NamedRecordLiteral");
-      const instance = NamedRecordInstance.fromNamedRecordLiteral(
-        expression,
+      const namedRecordKlass = context.getTypeOrThrow(expression.identifier);
+      if (!(namedRecordKlass instanceof NamedRecordKlass)) {
+        throw new Error(
+          `Type ${namedRecordKlass} is not a named record definition`
+        );
+      }
+
+      // TODO: typecheck
+      // konstructor.valueSpec
+
+      const recordLiteral = evaluateExpression(
+        expression.recordLiteral,
         context,
         system
       );
-      return { kind: "NamedRecord", value: instance };
+
+      const instance = new NamedRecordInstance(
+        expression,
+        namedRecordKlass,
+        recordLiteral.value
+      );
+
+      return { kind: "NamedRecordInstance", value: instance };
     }
 
     case "NumberLiteral": {
@@ -36,21 +66,21 @@ export function evaluateExpression(
     }
 
     case "RecordLiteral": {
-      system.console.log("->RecordLiteral");
-      const props = new Map<string, Value>
+      const props = new Map<string, Value>();
       for (const def of expression.definitions) {
-        const value = evaluateExpression(def.expression, context, system)
+        const childExpression = def.expression;
+        const value = evaluateExpression(childExpression, context, system);
         // TODO: ensure no duplicate identifiers
-        props.set(def.identifier.value, value)
+        props.set(def.identifier.value, value);
       }
 
-      const instance = new RecordLiteralInstance(expression, props)
-      return {kind: "RecordLiteralInstance", value: instance}
+      const instance = new RecordLiteralInstance(expression, props);
+      return { kind: "RecordLiteralInstance", value: instance };
     }
 
     case "StringLiteral": {
       return { kind: "string", value: expression.value };
-      // throw new Error("Not implemented; StringLiteral evaluation");
+      // throw new Error("Not implemented; StringsLiteral evaluation");
     }
 
     case "FunctionDefinition": {
@@ -85,8 +115,15 @@ export function evaluateExpression(
       );
     }
 
-    default:
+    case "MatchExpression": {
+      const value = evaluateExpression(expression.expression, context, system);
+      const result = evaluateMatch(value, expression.block, context, system);
+      return result;
+    }
+
+    default: {
       throw exhaustive(kind);
+    }
   }
 }
 

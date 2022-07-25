@@ -55,6 +55,25 @@ test("boolean definition", () => {
   expect(result).toMatchSnapshot();
 });
 
+test("NestedTypeIdentifier", () => {
+  const result = Lang.NestedTypeIdentifier.tryParse("Card.King");
+  expect(result).toMatchInlineSnapshot(`
+Object {
+  "kind": "NestedTypeIdentifier",
+  "path": Array [
+    Object {
+      "kind": "TypeIdentifier",
+      "value": "Card",
+    },
+    Object {
+      "kind": "TypeIdentifier",
+      "value": "King",
+    },
+  ],
+}
+`);
+});
+
 test("ConstantAssignment", () => {
   const result = Lang.ConstantAssignment.tryParse("const x = 3");
   expect(result).toMatchSnapshot();

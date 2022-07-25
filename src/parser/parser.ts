@@ -2,47 +2,6 @@ import * as Parsimmon from "parsimmon";
 import { LangType_BinOp, LangDef_BinOp } from "./parser.binop";
 import { LangType_Match, LangDef_Match } from "./parser.match";
 
-// console.log(Lang.NamedTupleDefinition.tryParse("type Point(number, number)"));
-
-/*
-
-type Point (
-  x: number,
-  y: number,
-)
-
-const a = {} => {
-
-}
-
-
-classes {
-  King()
-  Queen()
-  Jack()
-  Number(value: number)
-}
-
-*/
-
-export enum NodeKind {
-  NamedDefinition = "NamedDefinition",
-  RecordDefinition = "RecordDefinition",
-  NamedTupleDefinition = "NamedTupleDefinition",
-  TupleDefinition = "TupleDefinition",
-  TypeTag = "TypeTag",
-}
-
-const list: ReadonlyArray<Parsimmon.Parser<LangType["Statement"]>> = [
-  // r.ReturnStatement,
-  // r.IfStatement,
-  // r.NamedRecordDefinitionStatement,
-  // r.NamedRecordDefinitionGroup,
-  // r.ConstantAssignment,
-  // r.FunctionCall,
-  // r.DEBUG_Log,
-] as const;
-
 type LT_NonNodeKeys = {
   [Key in keyof LangType]: LangType[Key] extends string | number | symbol
     ? Key
@@ -59,8 +18,6 @@ type ValueOf<T> = T[keyof T];
 type ExhaustiveParsers<T extends ValueOf<LT_OnlyNodes>> = {
   [key in T["kind"]]: Parsimmon.Parser<LangType[key]>;
 };
-
-type x = Parsimmon.UnParser<typeof list[number]>;
 
 // From: https://github.com/jneen/parsimmon/blob/master/examples/json.js
 
@@ -128,6 +85,7 @@ export type LangType = LangType_BinOp &
 
     Expression:
       | LangType["FunctionDefinition"]
+      | LangType["MatchExpression"]
       | LangType["NumberLiteral"]
       | LangType["NamedRecordLiteral"]
       | LangType["FunctionCall"]
@@ -190,7 +148,7 @@ export type LangType = LangType_BinOp &
 
     //* (x: number, y: number)
     RecordDefinition: {
-      kind: NodeKind.RecordDefinition;
+      kind: "RecordDefinition";
       definitions: Array<LangType["NamedDefinition"]>;
     };
 
@@ -203,35 +161,44 @@ export type LangType = LangType_BinOp &
 
     // x: number
     NamedDefinition: {
-      kind: NodeKind.NamedDefinition;
+      kind: "NamedDefinition";
       identifier: LangType["ValueIdentifier"];
       typeTag: LangType["TypeTag"];
     };
 
-    Type:
+    TypeExpression:
       | LangType["NamedRecordDefinition"]
       | LangType["RecordDefinition"]
       | LangType["TypeIdentifier"];
 
     // :string
     TypeTag: {
-      kind: NodeKind.TypeTag;
+      kind: "TypeTag";
       identifier: LangType["TypeIdentifier"];
     };
 
+    // #log value
     DEBUG_Log: {
       kind: "DEBUG_Log";
       expression: LangType["Expression"];
     };
 
+    // #log Type
+    DEBUG_LogType: {
+      kind: "DEBUG_LogType";
+      typeExpression: LangType["TypeExpression"];
+    };
+
     Statement:
       | LangType["ReturnStatement"]
       | LangType["IfStatement"]
+      | LangType["MatchExpression"]
       | LangType["NamedRecordDefinitionStatement"]
       | LangType["NamedRecordDefinitionGroup"]
       | LangType["ConstantAssignment"]
       | LangType["MatchFunction"]
       | LangType["FunctionCall"]
+      | LangType["DEBUG_LogType"]
       | LangType["DEBUG_Log"];
 
     Program: { kind: "Program"; statements: Array<LangType["Statement"]> };
@@ -294,8 +261,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   ...LangDef_BinOp,
 
-  // Card, Point, SomeDataStructure
-  // TODO: special case "string", "number", "boolean" (,"object", "array" ?)
+  // Card, Point, SomeDataStructure, number
   TypeIdentifier: () => {
     return Parsimmon.regexp(
       /string|number|boolean|object|array|[A-Z][a-zA-Z]*/
@@ -337,6 +303,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   Expression: (r) => {
     const expressionParsers: ExhaustiveParsers<LangType["Expression"]> = {
       FunctionDefinition: r.FunctionDefinition,
+      MatchExpression: r.MatchExpression,
       NumberLiteral: r.NumberLiteral,
       NamedRecordLiteral: r.NamedRecordLiteral,
       FunctionCall: r.FunctionCall,
@@ -377,10 +344,12 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       ReturnStatement: r.ReturnStatement,
       IfStatement: r.IfStatement,
       MatchFunction: r.MatchFunction,
+      MatchExpression: r.MatchExpression,
       NamedRecordDefinitionStatement: r.NamedRecordDefinitionStatement,
       NamedRecordDefinitionGroup: r.NamedRecordDefinitionGroup,
       ConstantAssignment: r.ConstantAssignment,
       FunctionCall: r.FunctionCall,
+      DEBUG_LogType: r.DEBUG_LogType,
       DEBUG_Log: r.DEBUG_Log,
     };
     return Parsimmon.alt<LangType["Statement"]>(
@@ -438,6 +407,20 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         return {
           kind: "DEBUG_Log",
           expression,
+        };
+      }
+    );
+  },
+
+  DEBUG_LogType: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("#logtype"),
+      r.__,
+      r.TypeExpression,
+      function (_0, _1, typeExpression) {
+        return {
+          kind: "DEBUG_LogType",
+          typeExpression,
         };
       }
     );
@@ -534,7 +517,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r.TupleDefinition,
       function (_0, _1, identifier, _2, tuple) {
         return {
-          kind: NodeKind.NamedTupleDefinition,
+          kind: "NamedTupleDefinition",
           identifier,
           tuple,
         };
@@ -549,7 +532,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       .skip(Parsimmon.string(")"))
       .map((definitions) => {
         return {
-          kind: NodeKind.TupleDefinition,
+          kind: "TupleDefinition",
           definitions,
         };
       });
@@ -651,7 +634,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         .skip(Parsimmon.string(")"))
         .map((definitions) => {
           return {
-            kind: NodeKind.RecordDefinition,
+            kind: "RecordDefinition",
             definitions,
           };
         })
@@ -686,7 +669,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r.TypeTag,
       (identifier, _3, typeTag) => {
         return {
-          kind: NodeKind.NamedDefinition,
+          kind: "NamedDefinition",
           identifier,
           typeTag,
         };
@@ -694,13 +677,15 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     );
   },
 
-  Type: (r) => {
-    const typeParsers: ExhaustiveParsers<LangType["Type"]> = {
+  TypeExpression: (r) => {
+    const typeParsers: ExhaustiveParsers<LangType["TypeExpression"]> = {
       TypeIdentifier: r.TypeIdentifier,
       RecordDefinition: r.RecordDefinition,
       NamedRecordDefinition: r.NamedRecordDefinition,
     };
-    return Parsimmon.alt<LangType["Type"]>(...Object.values(typeParsers));
+    return Parsimmon.alt<LangType["TypeExpression"]>(
+      ...Object.values(typeParsers)
+    );
   },
 
   // :string
@@ -711,7 +696,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r.TypeIdentifier,
       (_2, _3, identifier) => {
         return {
-          kind: NodeKind.TypeTag,
+          kind: "TypeTag",
           identifier,
         };
       }

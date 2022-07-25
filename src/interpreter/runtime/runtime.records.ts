@@ -1,5 +1,7 @@
 import type { LangType } from "../../parser/parser";
+import { Context } from "../Context";
 import { Value } from "../interpreter";
+import { System } from "../System";
 
 /**
  * Represents the constructor for a named record, as it sits in memory
@@ -8,7 +10,13 @@ import { Value } from "../interpreter";
 export class NamedRecordKlass {
   readonly classname: string;
   readonly valueSpec: Map<string, string> = new Map(); // identifer => type
-  constructor(classname: string, valueSpec: Map<string, string>) {
+  ast: LangType["NamedRecordDefinition"];
+  constructor(
+    ast: LangType["NamedRecordDefinition"],
+    classname: string,
+    valueSpec: Map<string, string>
+  ) {
+    this.ast = ast;
     this.classname = classname;
     this.valueSpec = valueSpec;
   }
@@ -21,7 +29,7 @@ export class NamedRecordKlass {
     for (const prop of def.record.definitions) {
       valueSpec.set(prop.identifier.value, prop.typeTag.identifier.value);
     }
-    const res = new NamedRecordKlass(classname, valueSpec);
+    const res = new NamedRecordKlass(def, classname, valueSpec);
     // console.log(res.asClass());
     return res;
   }
@@ -43,11 +51,41 @@ export class NamedRecordKlass {
   }
 }
 
+// ie, Point(x: 3, y: 3)
+export class NamedRecordInstance {
+  readonly konstructor: NamedRecordKlass;
+  readonly recordLiteral: RecordLiteralInstance;
+  ast: LangType["NamedRecordLiteral"];
+  constructor(
+    ast: LangType["NamedRecordLiteral"],
+    konstructor: NamedRecordKlass,
+    recordLiteralInstance: RecordLiteralInstance
+  ) {
+    this.ast = ast;
+    this.konstructor = konstructor;
+    this.recordLiteral = recordLiteralInstance;
+  }
+}
+
+// ie, (x: 3, y: 4)
 export class RecordLiteralInstance {
   ast: LangType["RecordLiteral"];
   props: Map<string, Value>;
   constructor(ast: LangType["RecordLiteral"], props: Map<string, Value>) {
     this.ast = ast;
     this.props = props;
+  }
+}
+
+// ie, classes Card { King(); Queen(); ...etc }
+export class NamedRecordDefinitionGroupInstance {
+  ast: LangType["NamedRecordDefinitionGroup"];
+  klasses: Map<string, NamedRecordKlass>;
+  constructor(
+    ast: LangType["NamedRecordDefinitionGroup"],
+    klasses: Map<string, NamedRecordKlass>
+  ) {
+    this.ast = ast;
+    this.klasses = klasses;
   }
 }

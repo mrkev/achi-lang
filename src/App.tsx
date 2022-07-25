@@ -245,6 +245,7 @@ function handleScriptEditorWillMount(monaco: Monaco) {
       ":",
       "==",
       "<=",
+      "=>",
       ">=",
       "!=",
       "&&",

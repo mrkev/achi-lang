@@ -1,5 +1,4 @@
 import { LangType, tryParse } from "../parser/parser";
-import { evaluateExpression } from "./evaluateExpression";
 import { Context } from "./Context";
 import { System } from "./System";
 import { exhaustive, nullthrows } from "./nullthrows";
@@ -7,8 +6,10 @@ import { evaluateStatements } from "./evaluateStatements";
 import {
   NamedRecordKlass,
   RecordLiteralInstance,
-} from "./runtime/NamedRecordConstructor";
-import { MatchFunctionInstance } from "./runtime/MatchFunctionInstance";
+  NamedRecordDefinitionGroupInstance,
+  NamedRecordInstance,
+} from "./runtime/runtime.records";
+import { MatchFunctionInstance } from "./runtime/runtime.match";
 
 export function interpret(
   script: string | LangType["Program"],
@@ -24,57 +25,19 @@ export function interpret(
   }
 }
 
-export class NamedRecordInstance {
-  readonly konstructor: NamedRecordKlass;
-  readonly props: Map<string, Value>;
-  constructor(konstructor: NamedRecordKlass, props: Map<string, Value>) {
-    this.konstructor = konstructor;
-    this.props = props;
-  }
-
-  static fromNamedRecordLiteral(
-    expression: LangType["NamedRecordLiteral"],
-    context: Context,
-    system: System
-  ) {
-    // if (!context.types.has(expression.identifier.value)) {
-    //   throw new Error(`No definition for ${expression.identifier.value} found`);
-    // }
-
-    const identifierValue = resolveTypeIdentifier(
-      expression.identifier,
-      context
-    );
-
-    const konstructor = context.types.get(identifierValue);
-    if (!(konstructor instanceof NamedRecordKlass)) {
-      throw new Error(`Type ${identifierValue} is not a named record`);
-    }
-
-    // TODO: typecheck
-    // konstructor.valueSpec
-
-    const props = new Map();
-    for (const def of expression.recordLiteral.definitions) {
-      props.set(
-        def.identifier.value,
-        evaluateExpression(def.expression, context, system)
-      );
-    }
-
-    const instance = new NamedRecordInstance(konstructor, props);
-    return instance;
-  }
-}
-
 export type Value =
   | { kind: "number"; value: number }
   | { kind: "string"; value: string }
   | { kind: "boolean"; value: boolean }
-  | { kind: "NamedRecord"; value: NamedRecordInstance }
+  | { kind: "empty"; value: null }
+  | { kind: "NamedRecordInstance"; value: NamedRecordInstance }
   | { kind: "MatchFunctionInstance"; value: MatchFunctionInstance }
   | { kind: "NamedRecordKlass"; value: NamedRecordKlass }
-  | { kind: "RecordLiteralInstance"; value: RecordLiteralInstance };
+  | { kind: "RecordLiteralInstance"; value: RecordLiteralInstance }
+  | {
+      kind: "NamedRecordDefinitionGroupInstance";
+      value: NamedRecordDefinitionGroupInstance;
+    };
 
 export function stringOfValue(value: Value): string {
   const { kind } = value;
@@ -84,9 +47,13 @@ export function stringOfValue(value: Value): string {
     case "boolean": {
       return String(value.value);
     }
-    case "NamedRecord": {
-      let str = value.value.konstructor.classname + " { \n";
-      for (const [key, val] of value.value.props.entries()) {
+    case "NamedRecordInstance": {
+      let str = value.value.konstructor.classname + " {";
+      const entries = [...value.value.recordLiteral.props.entries()];
+      if (entries.length > 0) {
+        str += "\n";
+      }
+      for (const [key, val] of entries) {
         str += `  ${key}: ${stringOfValue(
           val
         )} (${value.value.konstructor.valueSpec.get(key)})\n`;
@@ -112,6 +79,14 @@ export function stringOfValue(value: Value): string {
       //   )} (${value.value.konstructor.valueSpec.get(key)})\n`;
       // }
       // str += "}";
+    }
+
+    case "NamedRecordDefinitionGroupInstance": {
+      return `[classes: ${value.value.ast.identifier.value} (${value.value.ast.namedRecordDefinitions.length} classes)]`;
+    }
+
+    case "empty": {
+      return "null";
     }
 
     default:

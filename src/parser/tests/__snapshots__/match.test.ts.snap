@@ -1,5 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`MatchExpression 1`] = `
+Object {
+  "block": Object {
+    "caseEntries": Array [
+      Object {
+        "block": Object {
+          "kind": "Block",
+          "statements": Array [],
+        },
+        "guard": Object {
+          "identifier": Object {
+            "kind": "TypeIdentifier",
+            "value": "King",
+          },
+          "kind": "NamedRecordLiteral",
+          "recordLiteral": Object {
+            "definitions": Array [],
+            "kind": "RecordLiteral",
+          },
+        },
+        "kind": "CaseEntry",
+      },
+    ],
+    "kind": "BlockOfCases",
+  },
+  "expression": Object {
+    "kind": "ValueIdentifier",
+    "value": "card",
+  },
+  "kind": "MatchExpression",
+}
+`;
+
 exports[`MatchFunction 1`] = `
 Object {
   "block": Object {
@@ -232,6 +265,137 @@ Object {
     ],
     "kind": "RecordDefinition",
   },
+}
+`;
+
+exports[`MatchFunction.fullExample 2`] = `
+Object {
+  "block": Object {
+    "caseEntries": Array [
+      Object {
+        "block": Object {
+          "kind": "Block",
+          "statements": Array [
+            Object {
+              "expression": Object {
+                "kind": "StringLiteral",
+                "value": "King",
+              },
+              "kind": "ReturnStatement",
+            },
+          ],
+        },
+        "guard": Object {
+          "identifier": Object {
+            "kind": "TypeIdentifier",
+            "value": "King",
+          },
+          "kind": "NamedRecordLiteral",
+          "recordLiteral": Object {
+            "definitions": Array [],
+            "kind": "RecordLiteral",
+          },
+        },
+        "kind": "CaseEntry",
+      },
+      Object {
+        "block": Object {
+          "kind": "Block",
+          "statements": Array [
+            Object {
+              "expression": Object {
+                "kind": "StringLiteral",
+                "value": "Queen",
+              },
+              "kind": "ReturnStatement",
+            },
+          ],
+        },
+        "guard": Object {
+          "identifier": Object {
+            "kind": "TypeIdentifier",
+            "value": "Queen",
+          },
+          "kind": "NamedRecordLiteral",
+          "recordLiteral": Object {
+            "definitions": Array [],
+            "kind": "RecordLiteral",
+          },
+        },
+        "kind": "CaseEntry",
+      },
+      Object {
+        "block": Object {
+          "kind": "Block",
+          "statements": Array [
+            Object {
+              "expression": Object {
+                "kind": "StringLiteral",
+                "value": "Jack",
+              },
+              "kind": "ReturnStatement",
+            },
+          ],
+        },
+        "guard": Object {
+          "identifier": Object {
+            "kind": "TypeIdentifier",
+            "value": "Jack",
+          },
+          "kind": "NamedRecordLiteral",
+          "recordLiteral": Object {
+            "definitions": Array [],
+            "kind": "RecordLiteral",
+          },
+        },
+        "kind": "CaseEntry",
+      },
+      Object {
+        "block": Object {
+          "kind": "Block",
+          "statements": Array [
+            Object {
+              "expression": Object {
+                "kind": "StringLiteral",
+                "value": "Number card",
+              },
+              "kind": "ReturnStatement",
+            },
+          ],
+        },
+        "guard": Object {
+          "identifier": Object {
+            "kind": "TypeIdentifier",
+            "value": "Number",
+          },
+          "kind": "NamedRecordLiteral",
+          "recordLiteral": Object {
+            "definitions": Array [
+              Object {
+                "expression": Object {
+                  "kind": "ValueIdentifier",
+                  "value": "value",
+                },
+                "identifier": Object {
+                  "kind": "ValueIdentifier",
+                  "value": "value",
+                },
+                "kind": "NamedLiteral",
+              },
+            ],
+            "kind": "RecordLiteral",
+          },
+        },
+        "kind": "CaseEntry",
+      },
+    ],
+    "kind": "BlockOfCases",
+  },
+  "expression": Object {
+    "kind": "ValueIdentifier",
+    "value": "card",
+  },
+  "kind": "MatchExpression",
 }
 `;
 

@@ -1,6 +1,14 @@
 import { Value } from "./interpreter";
-import { NamedRecordKlass } from "./runtime/NamedRecordConstructor";
+import {
+  NamedRecordKlass,
+  NamedRecordDefinitionGroupInstance,
+} from "./runtime/runtime.records";
 import { nullthrows } from "./nullthrows";
+import { LangType } from "../parser/parser";
+
+type RuntimeTypeStructures =
+  | NamedRecordKlass
+  | NamedRecordDefinitionGroupInstance;
 
 /**
  * Context handles variable/ scoping, stack frames (TODO), etc
@@ -13,7 +21,51 @@ export class Context {
   private valueScopes: Scope<Value>[] = [new Scope(null)];
 
   // TODO: standard types, like records?
-  types: Map<string, NamedRecordKlass> = new Map();
+  types: Map<string, RuntimeTypeStructures> = new Map();
+
+  ////////////////// Types
+
+  getTypeOrThrow(
+    identifer: LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"],
+    msg?: string
+  ): NamedRecordKlass | NamedRecordDefinitionGroupInstance {
+    const { kind } = identifer;
+    switch (kind) {
+      case "TypeIdentifier": {
+        const result = this.types.get(identifer.value);
+        if (result == null) {
+          throw new Error(msg ?? `Unknown type ${identifer.value}`);
+        }
+        return result;
+      }
+
+      case "NestedTypeIdentifier": {
+        // Currently just supporting strictly one level of nesting
+        const [parent, child] = identifer.path;
+        const group = this.getTypeOrThrow(
+          parent,
+          `Unknown NamedRecordDefinitionGroup ${parent.value}`
+        );
+
+        if (!(group instanceof NamedRecordDefinitionGroupInstance)) {
+          throw new Error(
+            `${parent.value} is not a NamedRecordDefinitionGroup`
+          );
+        }
+
+        const klass = group.klasses.get(child.value);
+
+        if (klass == null) {
+          console.log(group);
+          throw new Error(`${parent.value}.${child.value} does not exist`);
+        }
+
+        return klass;
+      }
+    }
+  }
+
+  ////////////////// Value Scopes
 
   pushScope() {
     const currentScope = this.valueScopes.at(-1);

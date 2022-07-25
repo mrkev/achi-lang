@@ -5,6 +5,6 @@ export function nullthrows<T>(val: T | null | undefined, msg?: string): T {
   return val;
 }
 
-export function exhaustive(a: never) {
-  throw new Error(`Non-exhaustive: ${a} went through`);
+export function exhaustive(a: never, msg?: string) {
+  throw new Error(msg ?? `Non-exhaustive: ${a} went through`);
 }

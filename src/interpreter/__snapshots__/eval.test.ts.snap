@@ -14,6 +14,12 @@ Array [
 ]
 `;
 
+exports[`match.1 1`] = `
+Array [
+  "number card",
+]
+`;
+
 exports[`simple.1 1`] = `
 Array [
   "hi",

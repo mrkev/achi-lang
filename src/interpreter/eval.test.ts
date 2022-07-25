@@ -1,6 +1,3 @@
-import { Lang } from "../parser/parser";
-import { Context } from "./Context";
-import { evaluateExpression } from "./evaluateExpression";
 import { interpret } from "./interpreter";
 import { System } from "./System";
 
@@ -37,6 +34,31 @@ test("func.1", () => {
     case King(): { }
   };
   #log foo;
+  `);
+  expect(logs).toMatchSnapshot();
+});
+
+test("match.1", () => {
+  const logs = logsFor(`
+  classes Card {
+    King();
+    Queen();
+    Jack();
+    Number(value: number)
+  };
+  
+  const four = Card.Number(value: 4);
+  
+  const result = match (four) {
+    case Card.King(): {
+      return "king"
+    };
+    case Card.Number(value: value): {
+      return "number card"
+    }
+  };
+  
+  #log result 
   `);
   expect(logs).toMatchSnapshot();
 });

@@ -41,3 +41,33 @@ test("MatchFunction.fullExample", () => {
   );
   expect(result).toMatchSnapshot();
 });
+
+test("MatchExpression", () => {
+  const result = Lang.MatchExpression.tryParse(
+    "match (card) { case King(): {} }"
+  );
+  expect(result).toMatchSnapshot();
+});
+
+test("MatchFunction.fullExample", () => {
+  const result = Lang.MatchExpression.tryParse(
+    `match (card) {
+        case King(): {
+          return "King"
+        };
+
+        case Queen(): {
+          return "Queen"
+        };
+
+        case Jack(): {
+          return "Jack"
+        };
+
+        case Number(value: value): {
+          return "Number card"
+        };
+    }`
+  );
+  expect(result).toMatchSnapshot();
+});
