@@ -1,0 +1,41 @@
+
+
+const four = Card.Number(value: 4)
+
+// Matches, like all functions, always necessitate a record
+// But that's fine I think, since being easily extensible
+
+function printCard matches (card: Card) {
+  case (card: Card.Number(value: value)) {
+    console.log("number", value)
+  }
+
+  case (card: Card.King())
+  case (card: Card.Queen())
+  case (card: Card.Jack()) {
+    console.log("suit")
+  }
+
+}
+
+
+// Implement this once shorthand record literal has been implemented, ie
+// const x = 1
+// const y = 1
+// const point = Point(x, y)
+match (point) {
+  case Point(x): // this should bind x
+  case Point(x: x) // this should be the exact same and bind x
+}
+
+
+ALON
+
+(
+  name: "Hello World",
+  isMessage: true,
+  render: (
+    fontSize: 20,
+    color: 'red',
+  )
+)
