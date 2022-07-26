@@ -34,12 +34,16 @@ export function evaluateMatch(
   for (const caseEntry of cases.caseEntries) {
     const guardExpression = caseEntry.guard;
     // TODO: bindings!!!
-    if (isMatch(value, guardExpression, context)) {
+    const matchResult = doMatch(value, guardExpression, context);
+    if (matchResult.isMatch) {
+      context.pushScope();
+      context.valueScope().defineAll(matchResult.bindings);
       const result = evaluateStatements(
         caseEntry.block.statements,
         context,
         system
       );
+      context.popScope();
       return result ?? { kind: "empty", value: null };
     }
   }
@@ -47,59 +51,34 @@ export function evaluateMatch(
   throw new Error("fixme, no case blocks");
 }
 
-function isMatch(
+function doMatch(
   value: Value,
   expression: LangType["Expression"],
   context: Context
-): boolean {
-  const { kind } = expression;
-  switch (kind) {
+  // todo, new context instead of bindings array?
+):
+  | Readonly<{ isMatch: false }>
+  | Readonly<{ isMatch: true; bindings: Array<[string, Value]> }> {
+  switch (expression.kind) {
     // an identifier matches with anything
     case "ValueIdentifier": {
-      return true;
+      return { isMatch: true, bindings: [[expression.value, value]] };
     }
 
     case "StringLiteral": {
-      return value.kind === "string";
+      const isMatch = value.kind === "string";
+      return isMatch ? { isMatch, bindings: [] } : { isMatch };
     }
 
     case "NumberLiteral": {
-      return value.kind === "number";
+      const isMatch = value.kind === "number";
+      return isMatch ? { isMatch, bindings: [] } : { isMatch };
     }
 
-    // TODO: TEST TEST TEST
-    case "RecordLiteral": {
-      if (value.kind !== "RecordLiteralInstance") {
-        return false;
-      }
-
-      const instace = value.value;
-      const instanceKeys = [...instace.props.keys()];
-      const literalKeys = expression.definitions.map(
-        (def) => def.identifier.value
-      );
-
-      if (!aSubsetB(literalKeys, instanceKeys)) {
-        return false;
-      }
-
-      for (const pattern of expression.definitions) {
-        const key = pattern.identifier.value;
-        const childVal = nullthrows(
-          instace.props.get(key),
-          "should never happen, because we ensured patternKeys is a subset of instanceKeys above"
-        );
-
-        if (!isMatch(childVal, pattern.expression, context)) {
-          return false;
-        }
-      }
-
-      return true;
-    }
+    // Card.Number(value: value)
     case "NamedRecordLiteral": {
       if (value.kind !== "NamedRecordInstance") {
-        return false;
+        return { isMatch: false };
       }
 
       const valueToMatch = value.value;
@@ -107,10 +86,10 @@ function isMatch(
 
       // todo: double check that this handles not matching on class groups in the way I want it to
       if (valueToMatch.konstructor !== patternKlass) {
-        return false;
+        return { isMatch: false };
       }
 
-      return isMatch(
+      return doMatch(
         {
           kind: "RecordLiteralInstance",
           value: valueToMatch.recordLiteral,
@@ -120,15 +99,55 @@ function isMatch(
       );
     }
 
+    // TODO: TEST TEST TEST
+    case "RecordLiteral": {
+      if (value.kind !== "RecordLiteralInstance") {
+        return { isMatch: false };
+      }
+
+      const instace = value.value;
+      const instanceKeys = [...instace.props.keys()];
+      const literalKeys = expression.definitions.map(
+        (def) => def.identifier.value
+      );
+
+      if (!aSubsetB(literalKeys, instanceKeys)) {
+        return { isMatch: false };
+      }
+
+      // TODO: error on overrides, would be better at eval time than only if
+      // the pattern matches (current behaviour).
+      // Would be even better at typechecking time acutally btw
+      const bindings = [];
+      for (const pattern of expression.definitions) {
+        const key = pattern.identifier.value;
+        const childVal = nullthrows(
+          instace.props.get(key),
+          "should never happen, because we ensured patternKeys is a subset of instanceKeys above"
+        );
+
+        const matchResult = doMatch(childVal, pattern.expression, context);
+        if (matchResult.isMatch) {
+          bindings.push(...matchResult.bindings);
+        } else {
+          return { isMatch: false };
+        }
+      }
+
+      return { isMatch: true, bindings: bindings };
+    }
+
     case "MatchExpression":
     case "FunctionCall":
     case "FunctionDefinition": {
-      throw new Error(`Can't pattern match using expression of type ${kind}`);
+      throw new Error(
+        `Can't pattern match using expression of type ${expression.kind}`
+      );
       break;
     }
 
     default: {
-      throw exhaustive(kind);
+      throw exhaustive(expression);
     }
   }
 }

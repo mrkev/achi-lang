@@ -43,7 +43,7 @@ export function evaluateStatements(
           klass
         );
         context
-          .values()
+          .valueScope()
           .define(identifer, { kind: "NamedRecordKlass", value: klass });
         break;
       }
@@ -51,7 +51,7 @@ export function evaluateStatements(
       // defines, "classes Card { ... }"
       case "NamedRecordDefinitionGroup": {
         const identiferValue = statement.identifier.value;
-        if (context.values().has(statement.identifier.value)) {
+        if (context.valueScope().has(statement.identifier.value)) {
           throw new Error(
             `NamedRecordDefinitionGroup: ${statement.identifier.value} is already defined`
           );
@@ -71,7 +71,7 @@ export function evaluateStatements(
         );
 
         context.types.set(identiferValue, group);
-        context.values().define(identiferValue, {
+        context.valueScope().define(identiferValue, {
           kind: "NamedRecordDefinitionGroupInstance",
           value: group,
         });
@@ -84,13 +84,15 @@ export function evaluateStatements(
         // TODO: determine truthiness
         if (guardValue) {
           // TODO: scoping!
+          context.pushScope();
           evaluateStatements(statement.block.statements, context, system);
+          context.popScope();
         }
         break;
       }
 
       case "ConstantAssignment": {
-        if (context.values().has(statement.identifier.value)) {
+        if (context.valueScope().has(statement.identifier.value)) {
           console.warn("Overriding definition for", statement.identifier.value);
         }
         const result = evaluateExpression(
@@ -98,7 +100,7 @@ export function evaluateStatements(
           context,
           system
         );
-        context.values().define(statement.identifier.value, result);
+        context.valueScope().define(statement.identifier.value, result);
         break;
       }
 
@@ -119,6 +121,7 @@ export function evaluateStatements(
       case "ReturnStatement": {
         const value = evaluateExpression(statement.expression, context, system);
         // We don't evaluate further, and instead return immediately //
+
         return value;
       }
 
@@ -131,7 +134,7 @@ export function evaluateStatements(
 
       // defines
       case "MatchFunction": {
-        if (context.values().has(statement.identifier.value)) {
+        if (context.valueScope().has(statement.identifier.value)) {
           console.warn(
             "MatchFunction: Overriding definition for",
             statement.identifier.value
@@ -139,7 +142,7 @@ export function evaluateStatements(
         }
 
         const matchFuncInstance = new MatchFunctionInstance(statement);
-        context.values().define(statement.identifier.value, {
+        context.valueScope().define(statement.identifier.value, {
           kind: "MatchFunctionInstance",
           value: matchFuncInstance,
         });

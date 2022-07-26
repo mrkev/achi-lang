@@ -18,7 +18,9 @@ export function interpret(
 ): void {
   try {
     const ast = typeof script === "string" ? tryParse(script) : script;
+    context.pushScope();
     evaluateStatements(ast.statements, context, system);
+    context.popScope();
   } catch (e) {
     system.console.log(e as Error);
     console.error(e);

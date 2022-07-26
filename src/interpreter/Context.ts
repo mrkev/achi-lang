@@ -18,7 +18,9 @@ export class Context {
     return new Context();
   }
 
-  private valueScopes: Scope<Value>[] = [new Scope(null)];
+  // Note, we start with no scopes. We need to make sure we push
+  // a sope before we try to define variables
+  private valueScopes: Scope<Value>[] = [];
 
   // TODO: standard types, like records?
   types: Map<string, RuntimeTypeStructures> = new Map();
@@ -68,22 +70,19 @@ export class Context {
   ////////////////// Value Scopes
 
   pushScope() {
-    const currentScope = this.valueScopes.at(-1);
-    if (!currentScope) {
-      throw new Error("No current scope");
-    }
-    this.valueScopes.push(currentScope);
+    const currentScope = this.valueScopes[this.valueScopes.length - 1] ?? null;
+    const newScope = new Scope(currentScope);
+    this.valueScopes.push(newScope);
   }
 
   popScope() {
-    console.log(this.valueScopes);
-    if (this.valueScopes.length === 1) {
-      throw new Error("Attempting to pop global (frist) scope!");
+    if (this.valueScopes.length === 0) {
+      throw new Error("Can't pop from empty scope stack!");
     }
     this.valueScopes.pop();
   }
 
-  values(): Scope<Value> {
+  valueScope(): Scope<Value> {
     const currentScope = nullthrows(
       this.valueScopes[this.valueScopes.length - 1]
     );
@@ -115,6 +114,14 @@ class Scope<T> {
       throw new Error(`${identifer} is already defined`);
     }
     this.map.set(identifer, value);
+  }
+
+  // Used when setting all the bindings in a pattern match at once.
+  // In theory, this handles not duplicating binding names
+  defineAll(entries: Array<[string, T]>) {
+    for (const [key, value] of entries) {
+      this.define(key, value);
+    }
   }
 
   // TODO: override in its right scope

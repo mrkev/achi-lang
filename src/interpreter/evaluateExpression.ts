@@ -30,7 +30,7 @@ export function evaluateExpression(
   switch (kind) {
     case "ValueIdentifier": {
       const foundValue = context
-        .values()
+        .valueScope()
         .getOrThrow(expression.value, `Name ${expression.value} not found`);
       return foundValue;
     }
@@ -91,7 +91,7 @@ export function evaluateExpression(
       const { identifier, argument } = expression;
 
       const funcInstance = context
-        .values()
+        .valueScope()
         .getOrThrow(
           identifier.value,
           `No definition for function ${identifier.value}`
@@ -139,11 +139,13 @@ function callFunction(
 
   for (const caseEntry of func.block.caseEntries) {
     // caseEntry.guard
+    context.pushScope();
     const result = evaluateStatements(
       caseEntry.block.statements,
       context,
       system
     );
+    context.popScope();
     return nullthrows(result, "fixme, case block returns nothing");
   }
 

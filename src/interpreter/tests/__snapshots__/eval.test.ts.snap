@@ -8,15 +8,15 @@ Array [
 ]
 `;
 
-exports[`if.1 1`] = `
+exports[`if.true 1`] = `
 Array [
   "pass",
 ]
 `;
 
-exports[`match.1 1`] = `
+exports[`if.true 2`] = `
 Array [
-  "number card",
+  "pass",
 ]
 `;
 
