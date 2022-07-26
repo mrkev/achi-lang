@@ -4,6 +4,7 @@ import { evaluateStatements } from "../evaluateStatements";
 import { Value } from "../interpreter";
 import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "../System";
+import { aSubsetB } from "./utils";
 import { NamedRecordKlass, RecordLiteralInstance } from "./runtime.records";
 
 // ie, function print matches Card
@@ -17,13 +18,6 @@ export class MatchFunctionInstance {
     this.ast = ast;
   }
 }
-
-// export class MatchExpressionInstance {
-//   ast: LangType["MatchExpression"];
-//   constructor(ast: LangType["MatchExpression"]) {
-//     this.ast = ast;
-//   }
-// }
 
 export function evaluateMatch(
   value: Value,
@@ -66,12 +60,20 @@ function doMatch(
     }
 
     case "StringLiteral": {
-      const isMatch = value.kind === "string";
+      const isMatch =
+        value.kind === "string" && value.value === expression.value;
       return isMatch ? { isMatch, bindings: [] } : { isMatch };
     }
 
     case "NumberLiteral": {
-      const isMatch = value.kind === "number";
+      const isMatch =
+        value.kind === "number" && value.value === expression.value;
+      return isMatch ? { isMatch, bindings: [] } : { isMatch };
+    }
+
+    case "BooleanLiteral": {
+      const isMatch =
+        value.kind === "boolean" && value.value === expression.value;
       return isMatch ? { isMatch, bindings: [] } : { isMatch };
     }
 
@@ -143,27 +145,10 @@ function doMatch(
       throw new Error(
         `Can't pattern match using expression of type ${expression.kind}`
       );
-      break;
     }
 
     default: {
       throw exhaustive(expression);
     }
   }
-}
-
-/** is A a subset of B */
-function aSubsetB(a: string[], b: string[]) {
-  if (a.length > b.length) {
-    return false;
-  }
-
-  const bset = new Set(b);
-  for (const akey of a) {
-    if (!bset.has(akey)) {
-      return false;
-    }
-  }
-
-  return true;
 }

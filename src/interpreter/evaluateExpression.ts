@@ -65,6 +65,10 @@ export function evaluateExpression(
       return { kind: "number", value: expression.value };
     }
 
+    case "BooleanLiteral": {
+      return { kind: "boolean", value: expression.value };
+    }
+
     case "RecordLiteral": {
       const props = new Map<string, Value>();
       for (const def of expression.definitions) {

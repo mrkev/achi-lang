@@ -560,60 +560,6 @@ Object {
 }
 `;
 
-exports[`boolean definition 1`] = `
-Object {
-  "kind": "Program",
-  "statements": Array [
-    Object {
-      "kind": "NamedRecordDefinitionStatement",
-      "namedRecordDefinition": Object {
-        "identifier": Object {
-          "kind": "TypeIdentifier",
-          "value": "True",
-        },
-        "kind": "NamedRecordDefinition",
-        "record": Object {
-          "definitions": Array [],
-          "kind": "RecordDefinition",
-        },
-      },
-    },
-    Object {
-      "kind": "NamedRecordDefinitionStatement",
-      "namedRecordDefinition": Object {
-        "identifier": Object {
-          "kind": "TypeIdentifier",
-          "value": "False",
-        },
-        "kind": "NamedRecordDefinition",
-        "record": Object {
-          "definitions": Array [],
-          "kind": "RecordDefinition",
-        },
-      },
-    },
-    Object {
-      "expression": Object {
-        "kind": "ValueIdentifier",
-        "value": "true",
-      },
-      "identifier": Object {
-        "kind": "ValueIdentifier",
-        "value": "one",
-      },
-      "kind": "ConstantAssignment",
-    },
-    Object {
-      "expression": Object {
-        "kind": "ValueIdentifier",
-        "value": "one",
-      },
-      "kind": "DEBUG_Log",
-    },
-  ],
-}
-`;
-
 exports[`string 1`] = `
 Object {
   "kind": "StringLiteral",

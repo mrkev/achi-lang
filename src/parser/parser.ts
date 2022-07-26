@@ -66,6 +66,7 @@ export type LangType = LangType_BinOp &
     TypeIdentifier: { kind: "TypeIdentifier"; value: string };
     NumberLiteral: { kind: "NumberLiteral"; value: number };
     StringLiteral: { kind: "StringLiteral"; value: string };
+    BooleanLiteral: { kind: "BooleanLiteral"; value: boolean };
 
     NestedTypeIdentifier: {
       kind: "NestedTypeIdentifier";
@@ -84,6 +85,7 @@ export type LangType = LangType_BinOp &
     };
 
     Expression:
+      | LangType["BooleanLiteral"]
       | LangType["FunctionDefinition"]
       | LangType["MatchExpression"]
       | LangType["NumberLiteral"]
@@ -259,6 +261,13 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       )
       .desc("string"),
 
+  BooleanLiteral: () => {
+    return Parsimmon.regexp(/true|false/).map((str) => ({
+      kind: "BooleanLiteral",
+      value: str === "true",
+    }));
+  },
+
   ...LangDef_BinOp,
 
   // Card, Point, SomeDataStructure, number
@@ -302,6 +311,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   Expression: (r) => {
     const expressionParsers: ExhaustiveParsers<LangType["Expression"]> = {
+      BooleanLiteral: r.BooleanLiteral,
       FunctionDefinition: r.FunctionDefinition,
       MatchExpression: r.MatchExpression,
       NumberLiteral: r.NumberLiteral,

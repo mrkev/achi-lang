@@ -41,20 +41,6 @@ test("IfStatement", () => {
   expect(result).toMatchSnapshot();
 });
 
-// TODO: is this what I want to do for booleans? would require
-// lowercase named records, implicit unit for empty named record definitiosn
-// or using the class itself for comparisons
-test("boolean definition", () => {
-  const result = Lang.Program.tryParse(`
-  class True();
-  class False();
-  const one = true;
-
-  #log one
-`);
-  expect(result).toMatchSnapshot();
-});
-
 test("NestedTypeIdentifier", () => {
   const result = Lang.NestedTypeIdentifier.tryParse("Card.King");
   expect(result).toMatchInlineSnapshot(`

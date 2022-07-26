@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BooleanLiteral.false 1`] = `
+Object {
+  "kind": "BooleanLiteral",
+  "value": false,
+}
+`;
+
+exports[`BooleanLiteral.true 1`] = `
+Object {
+  "kind": "BooleanLiteral",
+  "value": true,
+}
+`;
