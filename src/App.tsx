@@ -1,12 +1,19 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "./App.css";
-import Editor from "@monaco-editor/react";
+import Editor, { EditorProps } from "@monaco-editor/react";
 import type { Monaco } from "@monaco-editor/react";
 import monaco, { editor } from "monaco-editor";
 import useLocalStorage from "react-use-localstorage";
 import { System } from "./interpreter/System";
 import { interpret } from "./interpreter/interpreter";
 import { tryParse } from "./parser/parser";
+import { compileProgram, printTSStatements } from "./compiler/compiler";
 
 const DEFAULT_SCRIPT =
   `
@@ -23,7 +30,25 @@ const options: editor.IStandaloneEditorConstructionOptions = {
   insertSpaces: true,
   tabSize: 2,
   detectIndentation: false,
-};
+  minimap: { enabled: false },
+} as const;
+
+function useEditor(
+  props: Omit<EditorProps, "onMount">
+): [
+  React.ReactElement,
+  React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>
+] {
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const handleEditorDidMount = useCallback(
+    (editor: monaco.editor.IStandaloneCodeEditor) => {
+      editorRef.current = editor;
+    },
+    []
+  );
+
+  return [<Editor {...props} onMount={handleEditorDidMount} />, editorRef];
+}
 
 function App() {
   const [initialScript, setInitialScript] = useLocalStorage(
@@ -35,6 +60,12 @@ function App() {
     null
   );
   const astEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const [tsEditor, tsEditorRef] = useEditor({
+    language: "typescript",
+    height: "50vh",
+    theme: "vs-dark",
+    options,
+  });
 
   const handleAstEditorDidMount = useCallback(
     (editor: monaco.editor.IStandaloneCodeEditor) => {
@@ -77,7 +108,11 @@ function App() {
       setInitialScript(script);
 
       const ast = tryParse(script);
+      console.log("HERE");
       astEditorRef.current?.setValue(JSON.stringify(ast, null, 2));
+      const tsAst = compileProgram(ast);
+      const printed = printTSStatements(tsAst);
+      tsEditorRef.current?.setValue(printed);
 
       interpret(ast, system);
     } catch (e) {
@@ -101,33 +136,39 @@ function App() {
           beforeMount={handleScriptEditorWillMount}
           onMount={handleEditorDidMount}
         />
+        {tsEditor}
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ width: "50%", flexShrink: 0 }}>
+          <button onClick={doEvaluate}>Evaluate</button>
+          <pre>
+            {log.map((msg, i) => {
+              return msg instanceof Error ? (
+                <details style={{ color: "red" }} key={i}>
+                  <summary>{msg.message}</summary>
+                  {msg.stack}
+                </details>
+              ) : (
+                <span key={i}>
+                  {msg}
+                  <br />
+                </span>
+              );
+            })}
+          </pre>
+        </div>
         <Editor
           language="json"
           theme="vs-dark"
-          // options={options}
           height="50vh"
+          // options={options}
+
           // defaultLanguage="text"
           // defaultValue={initialScript}
           onMount={handleAstEditorDidMount}
         />
       </div>
-
-      <button onClick={doEvaluate}>Evaluate</button>
-      <pre>
-        {log.map((msg, i) => {
-          return msg instanceof Error ? (
-            <details style={{ color: "red" }} key={i}>
-              <summary>{msg.message}</summary>
-              {msg.stack}
-            </details>
-          ) : (
-            <span key={i}>
-              {msg}
-              <br />
-            </span>
-          );
-        })}
-      </pre>
     </div>
   );
 }
@@ -276,4 +317,7 @@ function handleScriptEditorWillMount(monaco: Monaco) {
       ">>>=",
     ],
   });
+}
+function compileStatement(value: any): any {
+  throw new Error("Function not implemented.");
 }

@@ -39,3 +39,114 @@ ALON
     color: 'red',
   )
 )
+
+
+() => records
+{} => maps
+[] => lists
+// no tuples
+
+
+
+
+
+// todo, context, state
+function App(props: Props) {
+
+}
+
+
+function render() {
+  const ui = react (App)
+
+}
+
+
+
+
+///////////////////
+
+Compilation: 
+
+function ensureExhaustive(x: never): never {
+  throw new Error("Unhandled switch case");
+}
+
+// Typescript defines a `Number` class, avoid collisions by always pre-pending '$'.
+// I really only have to do this on sub-classes though no? Since the parent colliding
+// with a class that's already defined is maybe good?
+
+class Super {
+  static Sub = class Sub {};
+}
+
+const a = new Super.Sub();
+
+type $CardVariant = "King" | "Queen" | "Jack" | "Number";
+class $Card {
+  readonly __variant: $CardVariant;
+  constructor(__variant: $CardVariant) {
+    this.__variant = __variant;
+  }
+  static King = class King extends $Card {
+    constructor() {
+      super("King");
+    }
+  };
+  static Queen = class Queen extends $Card {
+    constructor() {
+      super("Queen");
+    }
+  };
+  static Jack = class Jack extends $Card {
+    constructor() {
+      super("Jack");
+    }
+  };
+  static Number = class Number extends $Card {
+    value: number;
+    constructor(value: number) {
+      super("Number");
+      this.value = value;
+    }
+  };
+}
+
+/**
+ * match (card) {
+ *  case Number(value: value) {
+ *      console.log(value)
+ *  }
+ * }
+ *
+ *
+ */
+
+function printCard(
+  card: $Card,
+  kingClause: () => void,
+  queenClause: () => void,
+  jackClause: () => void,
+  numberClause: (value: number) => void
+) {
+  switch (card.__variant) {
+    case "King":
+    case "Queen":
+    case "Jack":
+      break;
+    case "Number":
+      const cardNumber = card as any as InstanceType<typeof $Card["Number"]>;
+      const value = cardNumber.value;
+      return numberClause(value);
+    default:
+      ensureExhaustive(card.__variant);
+  }
+}
+
+const four = new $Card.Number(4);
+four.value
+
+// class Point {
+//   x: number;
+//   y: number;
+// }

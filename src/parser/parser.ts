@@ -637,17 +637,17 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   //* (x: number, y: number)
   RecordDefinition: (r) => {
-    return (
-      Parsimmon.string("(")
-        // TBD: sepBy1 and make a different parser for Unit?
-        .then(Parsimmon.sepBy(r.NamedDefinition, r._comma))
-        .skip(Parsimmon.string(")"))
-        .map((definitions) => {
-          return {
-            kind: "RecordDefinition",
-            definitions,
-          };
-        })
+    return Parsimmon.seqMap(
+      Parsimmon.string("("),
+      // TBD: sepBy1 and make a different parser for Unit?
+      Parsimmon.sepBy(r.NamedDefinition, r._comma),
+      Parsimmon.string(")"),
+      function (_0, definitions, _2) {
+        return {
+          kind: "RecordDefinition",
+          definitions,
+        };
+      }
     );
   },
 
