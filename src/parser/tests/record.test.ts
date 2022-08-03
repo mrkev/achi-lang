@@ -45,6 +45,19 @@ test("RecordLiteral", () => {
   expect(result).toMatchSnapshot();
 });
 
+test("RecordLiteral.long", () => {
+  const result = Lang.RecordLiteral.tryParse(`(
+    num: 3,
+    rec: (
+      num: 2,
+      str: "this",
+      bool: true,
+      rec: (x: 3, y: 3)
+    )
+  )`);
+  expect(result).toMatchSnapshot();
+});
+
 // Literal building blocks
 
 test("NamedLiteral", () => {

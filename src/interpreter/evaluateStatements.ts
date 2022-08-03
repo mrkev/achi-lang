@@ -91,7 +91,7 @@ export function evaluateStatements(
         break;
       }
 
-      case "ConstantAssignment": {
+      case "ConstantDefinition": {
         if (context.valueScope().has(statement.identifier.value)) {
           console.warn("Overriding definition for", statement.identifier.value);
         }

@@ -36,7 +36,7 @@ Object {
         "kind": "ValueIdentifier",
         "value": "x",
       },
-      "kind": "ConstantAssignment",
+      "kind": "ConstantDefinition",
     },
   ],
 }
@@ -49,7 +49,7 @@ Object {
 }
 `;
 
-exports[`ConstantAssignment 1`] = `
+exports[`ConstantDefinition 1`] = `
 Object {
   "expression": Object {
     "kind": "NumberLiteral",
@@ -59,11 +59,11 @@ Object {
     "kind": "ValueIdentifier",
     "value": "x",
   },
-  "kind": "ConstantAssignment",
+  "kind": "ConstantDefinition",
 }
 `;
 
-exports[`ConstantAssignment.functionCall 1`] = `
+exports[`ConstantDefinition.functionCall 1`] = `
 Object {
   "expression": Object {
     "argument": Object {
@@ -92,7 +92,7 @@ Object {
     "kind": "ValueIdentifier",
     "value": "x",
   },
-  "kind": "ConstantAssignment",
+  "kind": "ConstantDefinition",
 }
 `;
 
@@ -276,7 +276,7 @@ Object {
         "kind": "ValueIdentifier",
         "value": "one",
       },
-      "kind": "ConstantAssignment",
+      "kind": "ConstantDefinition",
     },
     Object {
       "expression": Object {
@@ -317,7 +317,7 @@ Object {
         "kind": "ValueIdentifier",
         "value": "point",
       },
-      "kind": "ConstantAssignment",
+      "kind": "ConstantDefinition",
     },
     Object {
       "expression": Object {
@@ -410,7 +410,7 @@ Object {
                 "kind": "ValueIdentifier",
                 "value": "x",
               },
-              "kind": "ConstantAssignment",
+              "kind": "ConstantDefinition",
             },
             Object {
               "expression": Object {
@@ -457,7 +457,7 @@ Object {
         "kind": "ValueIdentifier",
         "value": "increment",
       },
-      "kind": "ConstantAssignment",
+      "kind": "ConstantDefinition",
     },
     Object {
       "expression": Object {
@@ -498,7 +498,7 @@ Object {
         "kind": "ValueIdentifier",
         "value": "point",
       },
-      "kind": "ConstantAssignment",
+      "kind": "ConstantDefinition",
     },
     Object {
       "argument": Object {

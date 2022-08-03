@@ -329,3 +329,101 @@ Object {
   "kind": "RecordLiteral",
 }
 `;
+
+exports[`RecordLiteral.long 1`] = `
+Object {
+  "definitions": Array [
+    Object {
+      "expression": Object {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+      "identifier": Object {
+        "kind": "ValueIdentifier",
+        "value": "num",
+      },
+      "kind": "NamedLiteral",
+    },
+    Object {
+      "expression": Object {
+        "definitions": Array [
+          Object {
+            "expression": Object {
+              "kind": "NumberLiteral",
+              "value": 2,
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "num",
+            },
+            "kind": "NamedLiteral",
+          },
+          Object {
+            "expression": Object {
+              "kind": "StringLiteral",
+              "value": "this",
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "str",
+            },
+            "kind": "NamedLiteral",
+          },
+          Object {
+            "expression": Object {
+              "kind": "BooleanLiteral",
+              "value": true,
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "bool",
+            },
+            "kind": "NamedLiteral",
+          },
+          Object {
+            "expression": Object {
+              "definitions": Array [
+                Object {
+                  "expression": Object {
+                    "kind": "NumberLiteral",
+                    "value": 3,
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "x",
+                  },
+                  "kind": "NamedLiteral",
+                },
+                Object {
+                  "expression": Object {
+                    "kind": "NumberLiteral",
+                    "value": 3,
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "y",
+                  },
+                  "kind": "NamedLiteral",
+                },
+              ],
+              "kind": "RecordLiteral",
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "rec",
+            },
+            "kind": "NamedLiteral",
+          },
+        ],
+        "kind": "RecordLiteral",
+      },
+      "identifier": Object {
+        "kind": "ValueIdentifier",
+        "value": "rec",
+      },
+      "kind": "NamedLiteral",
+    },
+  ],
+  "kind": "RecordLiteral",
+}
+`;

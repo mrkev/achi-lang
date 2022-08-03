@@ -60,13 +60,13 @@ Object {
 `);
 });
 
-test("ConstantAssignment", () => {
-  const result = Lang.ConstantAssignment.tryParse("const x = 3");
+test("ConstantDefinition", () => {
+  const result = Lang.ConstantDefinition.tryParse("const x = 3");
   expect(result).toMatchSnapshot();
 });
 
-test("ConstantAssignment.functionCall", () => {
-  const result = Lang.ConstantAssignment.tryParse(
+test("ConstantDefinition.functionCall", () => {
+  const result = Lang.ConstantDefinition.tryParse(
     "const x = foo(point: point)"
   );
   expect(result).toMatchSnapshot();

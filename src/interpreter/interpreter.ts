@@ -73,14 +73,18 @@ export function stringOfValue(value: Value): string {
     }
 
     case "RecordLiteralInstance": {
-      return "todo RecordLiteral";
-      // let str = "";
-      // for (const [key, val] of value.value.ast.definitions.) {
-      //   str += `  ${key}: ${stringOfValue(
-      //     val
-      //   )} (${value.value.konstructor.valueSpec.get(key)})\n`;
-      // }
-      // str += "}";
+      // return "todo RecordLiteral";
+      let str = "(\n";
+      for (const [key, val] of value.value.props.entries()) {
+        // add indendation
+        const valStr = stringOfValue(val)
+          .split("\n")
+          .map((s, i) => (i > 0 ? `  ${s}` : s))
+          .join("\n");
+        str += `  ${key}: ${valStr},\n`;
+      }
+      str += ")";
+      return str;
     }
 
     case "NamedRecordDefinitionGroupInstance": {

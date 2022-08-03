@@ -1,41 +1,93 @@
-import { nullthrows } from "../interpreter/nullthrows";
-import { Lang } from "../parser/parser";
 import {
-  compileStatement,
-  generateEmptyExports,
-  printTSStatements,
-} from "./compiler";
-import { typecheck } from "./typecheck";
+  expectExpressionCompilation,
+  expectStatementCompilation,
+} from "./expectCompilation";
 
 test("compiler.NamedRecordDefinitionStatement", async () => {
-  const parseResult = Lang.NamedRecordDefinitionStatement.parse(
-    `class Point(x: number, y: number)`
-  );
-
-  if (!parseResult.status) {
-    throw new Error("Invalid compiler, couldn't parse source");
-  }
-
-  const tsAst = nullthrows(compileStatement(parseResult.value));
-  const printed = printTSStatements([tsAst]);
-
-  // We compile what we expect
-  expect(printed).toEqual(
+  await expectStatementCompilation(
+    `class Point(x: number, y: number)`,
     `class Point {
     x: number;
     y: number;
-    constructor(x: number, y: number) {
-        this.x = x;
-        this.y = y;
+    constructor(props: {
+        x: number;
+        y: number;
+    }) {
+        this.x = props.x;
+        this.y = props.y;
     }
 }
 `
   );
+});
 
-  // We have to add an empty export so it typechecks
-  const tsForTypechecking = [tsAst, generateEmptyExports()];
+test("compiler.ConstantDefinition", async () => {
+  await expectStatementCompilation(
+    `const foo = 5`,
+    `const foo = 5;
+`
+  );
+});
 
-  const diagnostics = await typecheck(tsForTypechecking);
-  // It has no type errors
-  expect(diagnostics).toEqual([]);
+test("compiler.BooleanLiteral", async () => {
+  await expectExpressionCompilation(
+    `true`,
+    `true;
+`
+  );
+});
+
+test("compiler.NumberLiteral", async () => {
+  await expectExpressionCompilation(
+    `3`,
+    `3;
+`
+  );
+});
+
+test("compiler.ValueIdentifier", async () => {
+  await expectExpressionCompilation(
+    `foo`,
+    `foo;
+`
+  );
+});
+
+test("compiler.FunctionCall", async () => {
+  await expectExpressionCompilation(
+    `foo()`,
+    `foo();
+`
+  );
+});
+
+test("compiler.FunctionCall.arg", async () => {
+  await expectExpressionCompilation(
+    `foo(x: 3)`,
+    `foo({
+    x: 3
+});
+`
+  );
+});
+
+test("compiler.NamedRecordLiteral", async () => {
+  await expectExpressionCompilation(
+    `Point()`,
+    // todo, maybe expect new Point(), and figure out how to allways
+    // be explicit about the "()" when constructing something?
+    `new Point;
+`
+  );
+});
+
+test("compiler.NamedRecordLiteral", async () => {
+  await expectExpressionCompilation(
+    `Point(x: 3, y: 3)`,
+    `new Point({
+    x: 3,
+    y: 3
+});
+`
+  );
 });

@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import Editor, { EditorProps } from "@monaco-editor/react";
 import type { Monaco } from "@monaco-editor/react";

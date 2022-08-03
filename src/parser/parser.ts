@@ -107,8 +107,8 @@ export type LangType = LangType_BinOp &
       body: LangType["Block"];
     };
 
-    ConstantAssignment: {
-      kind: "ConstantAssignment";
+    ConstantDefinition: {
+      kind: "ConstantDefinition";
       identifier: LangType["ValueIdentifier"];
       expression: LangType["Expression"];
     };
@@ -197,7 +197,7 @@ export type LangType = LangType_BinOp &
       | LangType["MatchExpression"]
       | LangType["NamedRecordDefinitionStatement"]
       | LangType["NamedRecordDefinitionGroup"]
-      | LangType["ConstantAssignment"]
+      | LangType["ConstantDefinition"]
       | LangType["MatchFunction"]
       | LangType["FunctionCall"]
       | LangType["DEBUG_LogType"]
@@ -357,7 +357,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       MatchExpression: r.MatchExpression,
       NamedRecordDefinitionStatement: r.NamedRecordDefinitionStatement,
       NamedRecordDefinitionGroup: r.NamedRecordDefinitionGroup,
-      ConstantAssignment: r.ConstantAssignment,
+      ConstantDefinition: r.ConstantDefinition,
       FunctionCall: r.FunctionCall,
       DEBUG_LogType: r.DEBUG_LogType,
       DEBUG_Log: r.DEBUG_Log,
@@ -439,7 +439,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //////////////
 
   // const x = 3
-  ConstantAssignment: (r) => {
+  ConstantDefinition: (r) => {
     return Parsimmon.seqMap(
       Parsimmon.string("const"),
       r.__,
@@ -452,7 +452,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       r.Expression,
       function (_0, _1, identifier, _2, _3, _4, expression) {
         return {
-          kind: "ConstantAssignment",
+          kind: "ConstantDefinition",
           identifier,
           expression,
         };
@@ -624,25 +624,31 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   //* (x: 5, y: 5)
   RecordLiteral: (r) => {
-    return Parsimmon.string("(")
-      .then(Parsimmon.sepBy(r.NamedLiteral, r._comma))
-      .skip(Parsimmon.string(")"))
-      .map((definitions) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("("),
+      r._,
+      Parsimmon.sepBy(r.NamedLiteral, r._comma),
+      r._,
+      Parsimmon.string(")"),
+      (_0, _1, definitions, _3, _4) => {
         return {
           kind: "RecordLiteral",
           definitions,
         };
-      });
+      }
+    );
   },
 
   //* (x: number, y: number)
   RecordDefinition: (r) => {
     return Parsimmon.seqMap(
       Parsimmon.string("("),
+      r._,
       // TBD: sepBy1 and make a different parser for Unit?
       Parsimmon.sepBy(r.NamedDefinition, r._comma),
+      r._,
       Parsimmon.string(")"),
-      function (_0, definitions, _2) {
+      function (_0, _1, definitions, _2, _3) {
         return {
           kind: "RecordDefinition",
           definitions,

@@ -1,5 +1,6 @@
 import { LangType } from "../parser/parser";
 import * as ts from "typescript";
+import { compileExpression } from "./compileExpression";
 
 export function generateEmptyExports() {
   return ts.factory.createExportDeclaration(
@@ -15,7 +16,10 @@ export function generateEmptyExports() {
 export function compileProgram(ast: LangType["Program"]) {
   const resultStatements = [];
   for (const statement of ast.statements) {
-    if (statement.kind === "NamedRecordDefinitionStatement") {
+    if (
+      statement.kind === "NamedRecordDefinitionStatement" ||
+      statement.kind === "ConstantDefinition"
+    ) {
       const tsStatement = compileStatement(statement);
       resultStatements.push(tsStatement);
     }
@@ -30,6 +34,26 @@ export function compileStatement(
   statement: LangType["Statement"]
 ): ts.Statement {
   switch (statement.kind) {
+    /**
+     * const x = ...
+     */
+    case "ConstantDefinition": {
+      const variableDecl = ts.factory.createVariableDeclaration(
+        statement.identifier.value,
+        undefined,
+        undefined, // todo type
+        compileExpression(statement.expression)
+      );
+
+      return ts.factory.createVariableStatement(
+        undefined,
+        ts.factory.createVariableDeclarationList(
+          [variableDecl],
+          ts.NodeFlags.Const
+        )
+      );
+    }
+
     // TODO: add constructor to initialize props
     // class Point(x: number, y: number) => class Point { x: number; y: number}
     case "NamedRecordDefinitionStatement": {
@@ -39,7 +63,7 @@ export function compileStatement(
       } = statement.namedRecordDefinition;
 
       const classMembers = [];
-      const constructorParams = [];
+      const constructorTypeLiteralParams = [];
       const constructorStatements = [];
       for (const defn of definitions) {
         const propName = defn.identifier.value;
@@ -60,15 +84,12 @@ export function compileStatement(
         );
 
         // constructor( <<x: number,>> )
-        constructorParams.push(
-          ts.factory.createParameterDeclaration(
-            undefined,
-            undefined,
+        constructorTypeLiteralParams.push(
+          ts.factory.createPropertySignature(
             undefined,
             propName,
             undefined,
-            typeRef,
-            undefined
+            typeRef
           )
         );
 
@@ -81,16 +102,29 @@ export function compileStatement(
                 propName
               ),
               ts.SyntaxKind.EqualsToken,
-              ts.factory.createIdentifier(propName)
+              ts.factory.createPropertyAccessExpression(
+                ts.factory.createIdentifier("props"),
+                ts.factory.createIdentifier(propName)
+              )
             )
           )
         );
       }
+      // props: {x: number}
+      const constructorParam = ts.factory.createParameterDeclaration(
+        undefined,
+        undefined,
+        undefined,
+        "props",
+        undefined,
+        ts.factory.createTypeLiteralNode(constructorTypeLiteralParams),
+        undefined
+      );
 
       const constructorDeclaration = ts.factory.createConstructorDeclaration(
         undefined,
         undefined,
-        constructorParams,
+        [constructorParam],
         ts.factory.createBlock(constructorStatements, true)
       );
       classMembers.push(constructorDeclaration);
