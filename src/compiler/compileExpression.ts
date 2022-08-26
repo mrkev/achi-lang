@@ -83,7 +83,6 @@ export function compileExpression(
     }
 
     default:
-      throw exhaustive(expression);
+      throw exhaustive(expression, "complie expression: not implemented");
   }
-  throw new Error("NOT IMPLEMENTED compileExpression");
 }

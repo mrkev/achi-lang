@@ -52,6 +52,22 @@ function interpretEscapes(str: string) {
   });
 }
 
+function makeNode<U>(parser: Parsimmon.Parser<U>) {
+  return Parsimmon.seqMap(
+    Parsimmon.index,
+    parser,
+    Parsimmon.index,
+    function (start, value, end) {
+      return Object.freeze({
+        type: "myLanguage." + name,
+        value: value,
+        start: start,
+        end: end,
+      });
+    }
+  );
+}
+
 export type LangType = LangType_BinOp &
   LangType_Match & {
     _: string;
@@ -242,10 +258,16 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   ////////////////////////////////////////////////////////////// Expressions ///
 
   NumberLiteral: () => {
-    return Parsimmon.regexp(/[0-9]+/).map((v) => ({
-      kind: "NumberLiteral",
-      value: Number(v),
-    }));
+    return Parsimmon.seqMap(
+      Parsimmon.index,
+      Parsimmon.regexp(/[0-9]+/),
+      Parsimmon.index,
+      (start, v, end) => ({
+        kind: "NumberLiteral",
+        value: Number(v),
+        at: { start, end },
+      })
+    );
   },
 
   // Regexp based parsers should generally be named for better error reporting.
@@ -272,12 +294,13 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // Card, Point, SomeDataStructure, number
   TypeIdentifier: () => {
-    return Parsimmon.regexp(
-      /string|number|boolean|object|array|[A-Z][a-zA-Z]*/
-    ).map((v) => ({
-      kind: "TypeIdentifier",
-      value: v,
-    }));
+    return Parsimmon.regexp(/string|number|boolean|object|array|[A-Z][a-zA-Z]*/)
+      .mark()
+      .map(({ start, end, value }) => ({
+        kind: "TypeIdentifier",
+        value,
+        at: { start, end },
+      }));
   },
 
   // TODO: test
@@ -296,10 +319,13 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   ValueIdentifier: () => {
     return Parsimmon.regexp(
       /(?!string|number|boolean|object|array)[a-z][a-zA-Z]*/
-    ).map((v) => ({
-      kind: "ValueIdentifier",
-      value: v,
-    }));
+    )
+      .mark()
+      .map(({ start, end, value }) => ({
+        kind: "ValueIdentifier",
+        value: value,
+        at: { start, end },
+      }));
   },
 
   // TODO: remove?

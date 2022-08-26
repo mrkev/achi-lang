@@ -46,7 +46,12 @@ ALON
 [] => lists
 // no tuples
 
+const data: (x: number | string)
 
+match (data) {
+  case (kind: "animal", data: (name: name is "string")) {}
+  case (kind: "animal", data: (name: name is "number")) {}
+}
 
 
 
@@ -60,6 +65,10 @@ function render() {
   const ui = react (App)
 
 }
+
+- Features:
+  - Reactivity built in
+  - 
 
 
 

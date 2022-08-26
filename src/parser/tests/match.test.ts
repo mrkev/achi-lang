@@ -71,3 +71,24 @@ test("MatchFunction.fullExample", () => {
   );
   expect(result).toMatchSnapshot();
 });
+
+// test("MatchFunction.recursive", () => {
+//   const result = Lang.MatchExpression.tryParse(
+//     `function fib matches (x: number) {
+//       case (x: 0): {
+//         return 3
+//       }
+
+//       case (x: 1): {
+//         return 3
+//       }
+
+//       case (x: 0): {
+//         return fib(x: x - 1) + fib(x: x - 2)
+//       }
+//     };
+
+//     #log fib(x: 10)`
+//   );
+//   expect(result).toMatchSnapshot();
+// });
