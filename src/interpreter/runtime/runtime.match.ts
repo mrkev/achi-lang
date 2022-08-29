@@ -141,6 +141,8 @@ function doMatch(
 
     case "MatchExpression":
     case "FunctionCall":
+    case "ListLiteral":
+    case "MapLiteral":
     case "FunctionDefinition": {
       throw new Error(
         `Can't pattern match using expression of type ${expression.kind}`

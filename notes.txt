@@ -1,3 +1,30 @@
+## Descrption
+
+Three data structures:
+
+() {} []
+
+Records (),  named data, unordered entries, static shape.
+Maps {},     named data, unordered entries, dynamic shape.
+Lists [],  unnamed data, ordered entries, dynamic shape.
+Tuples N/A unnamed data, ordered entries, static shape
+
+unnamed + unordered doesn't make sense
+named + ordered sounds useful, but hard to define and edit mantaining consistency
+
+match list {
+  case []
+  case [h, ...t]
+  case [...h, t]
+  case [a, b, c,,,f]
+  {}
+}
+
+match map {
+  case {}
+  case { 'foo': value }
+  case { 'foo': value, ...rest }
+}
 
 
 const four = Card.Number(value: 4)

@@ -13,3 +13,120 @@ Object {
   "value": true,
 }
 `;
+
+exports[`ListLiteral 1`] = `
+Object {
+  "expressions": Array [
+    Object {
+      "kind": "NumberLiteral",
+      "value": 3,
+    },
+    Object {
+      "kind": "BooleanLiteral",
+      "value": false,
+    },
+    Object {
+      "kind": "StringLiteral",
+      "value": "string",
+    },
+  ],
+  "kind": "ListLiteral",
+}
+`;
+
+exports[`ListLiteral.recursive 1`] = `
+Object {
+  "expressions": Array [
+    Object {
+      "kind": "NumberLiteral",
+      "value": 3,
+    },
+    Object {
+      "expressions": Array [
+        Object {
+          "kind": "BooleanLiteral",
+          "value": false,
+        },
+      ],
+      "kind": "ListLiteral",
+    },
+    Object {
+      "kind": "StringLiteral",
+      "value": "string",
+    },
+  ],
+  "kind": "ListLiteral",
+}
+`;
+
+exports[`MapLiteral 1`] = `
+Object {
+  "entries": Array [
+    Object {
+      "expression": Object {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+      "identifier": Object {
+        "kind": "ValueIdentifier",
+        "value": "foo",
+      },
+      "kind": "NamedLiteral",
+    },
+    Object {
+      "expression": Object {
+        "kind": "BooleanLiteral",
+        "value": false,
+      },
+      "identifier": Object {
+        "kind": "ValueIdentifier",
+        "value": "bar",
+      },
+      "kind": "NamedLiteral",
+    },
+  ],
+  "kind": "MapLiteral",
+}
+`;
+
+exports[`MapLiteral.recursive 1`] = `
+Object {
+  "entries": Array [
+    Object {
+      "expression": Object {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+      "identifier": Object {
+        "kind": "ValueIdentifier",
+        "value": "foo",
+      },
+      "kind": "NamedLiteral",
+    },
+    Object {
+      "expression": Object {
+        "entries": Array [
+          Object {
+            "expression": Object {
+              "kind": "NumberLiteral",
+              "value": 3,
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "baz",
+            },
+            "kind": "NamedLiteral",
+          },
+        ],
+        "kind": "MapLiteral",
+      },
+      "identifier": Object {
+        "kind": "ValueIdentifier",
+        "value": "bar",
+      },
+      "kind": "NamedLiteral",
+    },
+  ],
+  "kind": "MapLiteral",
+}
+`;

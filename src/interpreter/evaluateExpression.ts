@@ -125,6 +125,14 @@ export function evaluateExpression(
       return result;
     }
 
+    case "MapLiteral": {
+      throw new Error("Not implemented, MapLiteral");
+    }
+
+    case "ListLiteral": {
+      throw new Error("Not implemented, ListLiteral");
+    }
+
     default: {
       throw exhaustive(kind);
     }

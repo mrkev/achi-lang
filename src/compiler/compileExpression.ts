@@ -78,6 +78,8 @@ export function compileExpression(
     }
 
     case "MatchExpression":
+    case "ListLiteral":
+    case "MapLiteral":
     case "FunctionDefinition": {
       throw new Error("Not implemented");
     }

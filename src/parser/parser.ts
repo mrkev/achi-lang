@@ -84,16 +84,19 @@ export type LangType = LangType_BinOp &
     StringLiteral: { kind: "StringLiteral"; value: string };
     BooleanLiteral: { kind: "BooleanLiteral"; value: boolean };
 
+    // Card.Number
     NestedTypeIdentifier: {
       kind: "NestedTypeIdentifier";
       path: Array<LangType["TypeIdentifier"]>;
     };
 
+    // return 3
     ReturnStatement: {
       kind: "ReturnStatement";
       expression: LangType["Expression"];
     };
 
+    // if (x < 3) {}
     IfStatement: {
       kind: "IfStatement";
       guard: LangType["Expression"];
@@ -109,7 +112,9 @@ export type LangType = LangType_BinOp &
       | LangType["FunctionCall"]
       | LangType["ValueIdentifier"]
       | LangType["RecordLiteral"]
-      | LangType["StringLiteral"];
+      | LangType["StringLiteral"]
+      | LangType["ListLiteral"]
+      | LangType["MapLiteral"];
 
     FunctionCall: {
       kind: "FunctionCall";
@@ -226,7 +231,16 @@ export type LangType = LangType_BinOp &
     };
     Block: { kind: "Block"; statements: Array<LangType["Statement"]> };
 
-    List: any;
+    ListLiteral: {
+      kind: "ListLiteral";
+      expressions: Array<LangType["Expression"]>;
+    };
+
+    MapLiteral: {
+      kind: "MapLiteral";
+      entries: Array<LangType["NamedLiteral"]>;
+    };
+
     TupleDefinition: any;
     NamedTupleDefinition: any;
   };
@@ -265,7 +279,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       (start, v, end) => ({
         kind: "NumberLiteral",
         value: Number(v),
-        at: { start, end },
+        // at: { start, end },
       })
     );
   },
@@ -299,7 +313,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       .map(({ start, end, value }) => ({
         kind: "TypeIdentifier",
         value,
-        at: { start, end },
+        // at: { start, end },
       }));
   },
 
@@ -324,15 +338,40 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       .map(({ start, end, value }) => ({
         kind: "ValueIdentifier",
         value: value,
-        at: { start, end },
+        // at: { start, end },
       }));
   },
 
-  // TODO: remove?
-  List: (r) => {
-    return Parsimmon.string("[")
-      .then(r.Expression.sepBy(r._))
-      .skip(Parsimmon.string("]"));
+  // [2,3,4]
+  ListLiteral: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("["),
+      r.Expression.sepBy(r._comma),
+      Parsimmon.string("]"),
+      function (_0, expressions, _2) {
+        return {
+          kind: "ListLiteral",
+          expressions,
+        };
+      }
+    );
+  },
+
+  //* {x: 5, y: 5}, basically the same as RecordLiteral
+  MapLiteral: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.string("{"),
+      r._,
+      Parsimmon.sepBy(r.NamedLiteral, r._comma),
+      r._,
+      Parsimmon.string("}"),
+      (_0, _1, entries, _3, _4) => {
+        return {
+          kind: "MapLiteral",
+          entries,
+        };
+      }
+    );
   },
 
   Expression: (r) => {
@@ -346,6 +385,8 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       ValueIdentifier: r.ValueIdentifier,
       RecordLiteral: r.RecordLiteral,
       StringLiteral: r.StringLiteral,
+      ListLiteral: r.ListLiteral,
+      MapLiteral: r.MapLiteral,
     };
     return Parsimmon.alt<LangType["Expression"]>(
       ...Object.values(expressionParsers)
