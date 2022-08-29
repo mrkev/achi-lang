@@ -1,0 +1,181 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ALON 1`] = `
+Object {
+  "definitions": Array [
+    Object {
+      "expression": Object {
+        "entries": Array [
+          Object {
+            "expression": Object {
+              "definitions": Array [
+                Object {
+                  "expression": Object {
+                    "kind": "StringLiteral",
+                    "value": "l1",
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "id",
+                  },
+                  "kind": "NamedLiteral",
+                },
+                Object {
+                  "expression": Object {
+                    "kind": "StringLiteral",
+                    "value": "lion",
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "kind",
+                  },
+                  "kind": "NamedLiteral",
+                },
+              ],
+              "kind": "RecordLiteral",
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "l1",
+            },
+            "kind": "NamedLiteral",
+          },
+          Object {
+            "expression": Object {
+              "definitions": Array [
+                Object {
+                  "expression": Object {
+                    "kind": "StringLiteral",
+                    "value": "l2",
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "id",
+                  },
+                  "kind": "NamedLiteral",
+                },
+                Object {
+                  "expression": Object {
+                    "kind": "StringLiteral",
+                    "value": "lion",
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "kind",
+                  },
+                  "kind": "NamedLiteral",
+                },
+              ],
+              "kind": "RecordLiteral",
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "l2",
+            },
+            "kind": "NamedLiteral",
+          },
+          Object {
+            "expression": Object {
+              "definitions": Array [
+                Object {
+                  "expression": Object {
+                    "kind": "StringLiteral",
+                    "value": "t1",
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "id",
+                  },
+                  "kind": "NamedLiteral",
+                },
+                Object {
+                  "expression": Object {
+                    "kind": "StringLiteral",
+                    "value": "tiger",
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "kind",
+                  },
+                  "kind": "NamedLiteral",
+                },
+              ],
+              "kind": "RecordLiteral",
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "t1",
+            },
+            "kind": "NamedLiteral",
+          },
+          Object {
+            "expression": Object {
+              "definitions": Array [
+                Object {
+                  "expression": Object {
+                    "kind": "StringLiteral",
+                    "value": "t2",
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "id",
+                  },
+                  "kind": "NamedLiteral",
+                },
+                Object {
+                  "expression": Object {
+                    "kind": "StringLiteral",
+                    "value": "tiger",
+                  },
+                  "identifier": Object {
+                    "kind": "ValueIdentifier",
+                    "value": "kind",
+                  },
+                  "kind": "NamedLiteral",
+                },
+              ],
+              "kind": "RecordLiteral",
+            },
+            "identifier": Object {
+              "kind": "ValueIdentifier",
+              "value": "t2",
+            },
+            "kind": "NamedLiteral",
+          },
+        ],
+        "kind": "MapLiteral",
+      },
+      "identifier": Object {
+        "kind": "ValueIdentifier",
+        "value": "animals",
+      },
+      "kind": "NamedLiteral",
+    },
+    Object {
+      "expression": Object {
+        "expressions": Array [
+          Object {
+            "kind": "StringLiteral",
+            "value": "jungle",
+          },
+          Object {
+            "kind": "StringLiteral",
+            "value": "desert",
+          },
+          Object {
+            "kind": "StringLiteral",
+            "value": "savannah",
+          },
+        ],
+        "kind": "ListLiteral",
+      },
+      "identifier": Object {
+        "kind": "ValueIdentifier",
+        "value": "environments",
+      },
+      "kind": "NamedLiteral",
+    },
+  ],
+  "kind": "RecordLiteral",
+}
+`;

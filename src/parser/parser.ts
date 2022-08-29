@@ -332,7 +332,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // card, point, doThisOrThat
   ValueIdentifier: () => {
     return Parsimmon.regexp(
-      /(?!string|number|boolean|object|array)[a-z][a-zA-Z]*/
+      /(?!string|number|boolean|object|array)[a-z][a-zA-Z0-9]*/
     )
       .mark()
       .map(({ start, end, value }) => ({
@@ -346,9 +346,10 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   ListLiteral: (r) => {
     return Parsimmon.seqMap(
       Parsimmon.string("["),
+      r._,
       r.Expression.sepBy(r._comma),
       Parsimmon.string("]"),
-      function (_0, expressions, _2) {
+      function (_0, _1, expressions, _2) {
         return {
           kind: "ListLiteral",
           expressions,

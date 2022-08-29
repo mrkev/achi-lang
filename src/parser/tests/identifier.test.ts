@@ -13,7 +13,6 @@ test("ValueIdentifier.succuesses", () => {
 
 test("ValueIdentifier.failures", () => {
   expect(() => Lang.ValueIdentifier.tryParse("3fooBar")).toThrow();
-  expect(() => Lang.ValueIdentifier.tryParse("foo3Bar")).toThrow();
   expect(() => Lang.ValueIdentifier.tryParse("FooBar3")).toThrow();
   expect(() => Lang.ValueIdentifier.tryParse("7283493")).toThrow();
 });
