@@ -3,7 +3,7 @@ import { Context } from "../Context";
 import { evaluateStatements } from "../evaluateStatements";
 import { Value } from "../interpreter";
 import { exhaustive, nullthrows } from "../nullthrows";
-import { System } from "../System";
+import { System } from "./System";
 import { aSubsetB } from "./utils";
 import { NamedRecordKlass, RecordLiteralInstance } from "./runtime.records";
 
@@ -143,7 +143,8 @@ function doMatch(
     case "FunctionCall":
     case "ListLiteral":
     case "MapLiteral":
-    case "FunctionDefinition": {
+    // case "FunctionDefinition":
+    case "AnonymousFunctionLiteral": {
       throw new Error(
         `Can't pattern match using expression of type ${expression.kind}`
       );

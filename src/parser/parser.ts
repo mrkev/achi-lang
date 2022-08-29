@@ -1,5 +1,6 @@
 import * as Parsimmon from "parsimmon";
 import { LangType_BinOp, LangDef_BinOp } from "./parser.binop";
+import { LangDef_Function, LangType_Function } from "./parser.function";
 import { LangType_Match, LangDef_Match } from "./parser.match";
 
 type LT_NonNodeKeys = {
@@ -69,7 +70,8 @@ function makeNode<U>(parser: Parsimmon.Parser<U>) {
 }
 
 export type LangType = LangType_BinOp &
-  LangType_Match & {
+  LangType_Match &
+  LangType_Function & {
     _: string;
     __: string;
     _comma: string;
@@ -105,7 +107,7 @@ export type LangType = LangType_BinOp &
 
     Expression:
       | LangType["BooleanLiteral"]
-      | LangType["FunctionDefinition"]
+      // | LangType["FunctionDefinition"]
       | LangType["MatchExpression"]
       | LangType["NumberLiteral"]
       | LangType["NamedRecordLiteral"]
@@ -114,19 +116,8 @@ export type LangType = LangType_BinOp &
       | LangType["RecordLiteral"]
       | LangType["StringLiteral"]
       | LangType["ListLiteral"]
-      | LangType["MapLiteral"];
-
-    FunctionCall: {
-      kind: "FunctionCall";
-      identifier: LangType["ValueIdentifier"];
-      argument: LangType["RecordLiteral"];
-    };
-
-    FunctionDefinition: {
-      kind: "FunctionDefinition";
-      argument: LangType["RecordDefinition"];
-      body: LangType["Block"];
-    };
+      | LangType["MapLiteral"]
+      | LangType["AnonymousFunctionLiteral"];
 
     ConstantDefinition: {
       kind: "ConstantDefinition";
@@ -378,7 +369,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   Expression: (r) => {
     const expressionParsers: ExhaustiveParsers<LangType["Expression"]> = {
       BooleanLiteral: r.BooleanLiteral,
-      FunctionDefinition: r.FunctionDefinition,
+      // FunctionDefinition: r.FunctionDefinition,
       MatchExpression: r.MatchExpression,
       NumberLiteral: r.NumberLiteral,
       NamedRecordLiteral: r.NamedRecordLiteral,
@@ -388,6 +379,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       StringLiteral: r.StringLiteral,
       ListLiteral: r.ListLiteral,
       MapLiteral: r.MapLiteral,
+      AnonymousFunctionLiteral: r.AnonymousFunctionLiteral,
     };
     return Parsimmon.alt<LangType["Expression"]>(
       ...Object.values(expressionParsers)
@@ -528,32 +520,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     );
   },
 
-  /* 
-  TODO;
-  const add = (x: number, y: number) => number {
-  }
-
-  function foo(x: number): number {
-    return x + 3;
-  }
-   */
-  FunctionDefinition: (r) => {
-    return Parsimmon.seqMap(
-      r.RecordDefinition,
-      r._,
-      Parsimmon.string("=>"),
-      // TODO: type tag?
-      r._,
-      r.Block,
-      function (argument, _1, _2, _3, body) {
-        return {
-          kind: "FunctionDefinition",
-          argument,
-          body,
-        };
-      }
-    );
-  },
+  ...LangDef_Function,
 
   Block: (r) => {
     return (
@@ -567,21 +534,6 @@ export const Lang = Parsimmon.createLanguage<LangType>({
             statements,
           };
         })
-    );
-  },
-
-  // log(msg: "hello")
-  FunctionCall: (r) => {
-    return Parsimmon.seqMap(
-      r.ValueIdentifier,
-      r.RecordLiteral,
-      function (identifier, argument) {
-        return {
-          kind: "FunctionCall",
-          identifier,
-          argument,
-        };
-      }
     );
   },
 

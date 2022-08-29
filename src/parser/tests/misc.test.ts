@@ -77,18 +77,6 @@ test("Block", () => {
   expect(result).toMatchSnapshot();
 });
 
-test("FunctionDefinition", () => {
-  const result = Lang.FunctionDefinition.tryParse(
-    `(msg: string) => { hello(msg: msg) }`
-  );
-  expect(result).toMatchSnapshot();
-});
-
-test("FunctionCall", () => {
-  const result = Lang.FunctionCall.tryParse(`log(msg: "hello")`);
-  expect(result).toMatchSnapshot();
-});
-
 test("string", () => {
   expect(Lang.StringLiteral.tryParse(`"hello world"`)).toMatchSnapshot();
   expect(Lang.StringLiteral.tryParse(`"hello\\n world"`)).toMatchSnapshot();

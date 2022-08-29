@@ -1,3 +1,7 @@
+PRIOS: 
+- destructuring, finish function evaluation
+- position for errors
+
 ## Descrption
 
 Three data structures:
@@ -19,6 +23,14 @@ match list {
   case [a, b, c,,,f]
   {}
 }
+
+const foo = () => {
+
+}
+
+
+Function(name: "foo", block: ...)
+
 
 match map {
   case {}

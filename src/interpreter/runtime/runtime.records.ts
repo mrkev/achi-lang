@@ -1,7 +1,7 @@
 import type { LangType } from "../../parser/parser";
 import { Context } from "../Context";
 import { Value } from "../interpreter";
-import { System } from "../System";
+import { System } from "./System";
 
 /**
  * Represents the constructor for a named record, as it sits in memory

@@ -96,85 +96,6 @@ Object {
 }
 `;
 
-exports[`FunctionCall 1`] = `
-Object {
-  "argument": Object {
-    "definitions": Array [
-      Object {
-        "expression": Object {
-          "kind": "StringLiteral",
-          "value": "hello",
-        },
-        "identifier": Object {
-          "kind": "ValueIdentifier",
-          "value": "msg",
-        },
-        "kind": "NamedLiteral",
-      },
-    ],
-    "kind": "RecordLiteral",
-  },
-  "identifier": Object {
-    "kind": "ValueIdentifier",
-    "value": "log",
-  },
-  "kind": "FunctionCall",
-}
-`;
-
-exports[`FunctionDefinition 1`] = `
-Object {
-  "argument": Object {
-    "definitions": Array [
-      Object {
-        "identifier": Object {
-          "kind": "ValueIdentifier",
-          "value": "msg",
-        },
-        "kind": "NamedDefinition",
-        "typeTag": Object {
-          "identifier": Object {
-            "kind": "TypeIdentifier",
-            "value": "string",
-          },
-          "kind": "TypeTag",
-        },
-      },
-    ],
-    "kind": "RecordDefinition",
-  },
-  "body": Object {
-    "kind": "Block",
-    "statements": Array [
-      Object {
-        "argument": Object {
-          "definitions": Array [
-            Object {
-              "expression": Object {
-                "kind": "ValueIdentifier",
-                "value": "msg",
-              },
-              "identifier": Object {
-                "kind": "ValueIdentifier",
-                "value": "msg",
-              },
-              "kind": "NamedLiteral",
-            },
-          ],
-          "kind": "RecordLiteral",
-        },
-        "identifier": Object {
-          "kind": "ValueIdentifier",
-          "value": "hello",
-        },
-        "kind": "FunctionCall",
-      },
-    ],
-  },
-  "kind": "FunctionDefinition",
-}
-`;
-
 exports[`IfStatement 1`] = `
 Object {
   "block": Object {
@@ -398,7 +319,7 @@ Object {
           ],
           "kind": "RecordDefinition",
         },
-        "body": Object {
+        "block": Object {
           "kind": "Block",
           "statements": Array [
             Object {
@@ -451,7 +372,7 @@ Object {
             },
           ],
         },
-        "kind": "FunctionDefinition",
+        "kind": "AnonymousFunctionLiteral",
       },
       "identifier": Object {
         "kind": "ValueIdentifier",

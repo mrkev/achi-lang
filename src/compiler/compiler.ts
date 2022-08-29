@@ -13,15 +13,25 @@ export function generateEmptyExports() {
   );
 }
 
-export function compileProgram(ast: LangType["Program"]) {
+export function compileProgram(
+  ast: LangType["Program"]
+): ts.Statement[] | Error {
   const resultStatements = [];
   for (const statement of ast.statements) {
     if (
       statement.kind === "NamedRecordDefinitionStatement" ||
       statement.kind === "ConstantDefinition"
     ) {
-      const tsStatement = compileStatement(statement);
-      resultStatements.push(tsStatement);
+      try {
+        const tsStatement = compileStatement(statement);
+        resultStatements.push(tsStatement);
+      } catch (e) {
+        if (e instanceof Error) {
+          return e;
+        } else {
+          return new Error(String(e));
+        }
+      }
     }
   }
 

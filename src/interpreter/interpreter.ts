@@ -1,6 +1,6 @@
 import { LangType, tryParse } from "../parser/parser";
 import { Context } from "./Context";
-import { System } from "./System";
+import { System } from "./runtime/System";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { evaluateStatements } from "./evaluateStatements";
 import {
@@ -10,6 +10,7 @@ import {
   NamedRecordInstance,
 } from "./runtime/runtime.records";
 import { MatchFunctionInstance } from "./runtime/runtime.match";
+import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 
 export function interpret(
   script: string | LangType["Program"],
@@ -28,17 +29,30 @@ export function interpret(
 }
 
 export type Value =
+  // 3
   | { kind: "number"; value: number }
+  // "hello"
   | { kind: "string"; value: string }
+  // false
   | { kind: "boolean"; value: boolean }
+  // null
   | { kind: "empty"; value: null }
+  // Point(x: 3, y: 2)
   | { kind: "NamedRecordInstance"; value: NamedRecordInstance }
+  // function printPoint matches (point: Point) { ... }
   | { kind: "MatchFunctionInstance"; value: MatchFunctionInstance }
+  // class Point(x: number, y: number)
   | { kind: "NamedRecordKlass"; value: NamedRecordKlass }
+  // (x: 3, y: 2)
   | { kind: "RecordLiteralInstance"; value: RecordLiteralInstance }
+  // classes Cards { ... }
   | {
       kind: "NamedRecordDefinitionGroupInstance";
       value: NamedRecordDefinitionGroupInstance;
+    }
+  | {
+      kind: "AnonymousFunctionInstance";
+      value: AnonymousFunctionInstance;
     };
 
 export function stringOfValue(value: Value): string {
@@ -89,6 +103,10 @@ export function stringOfValue(value: Value): string {
 
     case "NamedRecordDefinitionGroupInstance": {
       return `[classes: ${value.value.ast.identifier.value} (${value.value.ast.namedRecordDefinitions.length} classes)]`;
+    }
+
+    case "AnonymousFunctionInstance": {
+      return "<anonymous function>";
     }
 
     case "empty": {

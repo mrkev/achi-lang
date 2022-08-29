@@ -1,5 +1,5 @@
 import { interpret } from "../interpreter";
-import { System } from "../System";
+import { System } from "../runtime/System";
 
 export function logsFor(script: string) {
   const system = new System();

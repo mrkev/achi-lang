@@ -1,7 +1,7 @@
 import { LangType } from "../parser/parser";
 import { evaluateExpression } from "./evaluateExpression";
 import { Context } from "./Context";
-import { System } from "./System";
+import { System } from "./runtime/System";
 import { exhaustive } from "./nullthrows";
 import { stringOfValue, Value } from "./interpreter";
 import {

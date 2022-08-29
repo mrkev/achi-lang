@@ -4,7 +4,7 @@ import Editor, { EditorProps } from "@monaco-editor/react";
 import type { Monaco } from "@monaco-editor/react";
 import monaco, { editor } from "monaco-editor";
 import useLocalStorage from "react-use-localstorage";
-import { System } from "./interpreter/System";
+import { System } from "./interpreter/runtime/System";
 import { interpret } from "./interpreter/interpreter";
 import { tryParse } from "./parser/parser";
 import { compileProgram, printTSStatements } from "./compiler/compiler";
@@ -105,7 +105,11 @@ function App() {
       console.log("HERE");
       astEditorRef.current?.setValue(JSON.stringify(ast, null, 2));
       const tsAst = compileProgram(ast);
-      const printed = printTSStatements(tsAst);
+
+      const printed =
+        tsAst instanceof Error
+          ? tsAst.message + "\n" + tsAst.stack
+          : printTSStatements(tsAst);
       tsEditorRef.current?.setValue(printed);
 
       interpret(ast, system);

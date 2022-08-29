@@ -3,13 +3,14 @@ import { Value } from "./interpreter";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { Context } from "./Context";
 import { evaluateStatements } from "./evaluateStatements";
-import { System } from "./System";
+import { System } from "./runtime/System";
 import {
   NamedRecordInstance,
   NamedRecordKlass,
   RecordLiteralInstance,
 } from "./runtime/runtime.records";
 import { evaluateMatch } from "./runtime/runtime.match";
+import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -28,6 +29,7 @@ export function evaluateExpression(
 ): Value {
   const { kind } = expression;
   switch (kind) {
+    // foo
     case "ValueIdentifier": {
       const foundValue = context
         .valueScope()
@@ -35,6 +37,7 @@ export function evaluateExpression(
       return foundValue;
     }
 
+    // Point(x: 3, y: 4)
     case "NamedRecordLiteral": {
       const namedRecordKlass = context.getTypeOrThrow(expression.identifier);
       if (!(namedRecordKlass instanceof NamedRecordKlass)) {
@@ -87,9 +90,9 @@ export function evaluateExpression(
       // throw new Error("Not implemented; StringsLiteral evaluation");
     }
 
-    case "FunctionDefinition": {
-      throw new Error("Not implemented; FunctionDefinition evaluation");
-    }
+    // case "FunctionDefinition": {
+    //   throw new Error("Not implemented; FunctionDefinition evaluation");
+    // }
 
     case "FunctionCall": {
       const { identifier, argument } = expression;
@@ -103,7 +106,10 @@ export function evaluateExpression(
 
       // TODO: other function types
       const instKind = funcInstance.kind;
-      if (instKind !== "MatchFunctionInstance") {
+      if (
+        instKind !== "MatchFunctionInstance" &&
+        instKind !== "AnonymousFunctionInstance"
+      ) {
         throw new Error(
           `${identifier.value} is a ${funcInstance.kind}, not a function`
         );
@@ -133,6 +139,11 @@ export function evaluateExpression(
       throw new Error("Not implemented, ListLiteral");
     }
 
+    case "AnonymousFunctionLiteral": {
+      const func = new AnonymousFunctionInstance(expression);
+      return { kind: "AnonymousFunctionInstance", value: func };
+    }
+
     default: {
       throw exhaustive(kind);
     }
@@ -140,26 +151,38 @@ export function evaluateExpression(
 }
 
 function callFunction(
-  func: LangType["MatchFunction"],
+  func: LangType["MatchFunction"] | LangType["AnonymousFunctionLiteral"],
   argument: Value,
   context: Context,
   system: System
 ): Value {
-  // TODO: handle different types of function
-  // TODO: test types
-  // TODO: just executing first case for now
-
-  for (const caseEntry of func.block.caseEntries) {
-    // caseEntry.guard
+  if (func.kind === "AnonymousFunctionLiteral") {
     context.pushScope();
-    const result = evaluateStatements(
-      caseEntry.block.statements,
-      context,
-      system
-    );
+    // TODO: add argument values to context, do when I implement destructuring
+    const result = evaluateStatements(func.block.statements, context, system);
     context.popScope();
     return nullthrows(result, "fixme, case block returns nothing");
   }
 
-  throw new Error("fixme, no case blocks");
+  if (func.kind === "MatchFunction") {
+    // TODO: test types
+    // TODO: ensure pattern is exhaustive, so we don't have to worry about that here
+    // TODO: just executing first case for now
+
+    for (const caseEntry of func.block.caseEntries) {
+      // caseEntry.guard
+      context.pushScope();
+      const result = evaluateStatements(
+        caseEntry.block.statements,
+        context,
+        system
+      );
+      context.popScope();
+      return nullthrows(result, "fixme, case block returns nothing");
+    }
+
+    throw new Error("fixme, no case blocks");
+  }
+
+  throw exhaustive(func);
 }

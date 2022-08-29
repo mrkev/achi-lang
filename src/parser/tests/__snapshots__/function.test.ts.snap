@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnonymousFunctionLiteral 1`] = `
+Object {
+  "argument": Object {
+    "definitions": Array [
+      Object {
+        "identifier": Object {
+          "kind": "ValueIdentifier",
+          "value": "value",
+        },
+        "kind": "NamedDefinition",
+        "typeTag": Object {
+          "identifier": Object {
+            "kind": "TypeIdentifier",
+            "value": "number",
+          },
+          "kind": "TypeTag",
+        },
+      },
+    ],
+    "kind": "RecordDefinition",
+  },
+  "block": Object {
+    "kind": "Block",
+    "statements": Array [
+      Object {
+        "expression": Object {
+          "kind": "ValueIdentifier",
+          "value": "value",
+        },
+        "kind": "ReturnStatement",
+      },
+    ],
+  },
+  "kind": "AnonymousFunctionLiteral",
+}
+`;
+
+exports[`AnonymousFunctionLiteral.emptyArg 1`] = `
+Object {
+  "argument": Object {
+    "definitions": Array [],
+    "kind": "RecordDefinition",
+  },
+  "block": Object {
+    "kind": "Block",
+    "statements": Array [
+      Object {
+        "expression": Object {
+          "kind": "NumberLiteral",
+          "value": 3,
+        },
+        "kind": "ReturnStatement",
+      },
+    ],
+  },
+  "kind": "AnonymousFunctionLiteral",
+}
+`;
+
+exports[`FunctionCall 1`] = `
+Object {
+  "argument": Object {
+    "definitions": Array [
+      Object {
+        "expression": Object {
+          "kind": "StringLiteral",
+          "value": "hello",
+        },
+        "identifier": Object {
+          "kind": "ValueIdentifier",
+          "value": "msg",
+        },
+        "kind": "NamedLiteral",
+      },
+    ],
+    "kind": "RecordLiteral",
+  },
+  "identifier": Object {
+    "kind": "ValueIdentifier",
+    "value": "log",
+  },
+  "kind": "FunctionCall",
+}
+`;
+
+exports[`FunctionCall.emtpyArg 1`] = `
+Object {
+  "argument": Object {
+    "definitions": Array [],
+    "kind": "RecordLiteral",
+  },
+  "identifier": Object {
+    "kind": "ValueIdentifier",
+    "value": "log",
+  },
+  "kind": "FunctionCall",
+}
+`;

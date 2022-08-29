@@ -49,6 +49,13 @@ test("func.1", () => {
   expect(logs).toMatchSnapshot();
 });
 
+test("func.2", () => {
+  const logs = logsFor(`
+  const foo = (x: number) => { return "hello" };
+  #log foo()`);
+  expect(logs).toEqual(["hello"]);
+});
+
 // test("evaluateExpression.NamedRecordLiteral", () => {
 //   // const context = Context.create();
 //   // context.values().set("Point");
