@@ -5,6 +5,7 @@ import {
 } from "./runtime/runtime.records";
 import { nullthrows } from "./nullthrows";
 import { LangType } from "../parser/parser";
+import Parsimmon from "parsimmon";
 
 type RuntimeTypeStructures =
   | NamedRecordKlass
@@ -165,5 +166,9 @@ export class ScopeError {
       _meta: { start },
     } = this.identifier;
     return `Identifier "${this.identifier.value}" not found (at ${start.line}:${start.column})`;
+  }
+
+  location(): Readonly<{ start: Parsimmon.Index; end: Parsimmon.Index }> {
+    return this.identifier._meta;
   }
 }

@@ -11,6 +11,7 @@ import {
 } from "./runtime/runtime.records";
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
+import { TypeMismatchError } from "../checker/checker";
 
 export function interpret(
   script: string | LangType["Program"],
@@ -38,10 +39,13 @@ export function interpret(
   }
 }
 
-function niceError(script: string, error: ScopeError) {
+export function niceError(
+  script: string,
+  error: ScopeError | TypeMismatchError
+) {
   const lines = script.split("\n");
   const numLineDigits = lines.length.toString().length;
-  const startLine = error.identifier._meta.start.line - 1; // make it 0 indexed
+  const startLine = error.location().start.line - 1; // make it 0 indexed
   const lineNum = (num: number) =>
     (num - 1).toString().padStart(numLineDigits + 1);
 
@@ -53,7 +57,7 @@ function niceError(script: string, error: ScopeError) {
   msg.push(
     "".padStart(numLineDigits + 1) +
       "  " +
-      "^".padStart(error.identifier._meta.end.column - 1)
+      "^".padStart(error.location().end.column - 1)
   );
   if (lines.length > startLine) {
     msg.push(`${lineNum(startLine + 3)}| ${lines[startLine + 1]}`);

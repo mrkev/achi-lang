@@ -9,6 +9,7 @@ import { interpret } from "./interpreter/interpreter";
 import { tryParse } from "./parser/parser";
 import { compileProgram, printTSStatements } from "./compiler/compiler";
 import { ScopeError } from "./interpreter/Context";
+import { check } from "./checker/checker";
 
 const DEFAULT_SCRIPT =
   `
@@ -113,6 +114,7 @@ function App() {
           : printTSStatements(tsAst);
       tsEditorRef.current?.setValue(printed);
 
+      check(script, undefined, system);
       interpret(script, system);
     } catch (e) {
       if (e instanceof Error || typeof e === "string") {
