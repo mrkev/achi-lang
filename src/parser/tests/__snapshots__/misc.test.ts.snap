@@ -13,6 +13,18 @@ Object {
               "value": "hello",
             },
             "identifier": Object {
+              "_meta": Object {
+                "end": Object {
+                  "column": 10,
+                  "line": 1,
+                  "offset": 9,
+                },
+                "start": Object {
+                  "column": 7,
+                  "line": 1,
+                  "offset": 6,
+                },
+              },
               "kind": "ValueIdentifier",
               "value": "msg",
             },
@@ -22,6 +34,18 @@ Object {
         "kind": "RecordLiteral",
       },
       "identifier": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 6,
+            "line": 1,
+            "offset": 5,
+          },
+          "start": Object {
+            "column": 3,
+            "line": 1,
+            "offset": 2,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "log",
       },
@@ -33,6 +57,18 @@ Object {
         "value": 4,
       },
       "identifier": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 29,
+            "line": 1,
+            "offset": 28,
+          },
+          "start": Object {
+            "column": 28,
+            "line": 1,
+            "offset": 27,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "x",
       },
@@ -56,6 +92,18 @@ Object {
     "value": 3,
   },
   "identifier": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+      "start": Object {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "x",
   },
@@ -70,10 +118,34 @@ Object {
       "definitions": Array [
         Object {
           "expression": Object {
+            "_meta": Object {
+              "end": Object {
+                "column": 27,
+                "line": 1,
+                "offset": 26,
+              },
+              "start": Object {
+                "column": 22,
+                "line": 1,
+                "offset": 21,
+              },
+            },
             "kind": "ValueIdentifier",
             "value": "point",
           },
           "identifier": Object {
+            "_meta": Object {
+              "end": Object {
+                "column": 20,
+                "line": 1,
+                "offset": 19,
+              },
+              "start": Object {
+                "column": 15,
+                "line": 1,
+                "offset": 14,
+              },
+            },
             "kind": "ValueIdentifier",
             "value": "point",
           },
@@ -83,12 +155,36 @@ Object {
       "kind": "RecordLiteral",
     },
     "identifier": Object {
+      "_meta": Object {
+        "end": Object {
+          "column": 14,
+          "line": 1,
+          "offset": 13,
+        },
+        "start": Object {
+          "column": 11,
+          "line": 1,
+          "offset": 10,
+        },
+      },
       "kind": "ValueIdentifier",
       "value": "foo",
     },
     "kind": "FunctionCall",
   },
   "identifier": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+      "start": Object {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "x",
   },
@@ -157,6 +253,18 @@ Object {
           "definitions": Array [
             Object {
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 16,
+                    "line": 2,
+                    "offset": 16,
+                  },
+                  "start": Object {
+                    "column": 15,
+                    "line": 2,
+                    "offset": 15,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "x",
               },
@@ -171,6 +279,18 @@ Object {
             },
             Object {
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 27,
+                    "line": 2,
+                    "offset": 27,
+                  },
+                  "start": Object {
+                    "column": 26,
+                    "line": 2,
+                    "offset": 26,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "y",
               },
@@ -194,6 +314,18 @@ Object {
         "value": 1,
       },
       "identifier": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 12,
+            "line": 3,
+            "offset": 49,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 3,
+            "offset": 46,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "one",
       },
@@ -210,10 +342,34 @@ Object {
           "definitions": Array [
             Object {
               "expression": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 29,
+                    "line": 4,
+                    "offset": 83,
+                  },
+                  "start": Object {
+                    "column": 26,
+                    "line": 4,
+                    "offset": 80,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "one",
               },
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 24,
+                    "line": 4,
+                    "offset": 78,
+                  },
+                  "start": Object {
+                    "column": 23,
+                    "line": 4,
+                    "offset": 77,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "x",
               },
@@ -225,6 +381,18 @@ Object {
                 "value": 2,
               },
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 32,
+                    "line": 4,
+                    "offset": 86,
+                  },
+                  "start": Object {
+                    "column": 31,
+                    "line": 4,
+                    "offset": 85,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "y",
               },
@@ -235,6 +403,18 @@ Object {
         },
       },
       "identifier": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 14,
+            "line": 4,
+            "offset": 68,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 4,
+            "offset": 63,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "point",
       },
@@ -242,6 +422,18 @@ Object {
     },
     Object {
       "expression": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 0,
+            "line": 7,
+            "offset": 105,
+          },
+          "start": Object {
+            "column": 8,
+            "line": 6,
+            "offset": 100,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "point",
       },
@@ -267,6 +459,18 @@ Object {
           "definitions": Array [
             Object {
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 16,
+                    "line": 2,
+                    "offset": 16,
+                  },
+                  "start": Object {
+                    "column": 15,
+                    "line": 2,
+                    "offset": 15,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "x",
               },
@@ -281,6 +485,18 @@ Object {
             },
             Object {
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 27,
+                    "line": 2,
+                    "offset": 27,
+                  },
+                  "start": Object {
+                    "column": 26,
+                    "line": 2,
+                    "offset": 26,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "y",
               },
@@ -304,6 +520,18 @@ Object {
           "definitions": Array [
             Object {
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 27,
+                    "line": 3,
+                    "offset": 64,
+                  },
+                  "start": Object {
+                    "column": 22,
+                    "line": 3,
+                    "offset": 59,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "point",
               },
@@ -324,10 +552,34 @@ Object {
           "statements": Array [
             Object {
               "expression": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 20,
+                    "line": 4,
+                    "offset": 97,
+                  },
+                  "start": Object {
+                    "column": 15,
+                    "line": 4,
+                    "offset": 92,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "point",
               },
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 12,
+                    "line": 4,
+                    "offset": 89,
+                  },
+                  "start": Object {
+                    "column": 11,
+                    "line": 4,
+                    "offset": 88,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "x",
               },
@@ -344,10 +596,34 @@ Object {
                   "definitions": Array [
                     Object {
                       "expression": Object {
+                        "_meta": Object {
+                          "end": Object {
+                            "column": 22,
+                            "line": 5,
+                            "offset": 120,
+                          },
+                          "start": Object {
+                            "column": 21,
+                            "line": 5,
+                            "offset": 119,
+                          },
+                        },
                         "kind": "ValueIdentifier",
                         "value": "x",
                       },
                       "identifier": Object {
+                        "_meta": Object {
+                          "end": Object {
+                            "column": 19,
+                            "line": 5,
+                            "offset": 117,
+                          },
+                          "start": Object {
+                            "column": 18,
+                            "line": 5,
+                            "offset": 116,
+                          },
+                        },
                         "kind": "ValueIdentifier",
                         "value": "x",
                       },
@@ -355,10 +631,34 @@ Object {
                     },
                     Object {
                       "expression": Object {
+                        "_meta": Object {
+                          "end": Object {
+                            "column": 28,
+                            "line": 5,
+                            "offset": 126,
+                          },
+                          "start": Object {
+                            "column": 27,
+                            "line": 5,
+                            "offset": 125,
+                          },
+                        },
                         "kind": "ValueIdentifier",
                         "value": "y",
                       },
                       "identifier": Object {
+                        "_meta": Object {
+                          "end": Object {
+                            "column": 25,
+                            "line": 5,
+                            "offset": 123,
+                          },
+                          "start": Object {
+                            "column": 24,
+                            "line": 5,
+                            "offset": 122,
+                          },
+                        },
                         "kind": "ValueIdentifier",
                         "value": "y",
                       },
@@ -375,6 +675,18 @@ Object {
         "kind": "AnonymousFunctionLiteral",
       },
       "identifier": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 18,
+            "line": 3,
+            "offset": 55,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 3,
+            "offset": 46,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "increment",
       },
@@ -391,10 +703,34 @@ Object {
           "definitions": Array [
             Object {
               "expression": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 29,
+                    "line": 7,
+                    "offset": 161,
+                  },
+                  "start": Object {
+                    "column": 26,
+                    "line": 7,
+                    "offset": 158,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "one",
               },
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 24,
+                    "line": 7,
+                    "offset": 156,
+                  },
+                  "start": Object {
+                    "column": 23,
+                    "line": 7,
+                    "offset": 155,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "x",
               },
@@ -406,6 +742,18 @@ Object {
                 "value": 2,
               },
               "identifier": Object {
+                "_meta": Object {
+                  "end": Object {
+                    "column": 32,
+                    "line": 7,
+                    "offset": 164,
+                  },
+                  "start": Object {
+                    "column": 31,
+                    "line": 7,
+                    "offset": 163,
+                  },
+                },
                 "kind": "ValueIdentifier",
                 "value": "y",
               },
@@ -416,6 +764,18 @@ Object {
         },
       },
       "identifier": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 14,
+            "line": 7,
+            "offset": 146,
+          },
+          "start": Object {
+            "column": 9,
+            "line": 7,
+            "offset": 141,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "point",
       },
@@ -426,10 +786,34 @@ Object {
         "definitions": Array [
           Object {
             "expression": Object {
+              "_meta": Object {
+                "end": Object {
+                  "column": 25,
+                  "line": 8,
+                  "offset": 194,
+                },
+                "start": Object {
+                  "column": 20,
+                  "line": 8,
+                  "offset": 189,
+                },
+              },
               "kind": "ValueIdentifier",
               "value": "point",
             },
             "identifier": Object {
+              "_meta": Object {
+                "end": Object {
+                  "column": 18,
+                  "line": 8,
+                  "offset": 187,
+                },
+                "start": Object {
+                  "column": 13,
+                  "line": 8,
+                  "offset": 182,
+                },
+              },
               "kind": "ValueIdentifier",
               "value": "point",
             },
@@ -439,6 +823,18 @@ Object {
         "kind": "RecordLiteral",
       },
       "identifier": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 12,
+            "line": 8,
+            "offset": 181,
+          },
+          "start": Object {
+            "column": 3,
+            "line": 8,
+            "offset": 172,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "increment",
       },
@@ -446,6 +842,18 @@ Object {
     },
     Object {
       "expression": Object {
+        "_meta": Object {
+          "end": Object {
+            "column": 0,
+            "line": 11,
+            "offset": 210,
+          },
+          "start": Object {
+            "column": 8,
+            "line": 10,
+            "offset": 205,
+          },
+        },
         "kind": "ValueIdentifier",
         "value": "point",
       },

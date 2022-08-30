@@ -6,6 +6,18 @@ Object {
     "definitions": Array [
       Object {
         "identifier": Object {
+          "_meta": Object {
+            "end": Object {
+              "column": 7,
+              "line": 1,
+              "offset": 6,
+            },
+            "start": Object {
+              "column": 2,
+              "line": 1,
+              "offset": 1,
+            },
+          },
           "kind": "ValueIdentifier",
           "value": "value",
         },
@@ -26,6 +38,18 @@ Object {
     "statements": Array [
       Object {
         "expression": Object {
+          "_meta": Object {
+            "end": Object {
+              "column": 34,
+              "line": 1,
+              "offset": 33,
+            },
+            "start": Object {
+              "column": 29,
+              "line": 1,
+              "offset": 28,
+            },
+          },
           "kind": "ValueIdentifier",
           "value": "value",
         },
@@ -69,6 +93,18 @@ Object {
           "value": "hello",
         },
         "identifier": Object {
+          "_meta": Object {
+            "end": Object {
+              "column": 8,
+              "line": 1,
+              "offset": 7,
+            },
+            "start": Object {
+              "column": 5,
+              "line": 1,
+              "offset": 4,
+            },
+          },
           "kind": "ValueIdentifier",
           "value": "msg",
         },
@@ -78,6 +114,18 @@ Object {
     "kind": "RecordLiteral",
   },
   "identifier": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 4,
+        "line": 1,
+        "offset": 3,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "log",
   },
@@ -92,6 +140,18 @@ Object {
     "kind": "RecordLiteral",
   },
   "identifier": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 4,
+        "line": 1,
+        "offset": 3,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "log",
   },

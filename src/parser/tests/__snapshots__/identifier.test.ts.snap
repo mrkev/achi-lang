@@ -2,6 +2,18 @@
 
 exports[`Identifier 1`] = `
 Object {
+  "_meta": Object {
+    "end": Object {
+      "column": 7,
+      "line": 1,
+      "offset": 6,
+    },
+    "start": Object {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "kind": "ValueIdentifier",
   "value": "fooBar",
 }

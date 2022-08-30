@@ -142,11 +142,28 @@ class Scope<T> {
     return null;
   }
 
-  getOrThrow(identifer: string, errorMsg: string): T {
-    const value = this.get(identifer);
+  getOrError(
+    identifer: LangType["ValueIdentifier"],
+    errorMsg: string
+  ): T | ScopeError {
+    const value = this.get(identifer.value);
     if (value == null) {
-      throw new Error(errorMsg);
+      return new ScopeError(identifer);
     }
     return value;
+  }
+}
+
+export class ScopeError {
+  readonly identifier: LangType["ValueIdentifier"];
+  constructor(identifier: LangType["ValueIdentifier"]) {
+    this.identifier = identifier;
+  }
+
+  print(): string {
+    const {
+      _meta: { start },
+    } = this.identifier;
+    return `Identifier "${this.identifier.value}" not found (at ${start.line}:${start.column})`;
   }
 }

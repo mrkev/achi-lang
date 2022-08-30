@@ -69,6 +69,11 @@ function makeNode<U>(parser: Parsimmon.Parser<U>) {
   );
 }
 
+type Meta = {
+  start: Parsimmon.Index;
+  end: Parsimmon.Index;
+};
+
 export type LangType = LangType_BinOp &
   LangType_Match &
   LangType_Function & {
@@ -80,7 +85,7 @@ export type LangType = LangType_BinOp &
     blockComment: string;
 
     // Expressions
-    ValueIdentifier: { kind: "ValueIdentifier"; value: string };
+    ValueIdentifier: { kind: "ValueIdentifier"; value: string; _meta: Meta };
     TypeIdentifier: { kind: "TypeIdentifier"; value: string };
     NumberLiteral: { kind: "NumberLiteral"; value: number };
     StringLiteral: { kind: "StringLiteral"; value: string };
@@ -329,7 +334,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       .map(({ start, end, value }) => ({
         kind: "ValueIdentifier",
         value: value,
-        // at: { start, end },
+        _meta: { start, end },
       }));
   },
 

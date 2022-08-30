@@ -23,6 +23,15 @@ test("if.true", () => {
   expect(logs).toMatchSnapshot();
 });
 
+test("error.nice", () => {
+  const logs = logsFor(`
+
+  const one = y;
+  #log one
+  `);
+  expect(logs).toMatchSnapshot();
+});
+
 // test("if.false", () => {
 //   const logs = logsFor(`
 //   if (0) {

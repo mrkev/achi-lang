@@ -1,5 +1,5 @@
 import { LangType, tryParse } from "../parser/parser";
-import { Context } from "./Context";
+import { Context, ScopeError } from "./Context";
 import { System } from "./runtime/System";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { evaluateStatements } from "./evaluateStatements";
@@ -23,9 +23,44 @@ export function interpret(
     evaluateStatements(ast.statements, context, system);
     context.popScope();
   } catch (e) {
-    system.console.log(e as Error);
+    if (e instanceof ScopeError) {
+      if (typeof script === "string") {
+        const nice = niceError(script, e);
+        console.log("nice");
+        system.console.log(nice);
+      }
+    } else if (e instanceof Error || typeof e === "string") {
+      system.console.log(e);
+    } else {
+      console.log("Unknown error type during interpretation");
+    }
     console.error(e);
   }
+}
+
+function niceError(script: string, error: ScopeError) {
+  const lines = script.split("\n");
+  const numLineDigits = lines.length.toString().length;
+  const startLine = error.identifier._meta.start.line - 1; // make it 0 indexed
+  const lineNum = (num: number) =>
+    (num - 1).toString().padStart(numLineDigits + 1);
+
+  const msg = [];
+  if (startLine > 0) {
+    msg.push(`${lineNum(startLine + 1)}| ${lines[startLine - 1]}`);
+  }
+  msg.push(`${lineNum(startLine + 2)}| ${lines[startLine]}`);
+  msg.push(
+    "".padStart(numLineDigits + 1) +
+      "  " +
+      "^".padStart(error.identifier._meta.end.column - 1)
+  );
+  if (lines.length > startLine) {
+    msg.push(`${lineNum(startLine + 3)}| ${lines[startLine + 1]}`);
+  }
+  msg.push("");
+  msg.push(error.print());
+  return msg.join("\n");
 }
 
 export type Value =

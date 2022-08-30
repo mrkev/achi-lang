@@ -2,6 +2,17 @@
 
 exports[`class.1 1`] = `Array []`;
 
+exports[`error.nice 1`] = `
+Array [
+  " 2| 
+ 3|   const one = y;
+                  ^
+ 4|   #log one
+
+Identifier \\"y\\" not found (at 3:15)",
+]
+`;
+
 exports[`func.1 1`] = `
 Array [
   "[Function: foo]",

@@ -26,6 +26,18 @@ Object {
     "kind": "BlockOfCases",
   },
   "expression": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 12,
+        "line": 1,
+        "offset": 11,
+      },
+      "start": Object {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "card",
   },
@@ -40,6 +52,18 @@ Object {
     "kind": "BlockOfCases",
   },
   "identifier": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 19,
+        "line": 1,
+        "offset": 18,
+      },
+      "start": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "printCard",
   },
@@ -48,6 +72,18 @@ Object {
     "definitions": Array [
       Object {
         "identifier": Object {
+          "_meta": Object {
+            "end": Object {
+              "column": 33,
+              "line": 1,
+              "offset": 32,
+            },
+            "start": Object {
+              "column": 29,
+              "line": 1,
+              "offset": 28,
+            },
+          },
           "kind": "ValueIdentifier",
           "value": "card",
         },
@@ -92,6 +128,18 @@ Object {
     "kind": "BlockOfCases",
   },
   "identifier": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 19,
+        "line": 1,
+        "offset": 18,
+      },
+      "start": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "printCard",
   },
@@ -100,6 +148,18 @@ Object {
     "definitions": Array [
       Object {
         "identifier": Object {
+          "_meta": Object {
+            "end": Object {
+              "column": 33,
+              "line": 1,
+              "offset": 32,
+            },
+            "start": Object {
+              "column": 29,
+              "line": 1,
+              "offset": 28,
+            },
+          },
           "kind": "ValueIdentifier",
           "value": "card",
         },
@@ -223,10 +283,34 @@ Object {
             "definitions": Array [
               Object {
                 "expression": Object {
+                  "_meta": Object {
+                    "end": Object {
+                      "column": 33,
+                      "line": 14,
+                      "offset": 253,
+                    },
+                    "start": Object {
+                      "column": 28,
+                      "line": 14,
+                      "offset": 248,
+                    },
+                  },
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
                 "identifier": Object {
+                  "_meta": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 14,
+                      "offset": 246,
+                    },
+                    "start": Object {
+                      "column": 21,
+                      "line": 14,
+                      "offset": 241,
+                    },
+                  },
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
@@ -242,6 +326,18 @@ Object {
     "kind": "BlockOfCases",
   },
   "identifier": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 19,
+        "line": 1,
+        "offset": 18,
+      },
+      "start": Object {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "printCard",
   },
@@ -250,6 +346,18 @@ Object {
     "definitions": Array [
       Object {
         "identifier": Object {
+          "_meta": Object {
+            "end": Object {
+              "column": 33,
+              "line": 1,
+              "offset": 32,
+            },
+            "start": Object {
+              "column": 29,
+              "line": 1,
+              "offset": 28,
+            },
+          },
           "kind": "ValueIdentifier",
           "value": "card",
         },
@@ -373,10 +481,34 @@ Object {
             "definitions": Array [
               Object {
                 "expression": Object {
+                  "_meta": Object {
+                    "end": Object {
+                      "column": 33,
+                      "line": 14,
+                      "offset": 226,
+                    },
+                    "start": Object {
+                      "column": 28,
+                      "line": 14,
+                      "offset": 221,
+                    },
+                  },
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
                 "identifier": Object {
+                  "_meta": Object {
+                    "end": Object {
+                      "column": 26,
+                      "line": 14,
+                      "offset": 219,
+                    },
+                    "start": Object {
+                      "column": 21,
+                      "line": 14,
+                      "offset": 214,
+                    },
+                  },
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
@@ -392,6 +524,18 @@ Object {
     "kind": "BlockOfCases",
   },
   "expression": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 12,
+        "line": 1,
+        "offset": 11,
+      },
+      "start": Object {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "card",
   },
@@ -418,10 +562,34 @@ Object {
             "definitions": Array [
               Object {
                 "expression": Object {
+                  "_meta": Object {
+                    "end": Object {
+                      "column": 30,
+                      "line": 1,
+                      "offset": 29,
+                    },
+                    "start": Object {
+                      "column": 25,
+                      "line": 1,
+                      "offset": 24,
+                    },
+                  },
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
                 "identifier": Object {
+                  "_meta": Object {
+                    "end": Object {
+                      "column": 23,
+                      "line": 1,
+                      "offset": 22,
+                    },
+                    "start": Object {
+                      "column": 18,
+                      "line": 1,
+                      "offset": 17,
+                    },
+                  },
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
@@ -432,6 +600,18 @@ Object {
           },
         },
         "identifier": Object {
+          "_meta": Object {
+            "end": Object {
+              "column": 11,
+              "line": 1,
+              "offset": 10,
+            },
+            "start": Object {
+              "column": 7,
+              "line": 1,
+              "offset": 6,
+            },
+          },
           "kind": "ValueIdentifier",
           "value": "card",
         },

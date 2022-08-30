@@ -19,6 +19,18 @@ exports[`BinaryOperation 2`] = `
 Object {
   "kind": "BinaryOperation",
   "left": Object {
+    "_meta": Object {
+      "end": Object {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "start": Object {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "kind": "ValueIdentifier",
     "value": "hello",
   },

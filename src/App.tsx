@@ -8,6 +8,7 @@ import { System } from "./interpreter/runtime/System";
 import { interpret } from "./interpreter/interpreter";
 import { tryParse } from "./parser/parser";
 import { compileProgram, printTSStatements } from "./compiler/compiler";
+import { ScopeError } from "./interpreter/Context";
 
 const DEFAULT_SCRIPT =
   `
@@ -108,13 +109,15 @@ function App() {
 
       const printed =
         tsAst instanceof Error
-          ? tsAst.message + "\n" + tsAst.stack
+          ? "# Compiler error\n" + tsAst.message + "\n" + tsAst.stack
           : printTSStatements(tsAst);
       tsEditorRef.current?.setValue(printed);
 
-      interpret(ast, system);
+      interpret(script, system);
     } catch (e) {
-      system.console.log(e as Error);
+      if (e instanceof Error || typeof e === "string") {
+        system.console.log(e);
+      }
       console.error(e);
     }
     console.log("done.");

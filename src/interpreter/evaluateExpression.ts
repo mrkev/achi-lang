@@ -1,7 +1,7 @@
 import { LangType } from "../parser/parser";
 import { Value } from "./interpreter";
 import { exhaustive, nullthrows } from "./nullthrows";
-import { Context } from "./Context";
+import { Context, ScopeError } from "./Context";
 import { evaluateStatements } from "./evaluateStatements";
 import { System } from "./runtime/System";
 import {
@@ -33,7 +33,12 @@ export function evaluateExpression(
     case "ValueIdentifier": {
       const foundValue = context
         .valueScope()
-        .getOrThrow(expression.value, `Name ${expression.value} not found`);
+        .getOrError(expression, `Name ${expression.value} not found`);
+
+      if (foundValue instanceof ScopeError) {
+        throw foundValue;
+      }
+
       return foundValue;
     }
 
@@ -99,10 +104,14 @@ export function evaluateExpression(
 
       const funcInstance = context
         .valueScope()
-        .getOrThrow(
-          identifier.value,
+        .getOrError(
+          identifier,
           `No definition for function ${identifier.value}`
         );
+
+      if (funcInstance instanceof ScopeError) {
+        throw funcInstance;
+      }
 
       // TODO: other function types
       const instKind = funcInstance.kind;
