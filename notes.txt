@@ -198,3 +198,88 @@ four.value
 //   x: number;
 //   y: number;
 // }
+
+
+
+const program = `
+export type Point (
+  x: number,
+  y: number,
+)
+
+*.add(a: Point, b: Point) => Point {
+  return (
+    x: a.x + b.x, 
+    y: a.y + b.y
+  )
+}
+
+.origin() => Point {
+  return (x: 0, y: 0)
+}
+
+.double Point {
+  return (x: arg.x * 2, b: arg.x * 2)
+}
+
+.double(a: Point) {
+  return (x: a.x * 2, b: b.x * 2)
+}
+
+//////////  point.achi
+//////////  point.extra.achi // Can extend point.
+////////////////// if named differently, error when attempting
+////////////////// to define a new function in point
+
+import { Point } from "./point"
+
+Point.unit() => Point {
+  return (x: 1, y: 1)
+}
+
+
+const foo = Point(x:3, y:3)
+
+foo = foo
+  .double()
+  .add(Point(x:3, y:3))
+
+
+
+// index.achi
+
+type LinkedMap<T>(
+  _map: Map<string, T>,
+) as Subbable<T> (
+  subscriptors: Set<() => void>,
+) as StateHashable (
+  mutationHash: number,
+)
+
+.set<T>(lm: LinkedMap<T>, key: string, val: T) {
+  lm._map.set(key, val);
+  Subbable.notify(lm)
+  StateHashable.didMutate(lm)
+}
+
+
+
+
+// Usage
+
+Point.add(a, b)
+
+
+const x = Point(x: 1, y: 2)
+
+function add (a: Point, b: Point) {
+  
+}
+
+const serialize(this: Point) {
+  
+}
+
+x.serialize()
+
+`;

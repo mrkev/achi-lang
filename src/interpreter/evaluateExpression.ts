@@ -92,12 +92,7 @@ export function evaluateExpression(
 
     case "StringLiteral": {
       return { kind: "string", value: expression.value };
-      // throw new Error("Not implemented; StringsLiteral evaluation");
     }
-
-    // case "FunctionDefinition": {
-    //   throw new Error("Not implemented; FunctionDefinition evaluation");
-    // }
 
     case "FunctionCall": {
       const { identifier, argument } = expression;

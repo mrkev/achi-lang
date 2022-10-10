@@ -1,73 +1,8 @@
 import * as Parsimmon from "parsimmon";
+import { ExhaustiveParsers } from "./sublang";
 import { LangType_BinOp, LangDef_BinOp } from "./parser.binop";
 import { LangDef_Function, LangType_Function } from "./parser.function";
 import { LangType_Match, LangDef_Match } from "./parser.match";
-
-type LT_NonNodeKeys = {
-  [Key in keyof LangType]: LangType[Key] extends string | number | symbol
-    ? Key
-    : never;
-}[keyof LangType];
-
-// LangType, but skipping any entry that isn't an object
-type LT_OnlyNodes = Omit<LangType, LT_NonNodeKeys>;
-type ValueOf<T> = T[keyof T];
-// example:
-//   ExhaustiveParsers<LangType["Statement"]>
-// can only be satisfied by an object that entries for all the types
-// that make up LangType["Statement"]. Each entry maps to a Parsimmon.Parser.
-type ExhaustiveParsers<T extends ValueOf<LT_OnlyNodes>> = {
-  [key in T["kind"]]: Parsimmon.Parser<LangType[key]>;
-};
-
-// From: https://github.com/jneen/parsimmon/blob/master/examples/json.js
-
-// Use the JSON standard's definition of whitespace rather than Parsimmon's.
-let whitespace = Parsimmon.regexp(/\s*/m);
-
-// JSON is pretty relaxed about whitespace, so let's make it easy to ignore
-// after most text.
-function token<T>(parser: Parsimmon.Parser<T>) {
-  return parser.skip(whitespace);
-}
-
-// Turn escaped characters into real ones (e.g. "\\n" becomes "\n").
-function interpretEscapes(str: string) {
-  const escapes = {
-    b: "\b",
-    f: "\f",
-    n: "\n",
-    r: "\r",
-    t: "\t",
-  };
-  return str.replace(/\\(u[0-9a-fA-F]{4}|[^u])/, (_, escape: string) => {
-    let type = escape.charAt(0);
-    let hex = escape.slice(1);
-    if (type === "u") {
-      return String.fromCharCode(parseInt(hex, 16));
-    }
-    if (escapes.hasOwnProperty(type)) {
-      return (escapes as any)[type];
-    }
-    return type;
-  });
-}
-
-function makeNode<U>(parser: Parsimmon.Parser<U>) {
-  return Parsimmon.seqMap(
-    Parsimmon.index,
-    parser,
-    Parsimmon.index,
-    function (start, value, end) {
-      return Object.freeze({
-        type: "myLanguage." + name,
-        value: value,
-        start: start,
-        end: end,
-      });
-    }
-  );
-}
 
 type Meta = {
   start: Parsimmon.Index;
@@ -237,8 +172,8 @@ export type LangType = LangType_BinOp &
       entries: Array<LangType["NamedLiteral"]>;
     };
 
-    TupleDefinition: any;
-    NamedTupleDefinition: any;
+    // TupleDefinition: any;
+    // NamedTupleDefinition: any;
   };
 
 export const Lang = Parsimmon.createLanguage<LangType>({
@@ -542,36 +477,36 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     );
   },
 
-  // type Point(number, number)
-  NamedTupleDefinition: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("type"),
-      r.__,
-      r.TypeIdentifier,
-      r._,
-      r.TupleDefinition,
-      function (_0, _1, identifier, _2, tuple) {
-        return {
-          kind: "NamedTupleDefinition",
-          identifier,
-          tuple,
-        };
-      }
-    );
-  },
+  // // type Point(number, number)
+  // NamedTupleDefinition: (r) => {
+  //   return Parsimmon.seqMap(
+  //     Parsimmon.string("type"),
+  //     r.__,
+  //     r.TypeIdentifier,
+  //     r._,
+  //     r.TupleDefinition,
+  //     function (_0, _1, identifier, _2, tuple) {
+  //       return {
+  //         kind: "NamedTupleDefinition",
+  //         identifier,
+  //         tuple,
+  //       };
+  //     }
+  //   );
+  // },
 
-  //* (number, number)
-  TupleDefinition: (r) => {
-    return Parsimmon.string("(")
-      .then(Parsimmon.sepBy1(r.TypeIdentifier, r._comma))
-      .skip(Parsimmon.string(")"))
-      .map((definitions) => {
-        return {
-          kind: "TupleDefinition",
-          definitions,
-        };
-      });
-  },
+  // //* (number, number)
+  // TupleDefinition: (r) => {
+  //   return Parsimmon.string("(")
+  //     .then(Parsimmon.sepBy1(r.TypeIdentifier, r._comma))
+  //     .skip(Parsimmon.string(")"))
+  //     .map((definitions) => {
+  //       return {
+  //         kind: "TupleDefinition",
+  //         definitions,
+  //       };
+  //     });
+  // },
 
   ////////////////////////////////////////////////////////////////// Records ///
 
@@ -750,85 +685,51 @@ export function tryParse(str: string): LangType["Program"] {
   return result;
 }
 
-const program = `
-export type Point (
-  x: number,
-  y: number,
-)
+// From: https://github.com/jneen/parsimmon/blob/master/examples/json.js
 
-*.add(a: Point, b: Point) => Point {
-  return (
-    x: a.x + b.x, 
-    y: a.y + b.y
-  )
+// Use the JSON standard's definition of whitespace rather than Parsimmon's.
+let whitespace = Parsimmon.regexp(/\s*/m);
+
+// JSON is pretty relaxed about whitespace, so let's make it easy to ignore
+// after most text.
+function token<T>(parser: Parsimmon.Parser<T>) {
+  return parser.skip(whitespace);
 }
 
-.origin() => Point {
-  return (x: 0, y: 0)
+// Turn escaped characters into real ones (e.g. "\\n" becomes "\n").
+function interpretEscapes(str: string) {
+  const escapes = {
+    b: "\b",
+    f: "\f",
+    n: "\n",
+    r: "\r",
+    t: "\t",
+  };
+  return str.replace(/\\(u[0-9a-fA-F]{4}|[^u])/, (_, escape: string) => {
+    let type = escape.charAt(0);
+    let hex = escape.slice(1);
+    if (type === "u") {
+      return String.fromCharCode(parseInt(hex, 16));
+    }
+    if (escapes.hasOwnProperty(type)) {
+      return (escapes as any)[type];
+    }
+    return type;
+  });
 }
 
-.double Point {
-  return (x: arg.x * 2, b: arg.x * 2)
+function makeNode<U>(parser: Parsimmon.Parser<U>) {
+  return Parsimmon.seqMap(
+    Parsimmon.index,
+    parser,
+    Parsimmon.index,
+    function (start, value, end) {
+      return Object.freeze({
+        type: "myLanguage." + name,
+        value: value,
+        start: start,
+        end: end,
+      });
+    }
+  );
 }
-
-.double(a: Point) {
-  return (x: a.x * 2, b: b.x * 2)
-}
-
-//////////  point.achi
-//////////  point.extra.achi // Can extend point.
-////////////////// if named differently, error when attempting
-////////////////// to define a new function in point
-
-import { Point } from "./point"
-
-Point.unit() => Point {
-  return (x: 1, y: 1)
-}
-
-
-const foo = Point(x:3, y:3)
-
-foo = foo
-  .double()
-  .add(Point(x:3, y:3))
-
-
-
-// index.achi
-
-type LinkedMap<T>(
-  _map: Map<string, T>,
-) as Subbable<T> (
-  subscriptors: Set<() => void>,
-) as StateHashable (
-  mutationHash: number,
-)
-
-.set<T>(lm: LinkedMap<T>, key: string, val: T) {
-  lm._map.set(key, val);
-  Subbable.notify(lm)
-  StateHashable.didMutate(lm)
-}
-
-
-
-
-// Usage
-
-Point.add(a, b)
-
-
-const x = Point(x: 1, y: 2)
-
-function add (a: Point, b: Point) {
-  
-}
-
-const serialize(this: Point) {
-  
-}
-
-x.serialize()
-
-`;

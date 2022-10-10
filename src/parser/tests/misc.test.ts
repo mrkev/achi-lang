@@ -84,16 +84,16 @@ test("string", () => {
 
 // Types
 
-test("NamedTupleDefinition", () => {
-  const result = Lang.NamedTupleDefinition.tryParse(
-    "type Point(number, number)"
-  );
-  expect(result).toMatchSnapshot();
-});
+// test("NamedTupleDefinition", () => {
+//   const result = Lang.NamedTupleDefinition.tryParse(
+//     "type Point(number, number)"
+//   );
+//   expect(result).toMatchSnapshot();
+// });
 
-test("TupleDefinition", () => {
-  const result = Lang.TupleDefinition.tryParse("(number, number)");
-  expect(result).toMatchSnapshot();
-});
+// test("TupleDefinition", () => {
+//   const result = Lang.TupleDefinition.tryParse("(number, number)");
+//   expect(result).toMatchSnapshot();
+// });
 
 // -------------- Atoms

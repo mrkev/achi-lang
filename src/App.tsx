@@ -8,7 +8,6 @@ import { System } from "./interpreter/runtime/System";
 import { interpret } from "./interpreter/interpreter";
 import { tryParse } from "./parser/parser";
 import { compileProgram, printTSStatements } from "./compiler/compiler";
-import { ScopeError } from "./interpreter/Context";
 import { check } from "./checker/checker";
 
 const DEFAULT_SCRIPT =
@@ -320,7 +319,4 @@ function handleScriptEditorWillMount(monaco: Monaco) {
       ">>>=",
     ],
   });
-}
-function compileStatement(value: any): any {
-  throw new Error("Function not implemented.");
 }
