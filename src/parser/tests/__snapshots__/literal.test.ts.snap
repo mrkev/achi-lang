@@ -1,31 +1,31 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`BooleanLiteral.false 1`] = `
-Object {
+{
   "kind": "BooleanLiteral",
   "value": false,
 }
 `;
 
 exports[`BooleanLiteral.true 1`] = `
-Object {
+{
   "kind": "BooleanLiteral",
   "value": true,
 }
 `;
 
 exports[`ListLiteral 1`] = `
-Object {
-  "expressions": Array [
-    Object {
+{
+  "expressions": [
+    {
       "kind": "NumberLiteral",
       "value": 3,
     },
-    Object {
+    {
       "kind": "BooleanLiteral",
       "value": false,
     },
-    Object {
+    {
       "kind": "StringLiteral",
       "value": "string",
     },
@@ -35,22 +35,22 @@ Object {
 `;
 
 exports[`ListLiteral.recursive 1`] = `
-Object {
-  "expressions": Array [
-    Object {
+{
+  "expressions": [
+    {
       "kind": "NumberLiteral",
       "value": 3,
     },
-    Object {
-      "expressions": Array [
-        Object {
+    {
+      "expressions": [
+        {
           "kind": "BooleanLiteral",
           "value": false,
         },
       ],
       "kind": "ListLiteral",
     },
-    Object {
+    {
       "kind": "StringLiteral",
       "value": "string",
     },
@@ -60,21 +60,21 @@ Object {
 `;
 
 exports[`MapLiteral 1`] = `
-Object {
-  "entries": Array [
-    Object {
-      "expression": Object {
+{
+  "entries": [
+    {
+      "expression": {
         "kind": "NumberLiteral",
         "value": 3,
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 5,
             "line": 1,
             "offset": 4,
           },
-          "start": Object {
+          "start": {
             "column": 2,
             "line": 1,
             "offset": 1,
@@ -85,19 +85,19 @@ Object {
       },
       "kind": "NamedLiteral",
     },
-    Object {
-      "expression": Object {
+    {
+      "expression": {
         "kind": "BooleanLiteral",
         "value": false,
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 13,
             "line": 1,
             "offset": 12,
           },
-          "start": Object {
+          "start": {
             "column": 10,
             "line": 1,
             "offset": 9,
@@ -114,21 +114,21 @@ Object {
 `;
 
 exports[`MapLiteral.recursive 1`] = `
-Object {
-  "entries": Array [
-    Object {
-      "expression": Object {
+{
+  "entries": [
+    {
+      "expression": {
         "kind": "NumberLiteral",
         "value": 3,
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 5,
             "line": 1,
             "offset": 4,
           },
-          "start": Object {
+          "start": {
             "column": 2,
             "line": 1,
             "offset": 1,
@@ -139,22 +139,22 @@ Object {
       },
       "kind": "NamedLiteral",
     },
-    Object {
-      "expression": Object {
-        "entries": Array [
-          Object {
-            "expression": Object {
+    {
+      "expression": {
+        "entries": [
+          {
+            "expression": {
               "kind": "NumberLiteral",
               "value": 3,
             },
-            "identifier": Object {
-              "_meta": Object {
-                "end": Object {
+            "identifier": {
+              "_meta": {
+                "end": {
                   "column": 19,
                   "line": 1,
                   "offset": 18,
                 },
-                "start": Object {
+                "start": {
                   "column": 16,
                   "line": 1,
                   "offset": 15,
@@ -168,14 +168,14 @@ Object {
         ],
         "kind": "MapLiteral",
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 13,
             "line": 1,
             "offset": 12,
           },
-          "start": Object {
+          "start": {
             "column": 10,
             "line": 1,
             "offset": 9,

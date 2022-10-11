@@ -44,14 +44,14 @@ test("IfStatement", () => {
 test("NestedTypeIdentifier", () => {
   const result = Lang.NestedTypeIdentifier.tryParse("Card.King");
   expect(result).toMatchInlineSnapshot(`
-Object {
+{
   "kind": "NestedTypeIdentifier",
-  "path": Array [
-    Object {
+  "path": [
+    {
       "kind": "TypeIdentifier",
       "value": "Card",
     },
-    Object {
+    {
       "kind": "TypeIdentifier",
       "value": "King",
     },

@@ -1,22 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`MatchExpression 1`] = `
-Object {
-  "block": Object {
-    "caseEntries": Array [
-      Object {
-        "block": Object {
+{
+  "block": {
+    "caseEntries": [
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [],
+          "statements": [],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "King",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [],
+          "recordLiteral": {
+            "definitions": [],
             "kind": "RecordLiteral",
           },
         },
@@ -25,14 +25,14 @@ Object {
     ],
     "kind": "BlockOfCases",
   },
-  "expression": Object {
-    "_meta": Object {
-      "end": Object {
+  "expression": {
+    "_meta": {
+      "end": {
         "column": 12,
         "line": 1,
         "offset": 11,
       },
-      "start": Object {
+      "start": {
         "column": 8,
         "line": 1,
         "offset": 7,
@@ -46,19 +46,19 @@ Object {
 `;
 
 exports[`MatchFunction 1`] = `
-Object {
-  "block": Object {
-    "caseEntries": Array [],
+{
+  "block": {
+    "caseEntries": [],
     "kind": "BlockOfCases",
   },
-  "identifier": Object {
-    "_meta": Object {
-      "end": Object {
+  "identifier": {
+    "_meta": {
+      "end": {
         "column": 19,
         "line": 1,
         "offset": 18,
       },
-      "start": Object {
+      "start": {
         "column": 10,
         "line": 1,
         "offset": 9,
@@ -68,17 +68,17 @@ Object {
     "value": "printCard",
   },
   "kind": "MatchFunction",
-  "matchType": Object {
-    "definitions": Array [
-      Object {
-        "identifier": Object {
-          "_meta": Object {
-            "end": Object {
+  "matchType": {
+    "definitions": [
+      {
+        "identifier": {
+          "_meta": {
+            "end": {
               "column": 33,
               "line": 1,
               "offset": 32,
             },
-            "start": Object {
+            "start": {
               "column": 29,
               "line": 1,
               "offset": 28,
@@ -88,8 +88,8 @@ Object {
           "value": "card",
         },
         "kind": "NamedDefinition",
-        "typeTag": Object {
-          "identifier": Object {
+        "typeTag": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Card",
           },
@@ -103,22 +103,22 @@ Object {
 `;
 
 exports[`MatchFunction.cases 1`] = `
-Object {
-  "block": Object {
-    "caseEntries": Array [
-      Object {
-        "block": Object {
+{
+  "block": {
+    "caseEntries": [
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [],
+          "statements": [],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "King",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [],
+          "recordLiteral": {
+            "definitions": [],
             "kind": "RecordLiteral",
           },
         },
@@ -127,14 +127,14 @@ Object {
     ],
     "kind": "BlockOfCases",
   },
-  "identifier": Object {
-    "_meta": Object {
-      "end": Object {
+  "identifier": {
+    "_meta": {
+      "end": {
         "column": 19,
         "line": 1,
         "offset": 18,
       },
-      "start": Object {
+      "start": {
         "column": 10,
         "line": 1,
         "offset": 9,
@@ -144,17 +144,17 @@ Object {
     "value": "printCard",
   },
   "kind": "MatchFunction",
-  "matchType": Object {
-    "definitions": Array [
-      Object {
-        "identifier": Object {
-          "_meta": Object {
-            "end": Object {
+  "matchType": {
+    "definitions": [
+      {
+        "identifier": {
+          "_meta": {
+            "end": {
               "column": 33,
               "line": 1,
               "offset": 32,
             },
-            "start": Object {
+            "start": {
               "column": 29,
               "line": 1,
               "offset": 28,
@@ -164,8 +164,8 @@ Object {
           "value": "card",
         },
         "kind": "NamedDefinition",
-        "typeTag": Object {
-          "identifier": Object {
+        "typeTag": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Card",
           },
@@ -179,15 +179,15 @@ Object {
 `;
 
 exports[`MatchFunction.fullExample 1`] = `
-Object {
-  "block": Object {
-    "caseEntries": Array [
-      Object {
-        "block": Object {
+{
+  "block": {
+    "caseEntries": [
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
+          "statements": [
+            {
+              "expression": {
                 "kind": "StringLiteral",
                 "value": "King",
               },
@@ -195,25 +195,25 @@ Object {
             },
           ],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "King",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [],
+          "recordLiteral": {
+            "definitions": [],
             "kind": "RecordLiteral",
           },
         },
         "kind": "CaseEntry",
       },
-      Object {
-        "block": Object {
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
+          "statements": [
+            {
+              "expression": {
                 "kind": "StringLiteral",
                 "value": "Queen",
               },
@@ -221,25 +221,25 @@ Object {
             },
           ],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Queen",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [],
+          "recordLiteral": {
+            "definitions": [],
             "kind": "RecordLiteral",
           },
         },
         "kind": "CaseEntry",
       },
-      Object {
-        "block": Object {
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
+          "statements": [
+            {
+              "expression": {
                 "kind": "StringLiteral",
                 "value": "Jack",
               },
@@ -247,25 +247,25 @@ Object {
             },
           ],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Jack",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [],
+          "recordLiteral": {
+            "definitions": [],
             "kind": "RecordLiteral",
           },
         },
         "kind": "CaseEntry",
       },
-      Object {
-        "block": Object {
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
+          "statements": [
+            {
+              "expression": {
                 "kind": "StringLiteral",
                 "value": "Number card",
               },
@@ -273,23 +273,23 @@ Object {
             },
           ],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Number",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [
-              Object {
-                "expression": Object {
-                  "_meta": Object {
-                    "end": Object {
+          "recordLiteral": {
+            "definitions": [
+              {
+                "expression": {
+                  "_meta": {
+                    "end": {
                       "column": 33,
                       "line": 14,
                       "offset": 253,
                     },
-                    "start": Object {
+                    "start": {
                       "column": 28,
                       "line": 14,
                       "offset": 248,
@@ -298,14 +298,14 @@ Object {
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
-                "identifier": Object {
-                  "_meta": Object {
-                    "end": Object {
+                "identifier": {
+                  "_meta": {
+                    "end": {
                       "column": 26,
                       "line": 14,
                       "offset": 246,
                     },
-                    "start": Object {
+                    "start": {
                       "column": 21,
                       "line": 14,
                       "offset": 241,
@@ -325,14 +325,14 @@ Object {
     ],
     "kind": "BlockOfCases",
   },
-  "identifier": Object {
-    "_meta": Object {
-      "end": Object {
+  "identifier": {
+    "_meta": {
+      "end": {
         "column": 19,
         "line": 1,
         "offset": 18,
       },
-      "start": Object {
+      "start": {
         "column": 10,
         "line": 1,
         "offset": 9,
@@ -342,17 +342,17 @@ Object {
     "value": "printCard",
   },
   "kind": "MatchFunction",
-  "matchType": Object {
-    "definitions": Array [
-      Object {
-        "identifier": Object {
-          "_meta": Object {
-            "end": Object {
+  "matchType": {
+    "definitions": [
+      {
+        "identifier": {
+          "_meta": {
+            "end": {
               "column": 33,
               "line": 1,
               "offset": 32,
             },
-            "start": Object {
+            "start": {
               "column": 29,
               "line": 1,
               "offset": 28,
@@ -362,8 +362,8 @@ Object {
           "value": "card",
         },
         "kind": "NamedDefinition",
-        "typeTag": Object {
-          "identifier": Object {
+        "typeTag": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Card",
           },
@@ -377,15 +377,15 @@ Object {
 `;
 
 exports[`MatchFunction.fullExample 2`] = `
-Object {
-  "block": Object {
-    "caseEntries": Array [
-      Object {
-        "block": Object {
+{
+  "block": {
+    "caseEntries": [
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
+          "statements": [
+            {
+              "expression": {
                 "kind": "StringLiteral",
                 "value": "King",
               },
@@ -393,25 +393,25 @@ Object {
             },
           ],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "King",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [],
+          "recordLiteral": {
+            "definitions": [],
             "kind": "RecordLiteral",
           },
         },
         "kind": "CaseEntry",
       },
-      Object {
-        "block": Object {
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
+          "statements": [
+            {
+              "expression": {
                 "kind": "StringLiteral",
                 "value": "Queen",
               },
@@ -419,25 +419,25 @@ Object {
             },
           ],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Queen",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [],
+          "recordLiteral": {
+            "definitions": [],
             "kind": "RecordLiteral",
           },
         },
         "kind": "CaseEntry",
       },
-      Object {
-        "block": Object {
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
+          "statements": [
+            {
+              "expression": {
                 "kind": "StringLiteral",
                 "value": "Jack",
               },
@@ -445,25 +445,25 @@ Object {
             },
           ],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Jack",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [],
+          "recordLiteral": {
+            "definitions": [],
             "kind": "RecordLiteral",
           },
         },
         "kind": "CaseEntry",
       },
-      Object {
-        "block": Object {
+      {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
+          "statements": [
+            {
+              "expression": {
                 "kind": "StringLiteral",
                 "value": "Number card",
               },
@@ -471,23 +471,23 @@ Object {
             },
           ],
         },
-        "guard": Object {
-          "identifier": Object {
+        "guard": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "Number",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [
-              Object {
-                "expression": Object {
-                  "_meta": Object {
-                    "end": Object {
+          "recordLiteral": {
+            "definitions": [
+              {
+                "expression": {
+                  "_meta": {
+                    "end": {
                       "column": 33,
                       "line": 14,
                       "offset": 226,
                     },
-                    "start": Object {
+                    "start": {
                       "column": 28,
                       "line": 14,
                       "offset": 221,
@@ -496,14 +496,14 @@ Object {
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
-                "identifier": Object {
-                  "_meta": Object {
-                    "end": Object {
+                "identifier": {
+                  "_meta": {
+                    "end": {
                       "column": 26,
                       "line": 14,
                       "offset": 219,
                     },
-                    "start": Object {
+                    "start": {
                       "column": 21,
                       "line": 14,
                       "offset": 214,
@@ -523,14 +523,14 @@ Object {
     ],
     "kind": "BlockOfCases",
   },
-  "expression": Object {
-    "_meta": Object {
-      "end": Object {
+  "expression": {
+    "_meta": {
+      "end": {
         "column": 12,
         "line": 1,
         "offset": 11,
       },
-      "start": Object {
+      "start": {
         "column": 8,
         "line": 1,
         "offset": 7,
@@ -544,31 +544,31 @@ Object {
 `;
 
 exports[`NamedRecordDefinition 1`] = `
-Object {
-  "block": Object {
+{
+  "block": {
     "kind": "Block",
-    "statements": Array [],
+    "statements": [],
   },
-  "guard": Object {
-    "definitions": Array [
-      Object {
-        "expression": Object {
-          "identifier": Object {
+  "guard": {
+    "definitions": [
+      {
+        "expression": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "King",
           },
           "kind": "NamedRecordLiteral",
-          "recordLiteral": Object {
-            "definitions": Array [
-              Object {
-                "expression": Object {
-                  "_meta": Object {
-                    "end": Object {
+          "recordLiteral": {
+            "definitions": [
+              {
+                "expression": {
+                  "_meta": {
+                    "end": {
                       "column": 30,
                       "line": 1,
                       "offset": 29,
                     },
-                    "start": Object {
+                    "start": {
                       "column": 25,
                       "line": 1,
                       "offset": 24,
@@ -577,14 +577,14 @@ Object {
                   "kind": "ValueIdentifier",
                   "value": "value",
                 },
-                "identifier": Object {
-                  "_meta": Object {
-                    "end": Object {
+                "identifier": {
+                  "_meta": {
+                    "end": {
                       "column": 23,
                       "line": 1,
                       "offset": 22,
                     },
-                    "start": Object {
+                    "start": {
                       "column": 18,
                       "line": 1,
                       "offset": 17,
@@ -599,14 +599,14 @@ Object {
             "kind": "RecordLiteral",
           },
         },
-        "identifier": Object {
-          "_meta": Object {
-            "end": Object {
+        "identifier": {
+          "_meta": {
+            "end": {
               "column": 11,
               "line": 1,
               "offset": 10,
             },
-            "start": Object {
+            "start": {
               "column": 7,
               "line": 1,
               "offset": 6,

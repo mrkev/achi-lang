@@ -1,14 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Identifier 1`] = `
-Object {
-  "_meta": Object {
-    "end": Object {
+{
+  "_meta": {
+    "end": {
       "column": 7,
       "line": 1,
       "offset": 6,
     },
-    "start": Object {
+    "start": {
       "column": 1,
       "line": 1,
       "offset": 0,

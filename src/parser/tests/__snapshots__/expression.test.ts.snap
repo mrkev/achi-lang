@@ -1,27 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ALON 1`] = `
-Object {
-  "definitions": Array [
-    Object {
-      "expression": Object {
-        "entries": Array [
-          Object {
-            "expression": Object {
-              "definitions": Array [
-                Object {
-                  "expression": Object {
+{
+  "definitions": [
+    {
+      "expression": {
+        "entries": [
+          {
+            "expression": {
+              "definitions": [
+                {
+                  "expression": {
                     "kind": "StringLiteral",
                     "value": "l1",
                   },
-                  "identifier": Object {
-                    "_meta": Object {
-                      "end": Object {
+                  "identifier": {
+                    "_meta": {
+                      "end": {
                         "column": 14,
                         "line": 3,
                         "offset": 30,
                       },
-                      "start": Object {
+                      "start": {
                         "column": 12,
                         "line": 3,
                         "offset": 28,
@@ -32,19 +32,19 @@ Object {
                   },
                   "kind": "NamedLiteral",
                 },
-                Object {
-                  "expression": Object {
+                {
+                  "expression": {
                     "kind": "StringLiteral",
                     "value": "lion",
                   },
-                  "identifier": Object {
-                    "_meta": Object {
-                      "end": Object {
+                  "identifier": {
+                    "_meta": {
+                      "end": {
                         "column": 26,
                         "line": 3,
                         "offset": 42,
                       },
-                      "start": Object {
+                      "start": {
                         "column": 22,
                         "line": 3,
                         "offset": 38,
@@ -58,14 +58,14 @@ Object {
               ],
               "kind": "RecordLiteral",
             },
-            "identifier": Object {
-              "_meta": Object {
-                "end": Object {
+            "identifier": {
+              "_meta": {
+                "end": {
                   "column": 9,
                   "line": 3,
                   "offset": 25,
                 },
-                "start": Object {
+                "start": {
                   "column": 7,
                   "line": 3,
                   "offset": 23,
@@ -76,22 +76,22 @@ Object {
             },
             "kind": "NamedLiteral",
           },
-          Object {
-            "expression": Object {
-              "definitions": Array [
-                Object {
-                  "expression": Object {
+          {
+            "expression": {
+              "definitions": [
+                {
+                  "expression": {
                     "kind": "StringLiteral",
                     "value": "l2",
                   },
-                  "identifier": Object {
-                    "_meta": Object {
-                      "end": Object {
+                  "identifier": {
+                    "_meta": {
+                      "end": {
                         "column": 14,
                         "line": 4,
                         "offset": 66,
                       },
-                      "start": Object {
+                      "start": {
                         "column": 12,
                         "line": 4,
                         "offset": 64,
@@ -102,19 +102,19 @@ Object {
                   },
                   "kind": "NamedLiteral",
                 },
-                Object {
-                  "expression": Object {
+                {
+                  "expression": {
                     "kind": "StringLiteral",
                     "value": "lion",
                   },
-                  "identifier": Object {
-                    "_meta": Object {
-                      "end": Object {
+                  "identifier": {
+                    "_meta": {
+                      "end": {
                         "column": 26,
                         "line": 4,
                         "offset": 78,
                       },
-                      "start": Object {
+                      "start": {
                         "column": 22,
                         "line": 4,
                         "offset": 74,
@@ -128,14 +128,14 @@ Object {
               ],
               "kind": "RecordLiteral",
             },
-            "identifier": Object {
-              "_meta": Object {
-                "end": Object {
+            "identifier": {
+              "_meta": {
+                "end": {
                   "column": 9,
                   "line": 4,
                   "offset": 61,
                 },
-                "start": Object {
+                "start": {
                   "column": 7,
                   "line": 4,
                   "offset": 59,
@@ -146,22 +146,22 @@ Object {
             },
             "kind": "NamedLiteral",
           },
-          Object {
-            "expression": Object {
-              "definitions": Array [
-                Object {
-                  "expression": Object {
+          {
+            "expression": {
+              "definitions": [
+                {
+                  "expression": {
                     "kind": "StringLiteral",
                     "value": "t1",
                   },
-                  "identifier": Object {
-                    "_meta": Object {
-                      "end": Object {
+                  "identifier": {
+                    "_meta": {
+                      "end": {
                         "column": 14,
                         "line": 5,
                         "offset": 102,
                       },
-                      "start": Object {
+                      "start": {
                         "column": 12,
                         "line": 5,
                         "offset": 100,
@@ -172,19 +172,19 @@ Object {
                   },
                   "kind": "NamedLiteral",
                 },
-                Object {
-                  "expression": Object {
+                {
+                  "expression": {
                     "kind": "StringLiteral",
                     "value": "tiger",
                   },
-                  "identifier": Object {
-                    "_meta": Object {
-                      "end": Object {
+                  "identifier": {
+                    "_meta": {
+                      "end": {
                         "column": 26,
                         "line": 5,
                         "offset": 114,
                       },
-                      "start": Object {
+                      "start": {
                         "column": 22,
                         "line": 5,
                         "offset": 110,
@@ -198,14 +198,14 @@ Object {
               ],
               "kind": "RecordLiteral",
             },
-            "identifier": Object {
-              "_meta": Object {
-                "end": Object {
+            "identifier": {
+              "_meta": {
+                "end": {
                   "column": 9,
                   "line": 5,
                   "offset": 97,
                 },
-                "start": Object {
+                "start": {
                   "column": 7,
                   "line": 5,
                   "offset": 95,
@@ -216,22 +216,22 @@ Object {
             },
             "kind": "NamedLiteral",
           },
-          Object {
-            "expression": Object {
-              "definitions": Array [
-                Object {
-                  "expression": Object {
+          {
+            "expression": {
+              "definitions": [
+                {
+                  "expression": {
                     "kind": "StringLiteral",
                     "value": "t2",
                   },
-                  "identifier": Object {
-                    "_meta": Object {
-                      "end": Object {
+                  "identifier": {
+                    "_meta": {
+                      "end": {
                         "column": 14,
                         "line": 6,
                         "offset": 139,
                       },
-                      "start": Object {
+                      "start": {
                         "column": 12,
                         "line": 6,
                         "offset": 137,
@@ -242,19 +242,19 @@ Object {
                   },
                   "kind": "NamedLiteral",
                 },
-                Object {
-                  "expression": Object {
+                {
+                  "expression": {
                     "kind": "StringLiteral",
                     "value": "tiger",
                   },
-                  "identifier": Object {
-                    "_meta": Object {
-                      "end": Object {
+                  "identifier": {
+                    "_meta": {
+                      "end": {
                         "column": 26,
                         "line": 6,
                         "offset": 151,
                       },
-                      "start": Object {
+                      "start": {
                         "column": 22,
                         "line": 6,
                         "offset": 147,
@@ -268,14 +268,14 @@ Object {
               ],
               "kind": "RecordLiteral",
             },
-            "identifier": Object {
-              "_meta": Object {
-                "end": Object {
+            "identifier": {
+              "_meta": {
+                "end": {
                   "column": 9,
                   "line": 6,
                   "offset": 134,
                 },
-                "start": Object {
+                "start": {
                   "column": 7,
                   "line": 6,
                   "offset": 132,
@@ -289,14 +289,14 @@ Object {
         ],
         "kind": "MapLiteral",
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 12,
             "line": 2,
             "offset": 13,
           },
-          "start": Object {
+          "start": {
             "column": 5,
             "line": 2,
             "offset": 6,
@@ -307,32 +307,32 @@ Object {
       },
       "kind": "NamedLiteral",
     },
-    Object {
-      "expression": Object {
-        "expressions": Array [
-          Object {
+    {
+      "expression": {
+        "expressions": [
+          {
             "kind": "StringLiteral",
             "value": "jungle",
           },
-          Object {
+          {
             "kind": "StringLiteral",
             "value": "desert",
           },
-          Object {
+          {
             "kind": "StringLiteral",
             "value": "savannah",
           },
         ],
         "kind": "ListLiteral",
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 17,
             "line": 8,
             "offset": 185,
           },
-          "start": Object {
+          "start": {
             "column": 5,
             "line": 8,
             "offset": 173,

@@ -1,25 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Block 1`] = `
-Object {
+{
   "kind": "Block",
-  "statements": Array [
-    Object {
-      "argument": Object {
-        "definitions": Array [
-          Object {
-            "expression": Object {
+  "statements": [
+    {
+      "argument": {
+        "definitions": [
+          {
+            "expression": {
               "kind": "StringLiteral",
               "value": "hello",
             },
-            "identifier": Object {
-              "_meta": Object {
-                "end": Object {
+            "identifier": {
+              "_meta": {
+                "end": {
                   "column": 10,
                   "line": 1,
                   "offset": 9,
                 },
-                "start": Object {
+                "start": {
                   "column": 7,
                   "line": 1,
                   "offset": 6,
@@ -33,14 +33,14 @@ Object {
         ],
         "kind": "RecordLiteral",
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 6,
             "line": 1,
             "offset": 5,
           },
-          "start": Object {
+          "start": {
             "column": 3,
             "line": 1,
             "offset": 2,
@@ -51,19 +51,19 @@ Object {
       },
       "kind": "FunctionCall",
     },
-    Object {
-      "expression": Object {
+    {
+      "expression": {
         "kind": "NumberLiteral",
         "value": 4,
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 29,
             "line": 1,
             "offset": 28,
           },
-          "start": Object {
+          "start": {
             "column": 28,
             "line": 1,
             "offset": 27,
@@ -79,26 +79,26 @@ Object {
 `;
 
 exports[`Block.empty 1`] = `
-Object {
+{
   "kind": "Block",
-  "statements": Array [],
+  "statements": [],
 }
 `;
 
 exports[`ConstantDefinition 1`] = `
-Object {
-  "expression": Object {
+{
+  "expression": {
     "kind": "NumberLiteral",
     "value": 3,
   },
-  "identifier": Object {
-    "_meta": Object {
-      "end": Object {
+  "identifier": {
+    "_meta": {
+      "end": {
         "column": 8,
         "line": 1,
         "offset": 7,
       },
-      "start": Object {
+      "start": {
         "column": 7,
         "line": 1,
         "offset": 6,
@@ -112,19 +112,19 @@ Object {
 `;
 
 exports[`ConstantDefinition.functionCall 1`] = `
-Object {
-  "expression": Object {
-    "argument": Object {
-      "definitions": Array [
-        Object {
-          "expression": Object {
-            "_meta": Object {
-              "end": Object {
+{
+  "expression": {
+    "argument": {
+      "definitions": [
+        {
+          "expression": {
+            "_meta": {
+              "end": {
                 "column": 27,
                 "line": 1,
                 "offset": 26,
               },
-              "start": Object {
+              "start": {
                 "column": 22,
                 "line": 1,
                 "offset": 21,
@@ -133,14 +133,14 @@ Object {
             "kind": "ValueIdentifier",
             "value": "point",
           },
-          "identifier": Object {
-            "_meta": Object {
-              "end": Object {
+          "identifier": {
+            "_meta": {
+              "end": {
                 "column": 20,
                 "line": 1,
                 "offset": 19,
               },
-              "start": Object {
+              "start": {
                 "column": 15,
                 "line": 1,
                 "offset": 14,
@@ -154,14 +154,14 @@ Object {
       ],
       "kind": "RecordLiteral",
     },
-    "identifier": Object {
-      "_meta": Object {
-        "end": Object {
+    "identifier": {
+      "_meta": {
+        "end": {
           "column": 14,
           "line": 1,
           "offset": 13,
         },
-        "start": Object {
+        "start": {
           "column": 11,
           "line": 1,
           "offset": 10,
@@ -172,14 +172,14 @@ Object {
     },
     "kind": "FunctionCall",
   },
-  "identifier": Object {
-    "_meta": Object {
-      "end": Object {
+  "identifier": {
+    "_meta": {
+      "end": {
         "column": 8,
         "line": 1,
         "offset": 7,
       },
-      "start": Object {
+      "start": {
         "column": 7,
         "line": 1,
         "offset": 6,
@@ -193,12 +193,12 @@ Object {
 `;
 
 exports[`IfStatement 1`] = `
-Object {
-  "block": Object {
+{
+  "block": {
     "kind": "Block",
-    "statements": Array [
-      Object {
-        "expression": Object {
+    "statements": [
+      {
+        "expression": {
           "kind": "StringLiteral",
           "value": "hello",
         },
@@ -206,7 +206,7 @@ Object {
       },
     ],
   },
-  "guard": Object {
+  "guard": {
     "kind": "NumberLiteral",
     "value": 3,
   },
@@ -214,52 +214,29 @@ Object {
 }
 `;
 
-exports[`NamedTupleDefinition 1`] = `
-Object {
-  "identifier": Object {
-    "kind": "TypeIdentifier",
-    "value": "Point",
-  },
-  "kind": "NamedTupleDefinition",
-  "tuple": Object {
-    "definitions": Array [
-      Object {
-        "kind": "TypeIdentifier",
-        "value": "number",
-      },
-      Object {
-        "kind": "TypeIdentifier",
-        "value": "number",
-      },
-    ],
-    "kind": "TupleDefinition",
-  },
-}
-`;
-
 exports[`Program 1`] = `
-Object {
+{
   "kind": "Program",
-  "statements": Array [
-    Object {
+  "statements": [
+    {
       "kind": "NamedRecordDefinitionStatement",
-      "namedRecordDefinition": Object {
-        "identifier": Object {
+      "namedRecordDefinition": {
+        "identifier": {
           "kind": "TypeIdentifier",
           "value": "Point",
         },
         "kind": "NamedRecordDefinition",
-        "record": Object {
-          "definitions": Array [
-            Object {
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+        "record": {
+          "definitions": [
+            {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 16,
                     "line": 2,
                     "offset": 16,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 15,
                     "line": 2,
                     "offset": 15,
@@ -269,23 +246,23 @@ Object {
                 "value": "x",
               },
               "kind": "NamedDefinition",
-              "typeTag": Object {
-                "identifier": Object {
+              "typeTag": {
+                "identifier": {
                   "kind": "TypeIdentifier",
                   "value": "number",
                 },
                 "kind": "TypeTag",
               },
             },
-            Object {
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+            {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 27,
                     "line": 2,
                     "offset": 27,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 2,
                     "offset": 26,
@@ -295,8 +272,8 @@ Object {
                 "value": "y",
               },
               "kind": "NamedDefinition",
-              "typeTag": Object {
-                "identifier": Object {
+              "typeTag": {
+                "identifier": {
                   "kind": "TypeIdentifier",
                   "value": "number",
                 },
@@ -308,19 +285,19 @@ Object {
         },
       },
     },
-    Object {
-      "expression": Object {
+    {
+      "expression": {
         "kind": "NumberLiteral",
         "value": 1,
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 12,
             "line": 3,
             "offset": 49,
           },
-          "start": Object {
+          "start": {
             "column": 9,
             "line": 3,
             "offset": 46,
@@ -331,24 +308,24 @@ Object {
       },
       "kind": "ConstantDefinition",
     },
-    Object {
-      "expression": Object {
-        "identifier": Object {
+    {
+      "expression": {
+        "identifier": {
           "kind": "TypeIdentifier",
           "value": "Point",
         },
         "kind": "NamedRecordLiteral",
-        "recordLiteral": Object {
-          "definitions": Array [
-            Object {
-              "expression": Object {
-                "_meta": Object {
-                  "end": Object {
+        "recordLiteral": {
+          "definitions": [
+            {
+              "expression": {
+                "_meta": {
+                  "end": {
                     "column": 29,
                     "line": 4,
                     "offset": 83,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 4,
                     "offset": 80,
@@ -357,14 +334,14 @@ Object {
                 "kind": "ValueIdentifier",
                 "value": "one",
               },
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 24,
                     "line": 4,
                     "offset": 78,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 23,
                     "line": 4,
                     "offset": 77,
@@ -375,19 +352,19 @@ Object {
               },
               "kind": "NamedLiteral",
             },
-            Object {
-              "expression": Object {
+            {
+              "expression": {
                 "kind": "NumberLiteral",
                 "value": 2,
               },
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 32,
                     "line": 4,
                     "offset": 86,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 31,
                     "line": 4,
                     "offset": 85,
@@ -402,14 +379,14 @@ Object {
           "kind": "RecordLiteral",
         },
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 14,
             "line": 4,
             "offset": 68,
           },
-          "start": Object {
+          "start": {
             "column": 9,
             "line": 4,
             "offset": 63,
@@ -420,15 +397,15 @@ Object {
       },
       "kind": "ConstantDefinition",
     },
-    Object {
-      "expression": Object {
-        "_meta": Object {
-          "end": Object {
+    {
+      "expression": {
+        "_meta": {
+          "end": {
             "column": 0,
             "line": 7,
             "offset": 105,
           },
-          "start": Object {
+          "start": {
             "column": 8,
             "line": 6,
             "offset": 100,
@@ -444,28 +421,28 @@ Object {
 `;
 
 exports[`Program.2 1`] = `
-Object {
+{
   "kind": "Program",
-  "statements": Array [
-    Object {
+  "statements": [
+    {
       "kind": "NamedRecordDefinitionStatement",
-      "namedRecordDefinition": Object {
-        "identifier": Object {
+      "namedRecordDefinition": {
+        "identifier": {
           "kind": "TypeIdentifier",
           "value": "Point",
         },
         "kind": "NamedRecordDefinition",
-        "record": Object {
-          "definitions": Array [
-            Object {
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+        "record": {
+          "definitions": [
+            {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 16,
                     "line": 2,
                     "offset": 16,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 15,
                     "line": 2,
                     "offset": 15,
@@ -475,23 +452,23 @@ Object {
                 "value": "x",
               },
               "kind": "NamedDefinition",
-              "typeTag": Object {
-                "identifier": Object {
+              "typeTag": {
+                "identifier": {
                   "kind": "TypeIdentifier",
                   "value": "number",
                 },
                 "kind": "TypeTag",
               },
             },
-            Object {
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+            {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 27,
                     "line": 2,
                     "offset": 27,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 2,
                     "offset": 26,
@@ -501,8 +478,8 @@ Object {
                 "value": "y",
               },
               "kind": "NamedDefinition",
-              "typeTag": Object {
-                "identifier": Object {
+              "typeTag": {
+                "identifier": {
                   "kind": "TypeIdentifier",
                   "value": "number",
                 },
@@ -514,19 +491,19 @@ Object {
         },
       },
     },
-    Object {
-      "expression": Object {
-        "argument": Object {
-          "definitions": Array [
-            Object {
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+    {
+      "expression": {
+        "argument": {
+          "definitions": [
+            {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 27,
                     "line": 3,
                     "offset": 64,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 22,
                     "line": 3,
                     "offset": 59,
@@ -536,8 +513,8 @@ Object {
                 "value": "point",
               },
               "kind": "NamedDefinition",
-              "typeTag": Object {
-                "identifier": Object {
+              "typeTag": {
+                "identifier": {
                   "kind": "TypeIdentifier",
                   "value": "Point",
                 },
@@ -547,18 +524,18 @@ Object {
           ],
           "kind": "RecordDefinition",
         },
-        "block": Object {
+        "block": {
           "kind": "Block",
-          "statements": Array [
-            Object {
-              "expression": Object {
-                "_meta": Object {
-                  "end": Object {
+          "statements": [
+            {
+              "expression": {
+                "_meta": {
+                  "end": {
                     "column": 20,
                     "line": 4,
                     "offset": 97,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 15,
                     "line": 4,
                     "offset": 92,
@@ -567,14 +544,14 @@ Object {
                 "kind": "ValueIdentifier",
                 "value": "point",
               },
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 12,
                     "line": 4,
                     "offset": 89,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 11,
                     "line": 4,
                     "offset": 88,
@@ -585,24 +562,24 @@ Object {
               },
               "kind": "ConstantDefinition",
             },
-            Object {
-              "expression": Object {
-                "identifier": Object {
+            {
+              "expression": {
+                "identifier": {
                   "kind": "TypeIdentifier",
                   "value": "Point",
                 },
                 "kind": "NamedRecordLiteral",
-                "recordLiteral": Object {
-                  "definitions": Array [
-                    Object {
-                      "expression": Object {
-                        "_meta": Object {
-                          "end": Object {
+                "recordLiteral": {
+                  "definitions": [
+                    {
+                      "expression": {
+                        "_meta": {
+                          "end": {
                             "column": 22,
                             "line": 5,
                             "offset": 120,
                           },
-                          "start": Object {
+                          "start": {
                             "column": 21,
                             "line": 5,
                             "offset": 119,
@@ -611,14 +588,14 @@ Object {
                         "kind": "ValueIdentifier",
                         "value": "x",
                       },
-                      "identifier": Object {
-                        "_meta": Object {
-                          "end": Object {
+                      "identifier": {
+                        "_meta": {
+                          "end": {
                             "column": 19,
                             "line": 5,
                             "offset": 117,
                           },
-                          "start": Object {
+                          "start": {
                             "column": 18,
                             "line": 5,
                             "offset": 116,
@@ -629,15 +606,15 @@ Object {
                       },
                       "kind": "NamedLiteral",
                     },
-                    Object {
-                      "expression": Object {
-                        "_meta": Object {
-                          "end": Object {
+                    {
+                      "expression": {
+                        "_meta": {
+                          "end": {
                             "column": 28,
                             "line": 5,
                             "offset": 126,
                           },
-                          "start": Object {
+                          "start": {
                             "column": 27,
                             "line": 5,
                             "offset": 125,
@@ -646,14 +623,14 @@ Object {
                         "kind": "ValueIdentifier",
                         "value": "y",
                       },
-                      "identifier": Object {
-                        "_meta": Object {
-                          "end": Object {
+                      "identifier": {
+                        "_meta": {
+                          "end": {
                             "column": 25,
                             "line": 5,
                             "offset": 123,
                           },
-                          "start": Object {
+                          "start": {
                             "column": 24,
                             "line": 5,
                             "offset": 122,
@@ -674,14 +651,14 @@ Object {
         },
         "kind": "AnonymousFunctionLiteral",
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 18,
             "line": 3,
             "offset": 55,
           },
-          "start": Object {
+          "start": {
             "column": 9,
             "line": 3,
             "offset": 46,
@@ -692,24 +669,24 @@ Object {
       },
       "kind": "ConstantDefinition",
     },
-    Object {
-      "expression": Object {
-        "identifier": Object {
+    {
+      "expression": {
+        "identifier": {
           "kind": "TypeIdentifier",
           "value": "Point",
         },
         "kind": "NamedRecordLiteral",
-        "recordLiteral": Object {
-          "definitions": Array [
-            Object {
-              "expression": Object {
-                "_meta": Object {
-                  "end": Object {
+        "recordLiteral": {
+          "definitions": [
+            {
+              "expression": {
+                "_meta": {
+                  "end": {
                     "column": 29,
                     "line": 7,
                     "offset": 161,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 26,
                     "line": 7,
                     "offset": 158,
@@ -718,14 +695,14 @@ Object {
                 "kind": "ValueIdentifier",
                 "value": "one",
               },
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 24,
                     "line": 7,
                     "offset": 156,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 23,
                     "line": 7,
                     "offset": 155,
@@ -736,19 +713,19 @@ Object {
               },
               "kind": "NamedLiteral",
             },
-            Object {
-              "expression": Object {
+            {
+              "expression": {
                 "kind": "NumberLiteral",
                 "value": 2,
               },
-              "identifier": Object {
-                "_meta": Object {
-                  "end": Object {
+              "identifier": {
+                "_meta": {
+                  "end": {
                     "column": 32,
                     "line": 7,
                     "offset": 164,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 31,
                     "line": 7,
                     "offset": 163,
@@ -763,14 +740,14 @@ Object {
           "kind": "RecordLiteral",
         },
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 14,
             "line": 7,
             "offset": 146,
           },
-          "start": Object {
+          "start": {
             "column": 9,
             "line": 7,
             "offset": 141,
@@ -781,18 +758,18 @@ Object {
       },
       "kind": "ConstantDefinition",
     },
-    Object {
-      "argument": Object {
-        "definitions": Array [
-          Object {
-            "expression": Object {
-              "_meta": Object {
-                "end": Object {
+    {
+      "argument": {
+        "definitions": [
+          {
+            "expression": {
+              "_meta": {
+                "end": {
                   "column": 25,
                   "line": 8,
                   "offset": 194,
                 },
-                "start": Object {
+                "start": {
                   "column": 20,
                   "line": 8,
                   "offset": 189,
@@ -801,14 +778,14 @@ Object {
               "kind": "ValueIdentifier",
               "value": "point",
             },
-            "identifier": Object {
-              "_meta": Object {
-                "end": Object {
+            "identifier": {
+              "_meta": {
+                "end": {
                   "column": 18,
                   "line": 8,
                   "offset": 187,
                 },
-                "start": Object {
+                "start": {
                   "column": 13,
                   "line": 8,
                   "offset": 182,
@@ -822,14 +799,14 @@ Object {
         ],
         "kind": "RecordLiteral",
       },
-      "identifier": Object {
-        "_meta": Object {
-          "end": Object {
+      "identifier": {
+        "_meta": {
+          "end": {
             "column": 12,
             "line": 8,
             "offset": 181,
           },
-          "start": Object {
+          "start": {
             "column": 3,
             "line": 8,
             "offset": 172,
@@ -840,15 +817,15 @@ Object {
       },
       "kind": "FunctionCall",
     },
-    Object {
-      "expression": Object {
-        "_meta": Object {
-          "end": Object {
+    {
+      "expression": {
+        "_meta": {
+          "end": {
             "column": 0,
             "line": 11,
             "offset": 210,
           },
-          "start": Object {
+          "start": {
             "column": 8,
             "line": 10,
             "offset": 205,
@@ -864,8 +841,8 @@ Object {
 `;
 
 exports[`ReturnStatement 1`] = `
-Object {
-  "expression": Object {
+{
+  "expression": {
     "kind": "StringLiteral",
     "value": "string",
   },
@@ -873,31 +850,15 @@ Object {
 }
 `;
 
-exports[`TupleDefinition 1`] = `
-Object {
-  "definitions": Array [
-    Object {
-      "kind": "TypeIdentifier",
-      "value": "number",
-    },
-    Object {
-      "kind": "TypeIdentifier",
-      "value": "number",
-    },
-  ],
-  "kind": "TupleDefinition",
-}
-`;
-
 exports[`string 1`] = `
-Object {
+{
   "kind": "StringLiteral",
   "value": "hello world",
 }
 `;
 
 exports[`string 2`] = `
-Object {
+{
   "kind": "StringLiteral",
   "value": "hello
  world",

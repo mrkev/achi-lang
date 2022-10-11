@@ -1,38 +1,38 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`class.1 1`] = `Array []`;
+exports[`class.1 1`] = `[]`;
 
 exports[`error.nice 1`] = `
-Array [
+[
   " 2| 
  3|   const one = y;
                   ^
  4|   #log one
 
-Identifier \\"y\\" not found (at 3:15)",
+Identifier "y" not found (at 3:15)",
 ]
 `;
 
 exports[`func.1 1`] = `
-Array [
+[
   "[Function: foo]",
 ]
 `;
 
 exports[`if.true 1`] = `
-Array [
+[
   "pass",
 ]
 `;
 
 exports[`if.true 2`] = `
-Array [
+[
   "pass",
 ]
 `;
 
 exports[`simple.1 1`] = `
-Array [
+[
   "hi",
 ]
 `;

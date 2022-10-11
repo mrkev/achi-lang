@@ -1,18 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AnonymousFunctionLiteral 1`] = `
-Object {
-  "argument": Object {
-    "definitions": Array [
-      Object {
-        "identifier": Object {
-          "_meta": Object {
-            "end": Object {
+{
+  "argument": {
+    "definitions": [
+      {
+        "identifier": {
+          "_meta": {
+            "end": {
               "column": 7,
               "line": 1,
               "offset": 6,
             },
-            "start": Object {
+            "start": {
               "column": 2,
               "line": 1,
               "offset": 1,
@@ -22,8 +22,8 @@ Object {
           "value": "value",
         },
         "kind": "NamedDefinition",
-        "typeTag": Object {
-          "identifier": Object {
+        "typeTag": {
+          "identifier": {
             "kind": "TypeIdentifier",
             "value": "number",
           },
@@ -33,18 +33,18 @@ Object {
     ],
     "kind": "RecordDefinition",
   },
-  "block": Object {
+  "block": {
     "kind": "Block",
-    "statements": Array [
-      Object {
-        "expression": Object {
-          "_meta": Object {
-            "end": Object {
+    "statements": [
+      {
+        "expression": {
+          "_meta": {
+            "end": {
               "column": 34,
               "line": 1,
               "offset": 33,
             },
-            "start": Object {
+            "start": {
               "column": 29,
               "line": 1,
               "offset": 28,
@@ -62,16 +62,16 @@ Object {
 `;
 
 exports[`AnonymousFunctionLiteral.emptyArg 1`] = `
-Object {
-  "argument": Object {
-    "definitions": Array [],
+{
+  "argument": {
+    "definitions": [],
     "kind": "RecordDefinition",
   },
-  "block": Object {
+  "block": {
     "kind": "Block",
-    "statements": Array [
-      Object {
-        "expression": Object {
+    "statements": [
+      {
+        "expression": {
           "kind": "NumberLiteral",
           "value": 3,
         },
@@ -84,22 +84,22 @@ Object {
 `;
 
 exports[`FunctionCall 1`] = `
-Object {
-  "argument": Object {
-    "definitions": Array [
-      Object {
-        "expression": Object {
+{
+  "argument": {
+    "definitions": [
+      {
+        "expression": {
           "kind": "StringLiteral",
           "value": "hello",
         },
-        "identifier": Object {
-          "_meta": Object {
-            "end": Object {
+        "identifier": {
+          "_meta": {
+            "end": {
               "column": 8,
               "line": 1,
               "offset": 7,
             },
-            "start": Object {
+            "start": {
               "column": 5,
               "line": 1,
               "offset": 4,
@@ -113,14 +113,14 @@ Object {
     ],
     "kind": "RecordLiteral",
   },
-  "identifier": Object {
-    "_meta": Object {
-      "end": Object {
+  "identifier": {
+    "_meta": {
+      "end": {
         "column": 4,
         "line": 1,
         "offset": 3,
       },
-      "start": Object {
+      "start": {
         "column": 1,
         "line": 1,
         "offset": 0,
@@ -134,19 +134,19 @@ Object {
 `;
 
 exports[`FunctionCall.emtpyArg 1`] = `
-Object {
-  "argument": Object {
-    "definitions": Array [],
+{
+  "argument": {
+    "definitions": [],
     "kind": "RecordLiteral",
   },
-  "identifier": Object {
-    "_meta": Object {
-      "end": Object {
+  "identifier": {
+    "_meta": {
+      "end": {
         "column": 4,
         "line": 1,
         "offset": 3,
       },
-      "start": Object {
+      "start": {
         "column": 1,
         "line": 1,
         "offset": 0,
