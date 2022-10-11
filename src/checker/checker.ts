@@ -65,7 +65,7 @@ function checkStatements(
       case "FunctionCall":
       case "MatchFunction":
       case "MatchExpression":
-        throw new Error("Not implemented");
+        throw new Error("Not implemented" + kind);
       default: {
         throw exhaustive(kind);
       }
