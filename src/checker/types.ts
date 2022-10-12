@@ -9,13 +9,16 @@ export type Type =
   | { kind: "numberLiteral"; value: number }
   | { kind: "boolean" }
   | { kind: "booleanLiteral"; value: boolean }
-  | { kind: "list"; value: Type }
-  | { kind: "map"; value: Type }
+  | { kind: "list"; valueType: Type }
+  | { kind: "map"; valueType: Type }
   | RecordType
-  | { kind: "namedRecord"; name: string; shape: Map<string, Type> }
-  | { kind: "function"; argument: RecordType; return: Type };
+  | { kind: "namedRecord"; name: string; recordType: RecordType }
+  | { kind: "function"; argumentType: RecordType; returnType: Type }
+  | { kind: "any" }
+  // pointer type, should check scope for concrete type value. Only valid for identifiers.
+  | { kind: "reference" };
 
-type RecordType = { kind: "record"; shape: Map<string, Type> };
+export type RecordType = { kind: "record"; shape: Map<string, Type> };
 
 export function printType(type: Type) {
   switch (type.kind) {
@@ -32,6 +35,8 @@ export function printType(type: Type) {
     case "record":
     case "namedRecord":
     case "function":
+    case "any":
+    case "reference":
       return "TODO: " + type.kind;
     default: {
       throw exhaustive(type);
@@ -39,10 +44,7 @@ export function printType(type: Type) {
   }
 }
 //
-export function typeOf(
-  expression: LangType["Expression"],
-  scope: Context
-): Type {
+function typeOf(expression: LangType["Expression"], scope: Context): Type {
   switch (expression.kind) {
     case "BooleanLiteral":
       return { kind: "booleanLiteral", value: expression.value };
@@ -70,6 +72,16 @@ export function typeOf(
 // if function(arg: TypeB) {...}
 // is function(x as TypeA) ok
 export function isSubtype(sub: Type, sup: Type): boolean {
+  if (sup.kind === "any" || sub.kind === "any") {
+    return true;
+  }
+
+  if (sup.kind === "reference" || sub.kind === "reference") {
+    throw new Error(
+      "todo: make reference types their own thing? Instead of being part of Type"
+    );
+  }
+
   switch (sup.kind) {
     case "string": {
       switch (sub.kind) {

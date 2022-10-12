@@ -6,6 +6,7 @@ import {
 import { nullthrows } from "./nullthrows";
 import { LangType } from "../parser/parser";
 import Parsimmon from "parsimmon";
+import { Type } from "../checker/types";
 
 type RuntimeTypeStructures =
   | NamedRecordKlass
@@ -25,6 +26,8 @@ export class Context {
 
   // TODO: standard types, like records?
   types: Map<string, RuntimeTypeStructures> = new Map();
+
+  staticTypes: Map<LangType["Expression"], Type> = new Map();
 
   ////////////////// Types
 
@@ -93,7 +96,13 @@ export class Context {
 
 class Scope<T> {
   parent: Scope<T> | null;
-  map: Map<string, T> = new Map();
+  // string -> IdentifierNode
+  // 'foo' -> const [foo] = 3;
+  identifierNodeMap: Map<
+    string,
+    LangType["ValueIdentifier"] | LangType["TypeIdentifier"]
+  > = new Map();
+  private map: Map<string, T> = new Map();
 
   constructor(parent: Scope<T> | null) {
     this.parent = parent;
@@ -109,17 +118,22 @@ class Scope<T> {
     }
   }
 
-  define(identifer: string, value: T) {
+  define(
+    identifer: LangType["ValueIdentifier"] | LangType["TypeIdentifier"],
+    value: T
+  ) {
+    const id = identifer.value;
     // only disallow overriding own scope
-    if (this.map.has(identifer)) {
-      throw new Error(`${identifer} is already defined`);
+    if (this.map.has(id)) {
+      throw new Error(`${id} is already defined`);
     }
-    this.map.set(identifer, value);
+    this.map.set(id, value);
+    this.identifierNodeMap.set(id, identifer);
   }
 
   // Used when setting all the bindings in a pattern match at once.
   // In theory, this handles not duplicating binding names
-  defineAll(entries: Array<[string, T]>) {
+  defineAll(entries: Array<[LangType["ValueIdentifier"], T]>) {
     for (const [key, value] of entries) {
       this.define(key, value);
     }

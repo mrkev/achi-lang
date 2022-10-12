@@ -1,0 +1,45 @@
+function resolveStatementTypes(
+  statement: LangType["Statement"],
+  context: Context
+): void {
+  switch (statement.kind) {
+    case "IfStatement":
+    case "ConstantDefinition":
+    case "NamedRecordDefinitionStatement":
+    case "NamedRecordDefinitionGroup":
+    case "DEBUG_Log":
+    case "DEBUG_LogType":
+    case "ReturnStatement":
+    case "FunctionCall":
+    case "MatchFunction":
+    case "MatchExpression":
+      throw new Error("not implemented");
+    default: {
+      throw exhaustive(statement);
+    }
+  }
+}
+
+function resolveExpressionTypes(
+  expression: LangType["Expression"],
+  context: Context
+): void {
+  switch (expression.kind) {
+    case "ValueIdentifier":
+    case "NamedRecordLiteral":
+    case "NumberLiteral":
+    case "BooleanLiteral":
+    case "RecordLiteral":
+    case "StringLiteral":
+    case "FunctionCall":
+    case "MatchExpression":
+    case "MapLiteral":
+    case "ListLiteral":
+    case "AnonymousFunctionLiteral":
+      throw new Error("not implemented");
+
+    default: {
+      exhaustive(expression);
+    }
+  }
+}

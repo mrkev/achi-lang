@@ -25,7 +25,7 @@ export function evaluateStatements(
     switch (kind) {
       // defines, "class Point(x: number, y: number)"
       case "NamedRecordDefinitionStatement": {
-        const identifer = statement.namedRecordDefinition.identifier.value;
+        const identifer = statement.namedRecordDefinition.identifier;
         if (
           context.types.has(statement.namedRecordDefinition.identifier.value)
         ) {
@@ -50,7 +50,7 @@ export function evaluateStatements(
 
       // defines, "classes Card { ... }"
       case "NamedRecordDefinitionGroup": {
-        const identiferValue = statement.identifier.value;
+        const identifer = statement.identifier;
         if (context.valueScope().has(statement.identifier.value)) {
           throw new Error(
             `NamedRecordDefinitionGroup: ${statement.identifier.value} is already defined`
@@ -70,8 +70,8 @@ export function evaluateStatements(
           klasses
         );
 
-        context.types.set(identiferValue, group);
-        context.valueScope().define(identiferValue, {
+        context.types.set(identifer.value, group);
+        context.valueScope().define(identifer, {
           kind: "NamedRecordDefinitionGroupInstance",
           value: group,
         });
@@ -100,7 +100,7 @@ export function evaluateStatements(
           context,
           system
         );
-        context.valueScope().define(statement.identifier.value, result);
+        context.valueScope().define(statement.identifier, result);
         break;
       }
 
@@ -142,7 +142,7 @@ export function evaluateStatements(
         }
 
         const matchFuncInstance = new MatchFunctionInstance(statement);
-        context.valueScope().define(statement.identifier.value, {
+        context.valueScope().define(statement.identifier, {
           kind: "MatchFunctionInstance",
           value: matchFuncInstance,
         });

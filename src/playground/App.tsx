@@ -126,9 +126,9 @@ export default function App() {
       <ul
         style={{ listStyleType: "none", padding: 0, width: 120, flexShrink: 0 }}
       >
-        {scripts.map((script) => {
+        {scripts.map((script, i) => {
           return (
-            <li>
+            <li key={i}>
               <button
                 onClick={() => {
                   scriptEditorRef.current?.setValue(script);
