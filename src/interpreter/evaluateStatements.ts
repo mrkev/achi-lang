@@ -42,16 +42,17 @@ export function evaluateStatements(
           statement.namedRecordDefinition.identifier.value,
           klass
         );
-        context
-          .valueScope()
-          .define(identifer, { kind: "NamedRecordKlass", value: klass });
+        context.valueScope.define(identifer.value, {
+          kind: "NamedRecordKlass",
+          value: klass,
+        });
         break;
       }
 
       // defines, "classes Card { ... }"
       case "NamedRecordDefinitionGroup": {
         const identifer = statement.identifier;
-        if (context.valueScope().has(statement.identifier.value)) {
+        if (context.valueScope.has(statement.identifier.value)) {
           throw new Error(
             `NamedRecordDefinitionGroup: ${statement.identifier.value} is already defined`
           );
@@ -71,7 +72,7 @@ export function evaluateStatements(
         );
 
         context.types.set(identifer.value, group);
-        context.valueScope().define(identifer, {
+        context.valueScope.define(identifer.value, {
           kind: "NamedRecordDefinitionGroupInstance",
           value: group,
         });
@@ -84,15 +85,15 @@ export function evaluateStatements(
         // TODO: determine truthiness
         if (guardValue) {
           // TODO: scoping!
-          context.pushScope();
+          context.valueScope.push();
           evaluateStatements(statement.block.statements, context, system);
-          context.popScope();
+          context.valueScope.pop();
         }
         break;
       }
 
       case "ConstantDefinition": {
-        if (context.valueScope().has(statement.identifier.value)) {
+        if (context.valueScope.has(statement.identifier.value)) {
           console.warn("Overriding definition for", statement.identifier.value);
         }
         const result = evaluateExpression(
@@ -100,7 +101,7 @@ export function evaluateStatements(
           context,
           system
         );
-        context.valueScope().define(statement.identifier, result);
+        context.valueScope.define(statement.identifier.value, result);
         break;
       }
 
@@ -134,7 +135,7 @@ export function evaluateStatements(
 
       // defines
       case "MatchFunction": {
-        if (context.valueScope().has(statement.identifier.value)) {
+        if (context.valueScope.has(statement.identifier.value)) {
           console.warn(
             "MatchFunction: Overriding definition for",
             statement.identifier.value
@@ -142,7 +143,7 @@ export function evaluateStatements(
         }
 
         const matchFuncInstance = new MatchFunctionInstance(statement);
-        context.valueScope().define(statement.identifier, {
+        context.valueScope.define(statement.identifier.value, {
           kind: "MatchFunctionInstance",
           value: matchFuncInstance,
         });

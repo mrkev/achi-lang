@@ -8,6 +8,9 @@ import { LangType } from "../parser/parser";
 import Parsimmon from "parsimmon";
 import { Type } from "../checker/types";
 
+// Node => Type
+// string => Value
+
 type RuntimeTypeStructures =
   | NamedRecordKlass
   | NamedRecordDefinitionGroupInstance;
@@ -20,11 +23,18 @@ export class Context {
     return new Context();
   }
 
-  // Note, we start with no scopes. We need to make sure we push
-  // a sope before we try to define variables
-  private valueScopes: Scope<Value>[] = [];
+  // Identifier "string" => Value
+  // Operates at a block level
+  readonly valueScope: Scope<string, Value> = new Scope();
+
+  // string -> OGIdentifier
+  // OGIdentifier -> value
+
+  //
+  readonly typeScope: Scope<string, unknown> = new Scope();
 
   // TODO: standard types, like records?
+  // TODO: Should this just go in valueScope?
   types: Map<string, RuntimeTypeStructures> = new Map();
 
   staticTypes: Map<LangType["Expression"], Type> = new Map();
@@ -70,102 +80,85 @@ export class Context {
       }
     }
   }
-
-  ////////////////// Value Scopes
-
-  pushScope() {
-    const currentScope = this.valueScopes[this.valueScopes.length - 1] ?? null;
-    const newScope = new Scope(currentScope);
-    this.valueScopes.push(newScope);
-  }
-
-  popScope() {
-    if (this.valueScopes.length === 0) {
-      throw new Error("Can't pop from empty scope stack!");
-    }
-    this.valueScopes.pop();
-  }
-
-  valueScope(): Scope<Value> {
-    const currentScope = nullthrows(
-      this.valueScopes[this.valueScopes.length - 1]
-    );
-    return currentScope;
-  }
 }
 
-class Scope<T> {
-  parent: Scope<T> | null;
-  // string -> IdentifierNode
-  // 'foo' -> const [foo] = 3;
-  identifierNodeMap: Map<
-    string,
-    LangType["ValueIdentifier"] | LangType["TypeIdentifier"]
-  > = new Map();
-  private map: Map<string, T> = new Map();
+class Scope<K, V> {
+  // Note, we start with no scopes. We need to make sure we push
+  // a sope before we try to define variables
+  private readonly stack: Map<K, V>[] = [];
 
-  constructor(parent: Scope<T> | null) {
-    this.parent = parent;
+  push() {
+    this.stack.push(new Map());
   }
 
-  has(identifer: string): boolean {
-    if (this.map.has(identifer)) {
-      return true;
-    } else if (this.parent != null) {
-      return this.parent.has(identifer);
-    } else {
-      return false;
+  pop() {
+    if (this.stack.length === 0) {
+      throw new Error("Can't pop from empty scope stack!");
     }
+    this.stack.pop();
   }
 
-  define(
-    identifer: LangType["ValueIdentifier"] | LangType["TypeIdentifier"],
-    value: T
-  ) {
-    const id = identifer.value;
-    // only disallow overriding own scope
-    if (this.map.has(id)) {
-      throw new Error(`${id} is already defined`);
+  private peek() {
+    return this.stack[this.stack.length - 1];
+  }
+
+  has(key: K): boolean {
+    for (let i = this.stack.length - 1; i > -1; i--) {
+      const current = this.stack[i];
+      if (current.has(key)) {
+        return true;
+      }
     }
-    this.map.set(id, value);
-    this.identifierNodeMap.set(id, identifer);
+    return false;
+  }
+
+  // two checks to be done at a higher level:
+  // - defining something that exists alrady
+  // - setting something that hasn't been defined
+  // also, when setting a variable that exists already we want to
+  // override it, not replace it on the current scope, right?
+  set(key: K, value: V) {
+    const top = this.peek();
+    if (top == null) {
+      throw new Error(`no stack element to set into`);
+    }
+
+    if (this.has(key)) {
+      throw new Error("Cant redefine " + key);
+    }
+
+    top.set(key, value);
+  }
+
+  define(key: K, value: V) {
+    const top = this.peek();
+    if (top == null) {
+      throw new Error(`no stack element to set into`);
+    }
+    top.set(key, value);
+  }
+
+  get(key: K, errMsg?: string): V {
+    const top = this.peek();
+    if (top == null) {
+      throw new Error(`no stack element to get from`);
+    }
+
+    for (let i = this.stack.length - 1; i > -1; i--) {
+      const current = this.stack[i];
+      if (current.has(key)) {
+        return nullthrows(top.get(key), "checked for existance above");
+      }
+    }
+    throw new Error(errMsg ?? `'${key}' not in scope`);
   }
 
   // Used when setting all the bindings in a pattern match at once.
   // In theory, this handles not duplicating binding names
-  defineAll(entries: Array<[LangType["ValueIdentifier"], T]>) {
+  setAll(entries: Array<[K, V]>) {
     for (const [key, value] of entries) {
-      this.define(key, value);
+      this.set(key, value);
     }
-  }
-
-  // TODO: override in its right scope
-  set(identifer: string, value: T) {
-    if (!this.has(identifer)) {
-      throw new Error(`no definition for ${identifer} found`);
-    }
-    this.map.set(identifer, value);
-  }
-
-  get(identifer: string): T | null {
-    if (this.map.has(identifer)) {
-      return nullthrows(this.map.get(identifer), "checked for existance above");
-    }
-    if (this.parent != null) {
-      return this.parent.get(identifer);
-    }
-    return null;
-  }
-
-  getOrError(
-    identifer: LangType["ValueIdentifier"],
-    errorMsg: string
-  ): T | ScopeError {
-    const value = this.get(identifer.value);
-    if (value == null) {
-      return new ScopeError(identifer);
-    }
-    return value;
   }
 }
 

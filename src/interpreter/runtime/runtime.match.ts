@@ -30,14 +30,14 @@ export function evaluateMatch(
     // TODO: bindings!!!
     const matchResult = doMatch(value, guardExpression, context);
     if (matchResult.isMatch) {
-      context.pushScope();
-      context.valueScope().defineAll(matchResult.bindings);
+      context.valueScope.push();
+      context.valueScope.setAll(matchResult.bindings);
       const result = evaluateStatements(
         caseEntry.block.statements,
         context,
         system
       );
-      context.popScope();
+      context.valueScope.pop();
       return result ?? { kind: "empty", value: null };
     }
   }

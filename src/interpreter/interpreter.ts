@@ -20,9 +20,9 @@ export function interpret(
 ): void {
   try {
     const ast = typeof script === "string" ? tryParse(script) : script;
-    context.pushScope();
+    context.valueScope.push();
     evaluateStatements(ast.statements, context, system);
-    context.popScope();
+    context.valueScope.pop();
   } catch (e) {
     if (e instanceof ScopeError) {
       if (typeof script === "string") {

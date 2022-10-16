@@ -4,12 +4,7 @@ exports[`class.1 1`] = `[]`;
 
 exports[`error.nice 1`] = `
 [
-  " 2| 
- 3|   const one = y;
-                  ^
- 4|   #log one
-
-Identifier "y" not found (at 3:15)",
+  [Error: Identifier "y" not found (at 3:15)],
 ]
 `;
 

@@ -13,11 +13,11 @@ export function check(
 ): void {
   try {
     const ast = typeof script === "string" ? tryParse(script) : script;
-    context.pushScope();
+    context.typeScope.push();
     resolveTypes(ast.statements, context);
     console.log(context.staticTypes);
     checkStatements(ast.statements, context);
-    context.popScope();
+    context.typeScope.pop();
   } catch (e) {
     if (e instanceof ScopeError) {
       if (typeof script === "string") {
@@ -316,9 +316,7 @@ export function typeOf(
     if (expression.kind !== "ValueIdentifier") {
       throw new Error("refernce type on non-identifer; this shouldn't happen.");
     }
-    const originalIdentifier = scope
-      .valueScope()
-      .identifierNodeMap.get(expression.value);
+    const originalIdentifier = scope.identifierNodeMap.get(expression.value);
     if (
       originalIdentifier == null ||
       // TODO: what to do with "TypeIdentifier"

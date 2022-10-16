@@ -100,7 +100,7 @@ export default function App() {
           : printTSStatements(tsAst);
       tsEditorRef.current?.setValue(printed);
 
-      check(script, undefined, system);
+      // check(script, undefined, system);
       interpret(script, system);
     } catch (e) {
       if (e instanceof Error || typeof e === "string") {

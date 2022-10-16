@@ -31,9 +31,10 @@ export function evaluateExpression(
   switch (kind) {
     // foo
     case "ValueIdentifier": {
-      const foundValue = context
-        .valueScope()
-        .getOrError(expression, `Name ${expression.value} not found`);
+      const foundValue = context.valueScope.get(
+        expression.value,
+        `Identifier "${expression.value}" not found (at ${expression._meta.start.line}:${expression._meta.start.column})`
+      );
 
       if (foundValue instanceof ScopeError) {
         throw foundValue;
@@ -97,12 +98,10 @@ export function evaluateExpression(
     case "FunctionCall": {
       const { identifier, argument } = expression;
 
-      const funcInstance = context
-        .valueScope()
-        .getOrError(
-          identifier,
-          `No definition for function ${identifier.value}`
-        );
+      const funcInstance = context.valueScope.get(
+        identifier.value,
+        `No definition for function ${identifier.value}`
+      );
 
       if (funcInstance instanceof ScopeError) {
         throw funcInstance;
@@ -161,10 +160,10 @@ function callFunction(
   system: System
 ): Value {
   if (func.kind === "AnonymousFunctionLiteral") {
-    context.pushScope();
+    context.valueScope.push();
     // TODO: add argument values to context, do when I implement destructuring
     const result = evaluateStatements(func.block.statements, context, system);
-    context.popScope();
+    context.valueScope.pop();
     return nullthrows(result, "fixme, case block returns nothing");
   }
 
@@ -175,13 +174,13 @@ function callFunction(
 
     for (const caseEntry of func.block.caseEntries) {
       // caseEntry.guard
-      context.pushScope();
+      context.valueScope.push();
       const result = evaluateStatements(
         caseEntry.block.statements,
         context,
         system
       );
-      context.popScope();
+      context.valueScope.pop();
       return nullthrows(result, "fixme, case block returns nothing");
     }
 
