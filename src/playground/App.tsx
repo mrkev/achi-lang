@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
-import Editor, { EditorProps } from "@monaco-editor/react";
-import monaco, { editor } from "monaco-editor";
+import { editor } from "monaco-editor";
 import { System } from "../interpreter/runtime/System";
 import { interpret } from "../interpreter/interpreter";
 import { tryParse } from "../parser/parser";
@@ -9,6 +8,7 @@ import { compileProgram, printTSStatements } from "../compiler/compiler";
 import { check } from "../checker/checker";
 import { useLocalStorage } from "usehooks-ts";
 import { registerLangForMonaco } from "../playground/registerLangForMonaco";
+import { useEditor, useKeyboardShortcuts } from "./uiHooks";
 
 const DEFAULT_SCRIPT =
   `
@@ -28,22 +28,7 @@ const options: editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
 } as const;
 
-function useEditor(
-  props: Omit<EditorProps, "onMount">
-): [
-  React.ReactElement,
-  React.MutableRefObject<monaco.editor.IStandaloneCodeEditor | null>
-] {
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
-  const handleEditorDidMount = useCallback(
-    (editor: monaco.editor.IStandaloneCodeEditor) => {
-      editorRef.current = editor;
-    },
-    []
-  );
-
-  return [<Editor {...props} onMount={handleEditorDidMount} />, editorRef];
-}
+type Feature = "compile" | "typecheck" | "interpret" | "ast";
 
 export default function App() {
   const [initialScript, setInitialScript] = useLocalStorage(
@@ -52,6 +37,14 @@ export default function App() {
   );
   const [scripts, setScripts] = useLocalStorage<string[]>("scripts", []);
   const [log, setLog] = useState<(Error | string)[]>([]);
+
+  // TODO: make linked set its own package and use it here
+  const [featureArr, setFeatures] = useLocalStorage<Array<Feature>>(
+    "features",
+    ["compile", "typecheck", "interpret", "ast"]
+  );
+
+  const features = new Set(featureArr);
 
   const [tsEditor, tsEditorRef] = useEditor({
     language: "typescript",
@@ -92,15 +85,20 @@ export default function App() {
       const ast = tryParse(script);
       console.log("HERE");
       astEditorRef.current?.setValue(JSON.stringify(ast, null, 2));
-      const tsAst = compileProgram(ast);
 
-      const printed =
-        tsAst instanceof Error
-          ? "# Compiler error\n" + tsAst.message + "\n" + tsAst.stack
-          : printTSStatements(tsAst);
-      tsEditorRef.current?.setValue(printed);
+      if (features.has("compile")) {
+        const tsAst = compileProgram(ast);
+        const printed =
+          tsAst instanceof Error
+            ? "# Compiler error\n" + tsAst.message + "\n" + tsAst.stack
+            : printTSStatements(tsAst);
+        tsEditorRef.current?.setValue(printed);
+      }
 
-      // check(script, undefined, system);
+      if (features.has("typecheck")) {
+        // check(script, undefined, system);
+      }
+
       interpret(script, system);
     } catch (e) {
       if (e instanceof Error || typeof e === "string") {
@@ -121,11 +119,57 @@ export default function App() {
     setScripts(scripts.concat([script]));
   };
 
+  const evaluationBox = (
+    <div style={{ width: "100%", flexShrink: 0, overflow: "scroll" }}>
+      <button onClick={doEvaluate}>Evaluate</button>
+      <button onClick={doSave}>Save</button>
+      <pre>
+        {log.map((msg, i) => {
+          return msg instanceof Error ? (
+            <details style={{ color: "red" }} key={i}>
+              <summary>{msg.message}</summary>
+              {msg.stack}
+            </details>
+          ) : (
+            <span key={i}>
+              {msg}
+              <br />
+            </span>
+          );
+        })}
+      </pre>
+    </div>
+  );
+
   return (
     <>
       <ul
         style={{ listStyleType: "none", padding: 0, width: 120, flexShrink: 0 }}
       >
+        {(["compile", "typecheck", "interpret", "ast"] as const).map(
+          (feature) => {
+            const isOn = features.has(feature);
+            return (
+              <>
+                <input
+                  type="checkbox"
+                  checked={isOn}
+                  onChange={(e) => {
+                    if (isOn) {
+                      features.delete(feature);
+                    } else {
+                      features.add(feature);
+                    }
+                    setFeatures([...features.values()]);
+                  }}
+                />
+                <label>{feature}</label>
+                <br />
+              </>
+            );
+          }
+        )}
+        <hr />
         {scripts.map((script, i) => {
           return (
             <li key={i}>
@@ -149,44 +193,10 @@ export default function App() {
         }}
       >
         {scriptEditor}
-        {tsEditor}
-
-        <div style={{ width: "100%", flexShrink: 0, overflow: "scroll" }}>
-          <button onClick={doEvaluate}>Evaluate</button>
-          <button onClick={doSave}>Save</button>
-          <pre>
-            {log.map((msg, i) => {
-              return msg instanceof Error ? (
-                <details style={{ color: "red" }} key={i}>
-                  <summary>{msg.message}</summary>
-                  {msg.stack}
-                </details>
-              ) : (
-                <span key={i}>
-                  {msg}
-                  <br />
-                </span>
-              );
-            })}
-          </pre>
-        </div>
-        {astEditor}
+        {features.has("compile") ? tsEditor : <div />}
+        {evaluationBox}
+        {features.has("ast") ? astEditor : <div />}
       </div>
     </>
   );
-}
-function useKeyboardShortcuts(doEvaluate: () => void) {
-  useEffect(() => {
-    const onKeyDown = function (e: KeyboardEvent) {
-      if (e.key === "s" && e.metaKey) {
-        e.preventDefault();
-        doEvaluate();
-      }
-    };
-
-    document.addEventListener("keydown", onKeyDown, false);
-    () => {
-      document.removeEventListener("keydown", onKeyDown, false);
-    };
-  }, []);
 }
