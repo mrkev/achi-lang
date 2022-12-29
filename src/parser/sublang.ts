@@ -5,7 +5,11 @@ import { LangType } from "./parser";
 
 /** Keys of all the parsers in the LangType that don't produce a "node" */
 type LT_NonNodeKey = {
-  [Key in keyof LangType]: LangType[Key] extends string | number | symbol
+  [Key in keyof LangType]: LangType[Key] extends
+    | string
+    | number
+    | symbol
+    | string[]
     ? Key
     : never;
 }[keyof LangType];

@@ -12,7 +12,7 @@ type Meta = {
 export type LangType = LangType_BinOp &
   LangType_Match &
   LangType_Function & {
-    _: string;
+    _: string[];
     __: string;
     _comma: string;
     _nl: string;
@@ -179,7 +179,7 @@ export type LangType = LangType_BinOp &
 
 export const Lang = Parsimmon.createLanguage<LangType>({
   _: (r) => {
-    return Parsimmon.alt(r.blockComment, Parsimmon.optWhitespace);
+    return Parsimmon.alt(r.blockComment, Parsimmon.whitespace).many();
   },
   __: () => {
     return Parsimmon.whitespace;
