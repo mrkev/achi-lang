@@ -20,9 +20,7 @@ function exec(script: string, ...extra: ("compile" | "typecheck")[]): string {
 }
 
 describe("e2e", () => {
-  const tests = readdirSync(__dirname).filter(
-    (file) => file.indexOf(".xtest") !== -1
-  );
+  const tests = readdirSync(__dirname).filter((file) => /\.xtest$/.test(file));
 
   for (const testfile of tests) {
     const contents = readFileSync(path.join(__dirname, testfile), "utf-8");

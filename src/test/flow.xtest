@@ -2,6 +2,15 @@ if (true) {
   #log "hi"
 } else {
   #log "nevermind"
+};
+
+if (true) {
+  #log "hi"
+} else if (false) {
+  #log "nevermind"
+} else {
+  #log "impossible"
 }
 -------------------------
+hi
 hi

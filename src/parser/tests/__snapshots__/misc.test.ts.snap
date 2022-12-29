@@ -192,28 +192,6 @@ exports[`ConstantDefinition.functionCall 1`] = `
 }
 `;
 
-exports[`IfStatement 1`] = `
-{
-  "block": {
-    "kind": "Block",
-    "statements": [
-      {
-        "expression": {
-          "kind": "StringLiteral",
-          "value": "hello",
-        },
-        "kind": "ReturnStatement",
-      },
-    ],
-  },
-  "guard": {
-    "kind": "NumberLiteral",
-    "value": 3,
-  },
-  "kind": "IfStatement",
-}
-`;
-
 exports[`Program 1`] = `
 {
   "kind": "Program",

@@ -16,7 +16,10 @@ import { TypeMismatchError } from "../checker/checker";
 export function interpret(
   script: string | LangType["Program"],
   system: System = new System(),
-  context: Context = Context.create()
+  context: Context = Context.create(),
+  options?: {
+    quietConsoleError?: boolean;
+  }
 ): void {
   try {
     const ast = typeof script === "string" ? tryParse(script) : script;
@@ -35,7 +38,10 @@ export function interpret(
     } else {
       console.log("Unknown error type during interpretation");
     }
-    console.error(e);
+    const quietConsoleErr = options?.quietConsoleError === true;
+    if (!quietConsoleErr) {
+      console.error(e);
+    }
   }
 }
 

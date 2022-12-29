@@ -43,6 +43,7 @@ export type LangType = LangType_BinOp &
       kind: "IfStatement";
       guard: LangType["Expression"];
       block: LangType["Block"];
+      elseCase: LangType["Block"] | LangType["IfStatement"] | null;
     };
 
     Expression:
@@ -386,6 +387,16 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // NOTE: maybe support no parentheses too
   IfStatement: (r) => {
+    const elseCase = Parsimmon.seqMap(
+      r._,
+      Parsimmon.string("else"),
+      r._,
+      r.Block.or(r.IfStatement),
+      (_0, _1, _2, blockOrIf) => {
+        return blockOrIf;
+      }
+    );
+
     return Parsimmon.seqMap(
       Parsimmon.string("if"),
       r._,
@@ -396,11 +407,13 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       Parsimmon.string(")"),
       r._,
       r.Block,
-      (_0, _1, _2, _3, expression, _5, _6, _7, block) => {
+      elseCase.atMost(1),
+      (_0, _1, _2, _3, expression, _5, _6, _7, block, alt) => {
         return {
           kind: "IfStatement",
           guard: expression,
           block,
+          elseCase: alt.length > 0 ? alt[0] : null,
         };
       }
     );
