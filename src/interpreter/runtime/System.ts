@@ -15,4 +15,8 @@ class Console {
   log(...msgs: (string | Error)[]) {
     this._log.push(...msgs);
   }
+
+  getOut(): string {
+    return this._log.join("\n");
+  }
 }

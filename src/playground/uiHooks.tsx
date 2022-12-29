@@ -19,6 +19,7 @@ export function useEditor(
 
   return [<Editor {...props} onMount={handleEditorDidMount} />, editorRef];
 }
+
 export function useKeyboardShortcuts(doEvaluate: () => void) {
   useEffect(() => {
     const onKeyDown = function (e: KeyboardEvent) {

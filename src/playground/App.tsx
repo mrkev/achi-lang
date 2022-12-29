@@ -65,6 +65,8 @@ export default function App() {
     options: options,
     height: "50vh",
     defaultValue: initialScript,
+    // try "same", "indent" or "none"
+    // wrappingIndent: "indent",
     beforeMount: registerLangForMonaco,
   });
 

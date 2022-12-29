@@ -1,0 +1,7 @@
+if (true) {
+  #log "hi"
+} else {
+  #log "nevermind"
+}
+-------------------------
+hi

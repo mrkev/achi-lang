@@ -316,7 +316,10 @@ export function typeOf(
     if (expression.kind !== "ValueIdentifier") {
       throw new Error("refernce type on non-identifer; this shouldn't happen.");
     }
-    const originalIdentifier = scope.identifierNodeMap.get(expression.value);
+    // TODO: BROKEN!
+    const originalIdentifier = (scope as any).identifierNodeMap.get(
+      expression.value
+    );
     if (
       originalIdentifier == null ||
       // TODO: what to do with "TypeIdentifier"
