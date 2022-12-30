@@ -3,7 +3,6 @@ import * as path from "path";
 import { Context } from "../interpreter/Context";
 import { interpret } from "../interpreter/interpreter";
 import { System } from "../interpreter/runtime/System";
-import { tryParse } from "../parser/parser";
 
 function exec(script: string, ...extra: ("compile" | "typecheck")[]): string {
   const features = new Set(extra);

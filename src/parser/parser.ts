@@ -308,6 +308,8 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   },
 
   Expression: (r) => {
+    // AnonFunction before Record so
+    // const x = () => ... doesn't fail
     const expressionParsers: ExhaustiveParsers<LangType["Expression"]> = {
       BooleanLiteral: r.BooleanLiteral,
       // FunctionDefinition: r.FunctionDefinition,
@@ -316,11 +318,11 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       NamedRecordLiteral: r.NamedRecordLiteral,
       FunctionCall: r.FunctionCall,
       ValueIdentifier: r.ValueIdentifier,
+      AnonymousFunctionLiteral: r.AnonymousFunctionLiteral,
       RecordLiteral: r.RecordLiteral,
       StringLiteral: r.StringLiteral,
       ListLiteral: r.ListLiteral,
       MapLiteral: r.MapLiteral,
-      AnonymousFunctionLiteral: r.AnonymousFunctionLiteral,
     };
     return Parsimmon.alt<LangType["Expression"]>(
       ...Object.values(expressionParsers)

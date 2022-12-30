@@ -1,4 +1,39 @@
-const three = () => { return 3 };
-#log three();
+/** Function tests **/
+
+classes Card {
+  King();
+  Queen();
+  Jack();
+  Number(value: number)
+};
+
+/** Start **/
+
+const zero = () => { return 0 };
+#log zero();
+
+const ident = (value: number) => {
+  return value
+};
+
+const multi = (a: number, b: number) => {
+  return a;
+};
+
+function printCard matches (card: Card) {
+  case Card.King(): {
+    return "King"
+  };
+  case Card.Queen(): {
+    return "Queen"
+  };
+  case Card.Jack(): {
+    return "Jack"
+  };
+  case Card.Number(value: value): {
+    return "Number card"
+  };
+}
+
 ---------------------------
-3
+0
