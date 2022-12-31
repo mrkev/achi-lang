@@ -62,6 +62,10 @@ function typeOf(expression: LangType["Expression"], scope: Context): Type {
     case "MapLiteral":
     case "ListLiteral":
     case "AnonymousFunctionLiteral":
+    case "PREFIX":
+    case "POSTFIX":
+    case "BINARY_RIGHT":
+    case "BINARY_LEFT":
       throw new Error("typeOf, not implemented");
     default: {
       throw exhaustive(expression);

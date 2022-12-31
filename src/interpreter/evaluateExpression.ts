@@ -11,6 +11,8 @@ import {
 } from "./runtime/runtime.records";
 import { evaluateMatch } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
+import { BIN_OUT, FIX_OUT } from "../parser/parser.binex";
+import { factorial } from "./runtime/utils";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -147,9 +149,86 @@ export function evaluateExpression(
       return { kind: "AnonymousFunctionInstance", value: func };
     }
 
+    // Unary
+    case "PREFIX":
+    case "POSTFIX": {
+      return {
+        kind: "number",
+        value: evaluateUnaryExpression(expression, context, system),
+      };
+    }
+
+    case "BINARY_RIGHT":
+    case "BINARY_LEFT": {
+      return {
+        kind: "number",
+        value: evaluateBinaryExpression(expression, context, system),
+      };
+    }
+
     default: {
       throw exhaustive(kind);
     }
+  }
+}
+
+function expectNumber(value: Value): { kind: "number"; value: number } {
+  if (value.kind === "number") {
+    return value;
+  } else {
+    throw new Error("NUMBER EXPECTED");
+  }
+}
+
+function evaluateUnaryExpression(
+  unex: FIX_OUT,
+  context: Context,
+  system: System
+): number {
+  const value = expectNumber(
+    evaluateExpression(unex.value, context, system) as Value
+  ).value;
+
+  switch (unex.operator) {
+    case "-":
+      return -value;
+    case "!":
+      return factorial(value);
+    case "*":
+    case "+":
+    case "^":
+      throw new Error("invalid unary operator " + unex.operator);
+    default:
+      throw new Error("unknown operator " + unex.operator);
+  }
+}
+
+function evaluateBinaryExpression(
+  binex: BIN_OUT,
+  context: Context,
+  system: System
+): number {
+  const left = expectNumber(
+    evaluateExpression(binex.left, context, system) as Value
+  ).value;
+  const right = expectNumber(
+    evaluateExpression(binex.right, context, system) as Value
+  ).value;
+
+  switch (binex.operator) {
+    case "*":
+      return left * right;
+    case "+":
+      return left + right;
+    case "-":
+      return left - right;
+    case "^": {
+      return Math.pow(left, right);
+    }
+    case "!":
+      throw new Error("invalid binary operator " + binex.operator);
+    default:
+      throw new Error("unknown operator " + binex.operator);
   }
 }
 

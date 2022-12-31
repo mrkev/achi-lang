@@ -1,8 +1,13 @@
 import * as Parsimmon from "parsimmon";
 import { ExhaustiveParsers } from "./sublang";
-import { LangType_BinOp, LangDef_BinOp } from "./parser.binop";
+import {
+  LangType_BinOp,
+  LangDef_BinOp,
+  BinaryExpression,
+} from "./parser.binop";
 import { LangDef_Function, LangType_Function } from "./parser.function";
 import { LangType_Match, LangDef_Match } from "./parser.match";
+import { NEXT_PARSER } from "./parser.binex";
 
 type Meta = {
   start: Parsimmon.Index;
@@ -58,7 +63,9 @@ export type LangType = LangType_BinOp &
       | LangType["StringLiteral"]
       | LangType["ListLiteral"]
       | LangType["MapLiteral"]
-      | LangType["AnonymousFunctionLiteral"];
+      | LangType["AnonymousFunctionLiteral"]
+      | LangType["OperatorExpression"];
+    // | BinaryExpression;
 
     ConstantDefinition: {
       kind: "ConstantDefinition";
@@ -179,26 +186,30 @@ export type LangType = LangType_BinOp &
 
 export const Lang = Parsimmon.createLanguage<LangType>({
   _: (r) => {
-    return Parsimmon.alt(r.blockComment, Parsimmon.whitespace).many();
+    return Parsimmon.alt(r.blockComment, Parsimmon.whitespace)
+      .many()
+      .desc("optional space");
   },
   __: () => {
-    return Parsimmon.whitespace;
+    return Parsimmon.whitespace.desc("required whitespace");
   },
   _comma: (r) => {
-    return Parsimmon.string(",").trim(r._);
+    return Parsimmon.string(",").trim(r._).desc("comma");
   },
   _nl: (r) => {
-    return Parsimmon.regex(/[\s;]*/).trim(r._);
+    return Parsimmon.regex(/[\s;]*/)
+      .trim(r._)
+      .desc("optional newline");
   },
   __nl: (r) => {
-    return Parsimmon.alt(Parsimmon.string(";"), Parsimmon.string("\n")).trim(
-      r._
-    );
+    return Parsimmon.alt(Parsimmon.string(";"), Parsimmon.string("\n"))
+      .trim(r._)
+      .desc("requried newline");
   },
 
   // /* ... */
   blockComment: (r) => {
-    return Parsimmon.regex(/\/\*[\s\S]*\*\//);
+    return Parsimmon.regex(/\/\*[\s\S]*\*\//).desc("block comment");
   },
 
   ////////////////////////////////////////////////////////////// Expressions ///
@@ -314,6 +325,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       BooleanLiteral: r.BooleanLiteral,
       // FunctionDefinition: r.FunctionDefinition,
       MatchExpression: r.MatchExpression,
+      OperatorExpression: r.OperatorExpression,
       NumberLiteral: r.NumberLiteral,
       NamedRecordLiteral: r.NamedRecordLiteral,
       FunctionCall: r.FunctionCall,
@@ -323,7 +335,9 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       StringLiteral: r.StringLiteral,
       ListLiteral: r.ListLiteral,
       MapLiteral: r.MapLiteral,
-    };
+
+      // BinaryExpression: r.BinaryExpression,
+    } as any;
     return Parsimmon.alt<LangType["Expression"]>(
       ...Object.values(expressionParsers)
     );

@@ -13,6 +13,10 @@ type LT_NonNodeKey = {
     ? Key
     : never;
 }[keyof LangType];
+
+// These are potential kinds, but they don't have an associated parser to them
+type LT_KindsButNotKeys = "PREFIX" | "POSTFIX" | "BINARY_RIGHT" | "BINARY_LEFT";
+
 // LangType, but skipping any entry that isn't an object
 type LT_OnlyNodes = Omit<LangType, LT_NonNodeKey>;
 type ValueOf<T> = T[keyof T];
@@ -21,7 +25,9 @@ type ValueOf<T> = T[keyof T];
 // can only be satisfied by an object that entries for all the types
 // that make up LangType["Statement"]. Each entry maps to a Parsimmon.Parser.
 export type ExhaustiveParsers<T extends ValueOf<LT_OnlyNodes>> = {
-  [key in T["kind"]]: Parsimmon.Parser<LangType[key]>;
+  [key in Exclude<T["kind"], LT_KindsButNotKeys>]: Parsimmon.Parser<
+    LangType[key]
+  >;
 };
 
 /** Sublang helpers, to split LangType into multiple files */

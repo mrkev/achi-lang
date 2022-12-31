@@ -143,6 +143,10 @@ function doMatch(
     case "FunctionCall":
     case "ListLiteral":
     case "MapLiteral":
+    case "PREFIX":
+    case "POSTFIX":
+    case "BINARY_RIGHT":
+    case "BINARY_LEFT":
     // case "FunctionDefinition":
     case "AnonymousFunctionLiteral": {
       throw new Error(

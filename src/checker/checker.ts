@@ -226,6 +226,22 @@ function resolveExpressionTypes(
       return selfType;
     }
 
+    case "PREFIX": {
+      throw new Error("check OperatorExpression");
+    }
+
+    case "POSTFIX": {
+      throw new Error("check OperatorExpression");
+    }
+
+    case "BINARY_RIGHT": {
+      throw new Error("check OperatorExpression");
+    }
+
+    case "BINARY_LEFT": {
+      throw new Error("check OperatorExpression");
+    }
+
     default: {
       throw exhaustive(expression);
     }

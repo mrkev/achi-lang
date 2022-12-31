@@ -2,42 +2,120 @@
 
 exports[`BinaryOperation 1`] = `
 {
-  "kind": "BinaryOperation",
-  "left": {
-    "kind": "NumberLiteral",
-    "value": 3,
-  },
-  "operator": "+",
-  "right": {
-    "kind": "NumberLiteral",
-    "value": 3,
+  "kind": "POSTFIX",
+  "operator": "!",
+  "value": {
+    "kind": "POSTFIX",
+    "operator": "!",
+    "value": {
+      "kind": "POSTFIX",
+      "operator": "!",
+      "value": {
+        "kind": "NumberLiteral",
+        "value": 1,
+      },
+    },
   },
 }
 `;
 
 exports[`BinaryOperation 2`] = `
 {
-  "kind": "BinaryOperation",
+  "kind": "BINARY_RIGHT",
   "left": {
-    "_meta": {
-      "end": {
-        "column": 6,
-        "line": 1,
-        "offset": 5,
+    "kind": "NumberLiteral",
+    "value": 1,
+  },
+  "operator": "^",
+  "right": {
+    "kind": "BINARY_RIGHT",
+    "left": {
+      "kind": "NumberLiteral",
+      "value": 2,
+    },
+    "operator": "^",
+    "right": {
+      "kind": "NumberLiteral",
+      "value": 3,
+    },
+  },
+}
+`;
+
+exports[`BinaryOperation 3`] = `
+{
+  "kind": "BINARY_RIGHT",
+  "left": {
+    "kind": "PREFIX",
+    "operator": "-",
+    "value": {
+      "kind": "BINARY_LEFT",
+      "left": {
+        "kind": "NumberLiteral",
+        "value": 3,
       },
-      "start": {
-        "column": 1,
-        "line": 1,
-        "offset": 0,
+      "operator": "+",
+      "right": {
+        "kind": "NumberLiteral",
+        "value": 3,
       },
     },
-    "kind": "ValueIdentifier",
-    "value": "hello",
   },
-  "operator": "+",
+  "operator": "^",
   "right": {
-    "kind": "NumberLiteral",
-    "value": 3,
+    "kind": "BINARY_RIGHT",
+    "left": {
+      "kind": "NumberLiteral",
+      "value": 3,
+    },
+    "operator": "^",
+    "right": {
+      "kind": "POSTFIX",
+      "operator": "!",
+      "value": {
+        "kind": "NumberLiteral",
+        "value": 2,
+      },
+    },
+  },
+}
+`;
+
+exports[`BinaryOperation 4`] = `
+{
+  "kind": "BINARY_RIGHT",
+  "left": {
+    "kind": "PREFIX",
+    "operator": "-",
+    "value": {
+      "kind": "BINARY_LEFT",
+      "left": {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+      "operator": "+",
+      "right": {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+    },
+  },
+  "operator": "^",
+  "right": {
+    "kind": "BINARY_RIGHT",
+    "left": {
+      "kind": "NumberLiteral",
+      "value": 3,
+    },
+    "operator": "^",
+    "right": {
+      "kind": "POSTFIX",
+      "operator": "!",
+      "value": {
+        "kind": "NumberLiteral",
+        "value": 2,
+      },
+    },
   },
 }
 `;
