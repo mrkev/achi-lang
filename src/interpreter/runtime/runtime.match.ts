@@ -1,7 +1,7 @@
 import { LangType } from "../../parser/parser";
 import { Context } from "../Context";
 import { evaluateStatements } from "../evaluateStatements";
-import { Value } from "../interpreter";
+import { Value } from "../value";
 import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./System";
 import { aSubsetB } from "./utils";

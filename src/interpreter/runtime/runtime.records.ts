@@ -1,6 +1,6 @@
 import type { LangType } from "../../parser/parser";
 import { Context } from "../Context";
-import { Value } from "../interpreter";
+import { Value } from "../value";
 import { System } from "./System";
 
 /**

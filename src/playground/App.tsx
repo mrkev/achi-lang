@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./App.css";
 import { editor } from "monaco-editor";
 import { System } from "../interpreter/runtime/System";
 import { interpret } from "../interpreter/interpreter";
 import { tryParse } from "../parser/parser";
 import { compileProgram, printTSStatements } from "../compiler/compiler";
-import { check } from "../checker/checker";
 import { useLocalStorage } from "usehooks-ts";
 import { registerLangForMonaco } from "../playground/registerLangForMonaco";
 import { useEditor, useKeyboardShortcuts } from "./uiHooks";
+import { Allotment } from "allotment";
+import "allotment/dist/style.css";
 
 const DEFAULT_SCRIPT =
   `
@@ -145,60 +146,72 @@ export default function App() {
 
   return (
     <>
-      <ul
-        style={{ listStyleType: "none", padding: 0, width: 120, flexShrink: 0 }}
-      >
-        {(["compile", "typecheck", "interpret", "ast"] as const).map(
-          (feature) => {
-            const isOn = features.has(feature);
-            return (
-              <>
-                <input
-                  type="checkbox"
-                  checked={isOn}
-                  onChange={(e) => {
-                    if (isOn) {
-                      features.delete(feature);
-                    } else {
-                      features.add(feature);
-                    }
-                    setFeatures([...features.values()]);
-                  }}
-                />
-                <label>{feature}</label>
-                <br />
-              </>
-            );
-          }
-        )}
-        <hr />
-        {scripts.map((script, i) => {
-          return (
-            <li key={i}>
-              <button
-                onClick={() => {
-                  scriptEditorRef.current?.setValue(script);
-                }}
-              >
-                {script.split("\n")[0]}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-      <div
-        style={{
-          flexGrow: 1,
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gridTemplateRows: "repeat(2, 1fr)",
-        }}
-      >
-        {scriptEditor}
-        {features.has("compile") ? tsEditor : <div />}
-        {evaluationBox}
-        {features.has("ast") ? astEditor : <div />}
-      </div>
+      <Allotment>
+        <Allotment.Pane minSize={100} maxSize={200}>
+          <details>
+            <summary>configure</summary>
+            {(["compile", "typecheck", "interpret", "ast"] as const).map(
+              (feature) => {
+                const isOn = features.has(feature);
+                return (
+                  <>
+                    <input
+                      type="checkbox"
+                      checked={isOn}
+                      onChange={(e) => {
+                        if (isOn) {
+                          features.delete(feature);
+                        } else {
+                          features.add(feature);
+                        }
+                        setFeatures([...features.values()]);
+                      }}
+                    />
+                    <label>{feature}</label>
+                    <br />
+                  </>
+                );
+              }
+            )}
+          </details>
+
+          <hr />
+          <ul
+            style={{
+              listStyleType: "none",
+              padding: 0,
+            }}
+          >
+            {scripts.map((script, i) => {
+              return (
+                <li key={i}>
+                  <button
+                    onClick={() => {
+                      scriptEditorRef.current?.setValue(script);
+                    }}
+                  >
+                    {script.split("\n")[0]}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </Allotment.Pane>
+
+        <div
+          style={{
+            width: "100%",
+            display: "grid",
+            gridTemplateColumns: "repeat(2, 1fr)",
+            gridTemplateRows: "repeat(2, 1fr)",
+          }}
+        >
+          {scriptEditor}
+          {features.has("ast") ? astEditor : <div />}
+          {evaluationBox}
+          {features.has("compile") ? tsEditor : <div />}
+        </div>
+      </Allotment>
     </>
   );
 }

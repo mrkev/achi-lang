@@ -1,4 +1,4 @@
-import { Value } from "./interpreter";
+import { Value } from "./value";
 import {
   NamedRecordKlass,
   NamedRecordDefinitionGroupInstance,

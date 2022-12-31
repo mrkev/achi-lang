@@ -3,13 +3,14 @@ import { evaluateExpression } from "./evaluateExpression";
 import { Context } from "./Context";
 import { System } from "./runtime/System";
 import { exhaustive } from "./nullthrows";
-import { stringOfValue, Value } from "./interpreter";
+import { stringOfValue } from "./interpreter";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordKlass,
 } from "./runtime/runtime.records";
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import { stringOfType } from "./types";
+import { Value } from "./value";
 
 /**
  * Evaluates all statements sequentially, returning the

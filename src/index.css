@@ -12,6 +12,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -25,7 +31,6 @@ code {
 }
 
 #root {
-  width: 100%;
   display: flex;
   flex-direction: row;
   overflow: hidden;

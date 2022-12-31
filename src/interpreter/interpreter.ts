@@ -12,6 +12,7 @@ import {
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import { TypeMismatchError } from "../checker/checker";
+import { Value } from "./value";
 
 export function interpret(
   script: string | LangType["Program"],
@@ -72,33 +73,6 @@ export function niceError(
   msg.push(error.print());
   return msg.join("\n");
 }
-
-export type Value =
-  // 3
-  | { kind: "number"; value: number }
-  // "hello"
-  | { kind: "string"; value: string }
-  // false
-  | { kind: "boolean"; value: boolean }
-  // null
-  | { kind: "empty"; value: null }
-  // Point(x: 3, y: 2)
-  | { kind: "NamedRecordInstance"; value: NamedRecordInstance }
-  // function printPoint matches (point: Point) { ... }
-  | { kind: "MatchFunctionInstance"; value: MatchFunctionInstance }
-  // class Point(x: number, y: number)
-  | { kind: "NamedRecordKlass"; value: NamedRecordKlass }
-  // (x: 3, y: 2)
-  | { kind: "RecordLiteralInstance"; value: RecordLiteralInstance }
-  // classes Cards { ... }
-  | {
-      kind: "NamedRecordDefinitionGroupInstance";
-      value: NamedRecordDefinitionGroupInstance;
-    }
-  | {
-      kind: "AnonymousFunctionInstance";
-      value: AnonymousFunctionInstance;
-    };
 
 export function stringOfValue(value: Value): string {
   const { kind } = value;

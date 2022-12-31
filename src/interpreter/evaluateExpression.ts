@@ -1,5 +1,5 @@
 import { LangType } from "../parser/parser";
-import { Value } from "./interpreter";
+import { Value } from "./value";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { Context, ScopeError } from "./Context";
 import { evaluateStatements } from "./evaluateStatements";
@@ -11,8 +11,10 @@ import {
 } from "./runtime/runtime.records";
 import { evaluateMatch } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
-import { BinaryOperation, UnaryOperation } from "../parser/parser.binex";
-import { factorial } from "./runtime/utils";
+import {
+  evaluateUnaryExpression,
+  evaluateBinaryExpression,
+} from "./evaluateOperations";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -158,75 +160,12 @@ export function evaluateExpression(
     }
 
     case "BinaryOperation": {
-      return {
-        kind: "number",
-        value: evaluateBinaryExpression(expression, context, system),
-      };
+      return evaluateBinaryExpression(expression, context, system);
     }
 
     default: {
       throw exhaustive(kind);
     }
-  }
-}
-
-function expectNumber(value: Value): { kind: "number"; value: number } {
-  if (value.kind === "number") {
-    return value;
-  } else {
-    throw new Error("NUMBER EXPECTED");
-  }
-}
-
-function evaluateUnaryExpression(
-  unex: UnaryOperation,
-  context: Context,
-  system: System
-): number {
-  const value = expectNumber(
-    evaluateExpression(unex.value, context, system) as Value
-  ).value;
-
-  switch (unex.operator) {
-    case "-":
-      return -value;
-    case "!":
-      return factorial(value);
-    case "*":
-    case "+":
-    case "^":
-      throw new Error("invalid unary operator " + unex.operator);
-    default:
-      throw new Error("unknown operator " + unex.operator);
-  }
-}
-
-function evaluateBinaryExpression(
-  binex: BinaryOperation,
-  context: Context,
-  system: System
-): number {
-  const left = expectNumber(
-    evaluateExpression(binex.left, context, system) as Value
-  ).value;
-  const right = expectNumber(
-    evaluateExpression(binex.right, context, system) as Value
-  ).value;
-
-  switch (binex.operator) {
-    case "*":
-      return left * right;
-    case "+":
-      return left + right;
-    case "-":
-      return left - right;
-    case "^": {
-      return Math.pow(left, right);
-    }
-    case "!":
-      throw new Error("invalid binary operator " + binex.operator);
-    default:
-      throw new Error("unknown operator " + binex.operator);
   }
 }
 
