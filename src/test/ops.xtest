@@ -1,12 +1,30 @@
-#log -3;
+#log -1;
 #log 3!;
 #log 3 * 2;
 #log 3 + 2;
-#log 3 - 2 * 2
+#log 3 - 2 * 2;
+
+#log "with identifiers";
+
+const one = 1;
+const two = 2;
+const three = 3;
+
+#log -one;
+#log -(two + 1)!;
+#log two * three;
+#log two + one;
+#log three - two * two;
 
 ---------------
--3
+-1
 6
 6
 5
+-1
+with identifiers
+-1
+-6
+6
+3
 -1

@@ -80,10 +80,8 @@ export function compileExpression(
     case "MatchExpression":
     case "ListLiteral":
     case "MapLiteral":
-    case "PREFIX":
-    case "POSTFIX":
-    case "BINARY_RIGHT":
-    case "BINARY_LEFT":
+    case "UnaryOperation":
+    case "BinaryOperation":
     // case "FunctionDefinition":
     case "AnonymousFunctionLiteral": {
       throw new Error("Not implemented");

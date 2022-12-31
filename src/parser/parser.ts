@@ -1,13 +1,8 @@
 import * as Parsimmon from "parsimmon";
 import { ExhaustiveParsers } from "./sublang";
-import {
-  LangType_BinOp,
-  LangDef_BinOp,
-  BinaryExpression,
-} from "./parser.binop";
+import { LangType_BinOp, LangDef_BinOp } from "./parser.operations";
 import { LangDef_Function, LangType_Function } from "./parser.function";
 import { LangType_Match, LangDef_Match } from "./parser.match";
-import { NEXT_PARSER } from "./parser.binex";
 
 type Meta = {
   start: Parsimmon.Index;
@@ -64,7 +59,7 @@ export type LangType = LangType_BinOp &
       | LangType["ListLiteral"]
       | LangType["MapLiteral"]
       | LangType["AnonymousFunctionLiteral"]
-      | LangType["OperatorExpression"];
+      | LangType["OperationExpression"];
     // | BinaryExpression;
 
     ConstantDefinition: {
@@ -321,23 +316,23 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   Expression: (r) => {
     // AnonFunction before Record so
     // const x = () => ... doesn't fail
-    const expressionParsers: ExhaustiveParsers<LangType["Expression"]> = {
+    const expressionParsers: ExhaustiveParsers<LangType["Expression"]> & {
+      OperationExpression: Parsimmon.Parser<LangType["OperationExpression"]>;
+    } = {
       BooleanLiteral: r.BooleanLiteral,
       // FunctionDefinition: r.FunctionDefinition,
       MatchExpression: r.MatchExpression,
-      OperatorExpression: r.OperatorExpression,
+      FunctionCall: r.FunctionCall,
+      OperationExpression: r.OperationExpression,
       NumberLiteral: r.NumberLiteral,
       NamedRecordLiteral: r.NamedRecordLiteral,
-      FunctionCall: r.FunctionCall,
       ValueIdentifier: r.ValueIdentifier,
       AnonymousFunctionLiteral: r.AnonymousFunctionLiteral,
       RecordLiteral: r.RecordLiteral,
       StringLiteral: r.StringLiteral,
       ListLiteral: r.ListLiteral,
       MapLiteral: r.MapLiteral,
-
-      // BinaryExpression: r.BinaryExpression,
-    } as any;
+    };
     return Parsimmon.alt<LangType["Expression"]>(
       ...Object.values(expressionParsers)
     );

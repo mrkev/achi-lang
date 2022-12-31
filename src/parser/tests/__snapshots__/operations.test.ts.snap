@@ -1,0 +1,182 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BinaryOperation 1`] = `
+{
+  "kind": "BinaryOperation",
+  "left": {
+    "kind": "NumberLiteral",
+    "value": 1,
+  },
+  "operator": "^",
+  "right": {
+    "kind": "BinaryOperation",
+    "left": {
+      "kind": "NumberLiteral",
+      "value": 2,
+    },
+    "operator": "^",
+    "right": {
+      "kind": "NumberLiteral",
+      "value": 3,
+    },
+  },
+}
+`;
+
+exports[`BinaryOperation 2`] = `
+{
+  "kind": "BinaryOperation",
+  "left": {
+    "kind": "UnaryOperation",
+    "operator": "-",
+    "value": {
+      "kind": "BinaryOperation",
+      "left": {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+      "operator": "+",
+      "right": {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+    },
+  },
+  "operator": "^",
+  "right": {
+    "kind": "BinaryOperation",
+    "left": {
+      "kind": "NumberLiteral",
+      "value": 3,
+    },
+    "operator": "^",
+    "right": {
+      "kind": "UnaryOperation",
+      "operator": "!",
+      "value": {
+        "kind": "NumberLiteral",
+        "value": 2,
+      },
+    },
+  },
+}
+`;
+
+exports[`BinaryOperation 3`] = `
+{
+  "kind": "BinaryOperation",
+  "left": {
+    "kind": "UnaryOperation",
+    "operator": "-",
+    "value": {
+      "kind": "BinaryOperation",
+      "left": {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+      "operator": "+",
+      "right": {
+        "kind": "NumberLiteral",
+        "value": 3,
+      },
+    },
+  },
+  "operator": "^",
+  "right": {
+    "kind": "BinaryOperation",
+    "left": {
+      "kind": "NumberLiteral",
+      "value": 3,
+    },
+    "operator": "^",
+    "right": {
+      "kind": "UnaryOperation",
+      "operator": "!",
+      "value": {
+        "kind": "NumberLiteral",
+        "value": 2,
+      },
+    },
+  },
+}
+`;
+
+exports[`BinaryOperation 4`] = `
+{
+  "kind": "BinaryOperation",
+  "left": {
+    "kind": "BinaryOperation",
+    "left": {
+      "kind": "NumberLiteral",
+      "value": 5,
+    },
+    "operator": "+",
+    "right": {
+      "kind": "NumberLiteral",
+      "value": 5,
+    },
+  },
+  "operator": "+",
+  "right": {
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+}
+`;
+
+exports[`BinaryOperation.identifier 1`] = `
+{
+  "kind": "BinaryOperation",
+  "left": {
+    "_meta": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "kind": "ValueIdentifier",
+    "value": "hello",
+  },
+  "operator": "+",
+  "right": {
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+}
+`;
+
+exports[`UnaryOperation 1`] = `
+{
+  "kind": "UnaryOperation",
+  "operator": "!",
+  "value": {
+    "kind": "UnaryOperation",
+    "operator": "!",
+    "value": {
+      "kind": "UnaryOperation",
+      "operator": "!",
+      "value": {
+        "kind": "NumberLiteral",
+        "value": 1,
+      },
+    },
+  },
+}
+`;
+
+exports[`UnaryOperation 2`] = `
+{
+  "kind": "UnaryOperation",
+  "operator": "-",
+  "value": {
+    "kind": "NumberLiteral",
+    "value": 1,
+  },
+}
+`;

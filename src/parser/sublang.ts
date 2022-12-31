@@ -15,7 +15,7 @@ type LT_NonNodeKey = {
 }[keyof LangType];
 
 // These are potential kinds, but they don't have an associated parser to them
-type LT_KindsButNotKeys = "PREFIX" | "POSTFIX" | "BINARY_RIGHT" | "BINARY_LEFT";
+type LT_KindsButNotKeys = "UnaryOperation" | "BinaryOperation";
 
 // LangType, but skipping any entry that isn't an object
 type LT_OnlyNodes = Omit<LangType, LT_NonNodeKey>;
@@ -29,6 +29,10 @@ export type ExhaustiveParsers<T extends ValueOf<LT_OnlyNodes>> = {
     LangType[key]
   >;
 };
+
+type test = ExhaustiveParsers<
+  LangType["Expression"] | LangType["OperationExpression"]
+>;
 
 /** Sublang helpers, to split LangType into multiple files */
 

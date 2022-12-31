@@ -226,19 +226,11 @@ function resolveExpressionTypes(
       return selfType;
     }
 
-    case "PREFIX": {
+    case "UnaryOperation": {
       throw new Error("check OperatorExpression");
     }
 
-    case "POSTFIX": {
-      throw new Error("check OperatorExpression");
-    }
-
-    case "BINARY_RIGHT": {
-      throw new Error("check OperatorExpression");
-    }
-
-    case "BINARY_LEFT": {
+    case "BinaryOperation": {
       throw new Error("check OperatorExpression");
     }
 

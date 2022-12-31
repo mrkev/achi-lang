@@ -1,20 +1,22 @@
 import * as Parsimmon from "parsimmon";
 import { LangType } from "./parser";
 
-type NUM = LangType["NumberLiteral"];
-
-export type FIX_OUT = {
-  kind: "PREFIX" | "POSTFIX";
+export type UnaryOperation = {
+  kind: "UnaryOperation";
   operator: string;
   value: any;
 };
 
-export type BIN_OUT = {
-  kind: "BINARY_RIGHT" | "BINARY_LEFT";
+export type BinaryOperation = {
+  kind: "BinaryOperation";
   operator: string;
   left: any;
   right: any;
 };
+
+export type OperatableExpression =
+  | LangType["NumberLiteral"]
+  | LangType["ValueIdentifier"];
 
 // This parser supports basic math with + - * / ^, unary negation, factorial,
 // and parentheses. It does not evaluate the math, just turn it into a series of
@@ -28,7 +30,7 @@ export type BIN_OUT = {
 
 ///////////////////////////////////////////////////////////////////////
 
-export type NEXT_PARSER = NUM | FIX_OUT | BIN_OUT;
+type NEXT_PARSER = OperatableExpression | UnaryOperation | BinaryOperation;
 
 // Takes a parser for the prefix operator, and a parser for the base thing being
 // parsed, and parses as many occurrences as possible of the prefix operator.
@@ -44,10 +46,10 @@ function PREFIX(
       parser,
       (operator, value) =>
         ({
-          kind: "PREFIX",
+          kind: "UnaryOperation",
           operator,
           value,
-        } as FIX_OUT)
+        } as UnaryOperation)
     ).or(nextParser);
     return res;
   });
@@ -79,10 +81,10 @@ function POSTFIX(
   return Parsimmon.seqMap(nextParser, operatorsParser.many(), (x, suffixes) =>
     suffixes.reduce((acc, op) => {
       return {
-        kind: "POSTFIX",
+        kind: "UnaryOperation",
         operator: op,
         value: acc,
-      } as FIX_OUT;
+      } as UnaryOperation;
     }, x)
   );
 }
@@ -103,11 +105,11 @@ function BINARY_RIGHT(
         parser,
         (operator, next, p) =>
           ({
-            kind: "BINARY_RIGHT",
+            kind: "BinaryOperation",
             operator,
             left: next,
             right: p,
-          } as BIN_OUT)
+          } as BinaryOperation)
       ).or(Parsimmon.of(next))
     );
 
@@ -141,19 +143,17 @@ function BINARY_LEFT(
       return rest.reduce((acc, ch) => {
         const [op, another] = ch;
         return {
-          kind: "BINARY_LEFT",
+          kind: "BinaryOperation",
           operator: op,
           left: acc,
           right: another,
-        } as BIN_OUT;
+        } as BinaryOperation;
       }, first);
     }
   );
 }
 
-export function MathParser(r: Parsimmon.TypedLanguage<LangType>) {
-  const _ = Parsimmon.optWhitespace;
-
+export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
   // Operators should allow whitespace around them, but not require it. This
   // helper combines multiple operators together with names.
   //
@@ -175,13 +175,14 @@ export function MathParser(r: Parsimmon.TypedLanguage<LangType>) {
       .then(MyMath)
       .skip(Parsimmon.string(")"))
       .or(r.NumberLiteral)
+      .or(r.ValueIdentifier)
   );
 
   // Now we can describe the operators in order by precedence. You just need to
   // re-order the table.
   const table = [
-    { type: PREFIX, ops: operators(["-"]) },
     { type: POSTFIX, ops: operators(["!"]) },
+    { type: PREFIX, ops: operators(["-"]) },
     { type: BINARY_RIGHT, ops: operators(["^"]) },
     {
       type: BINARY_LEFT,
@@ -212,6 +213,6 @@ export function MathParser(r: Parsimmon.TypedLanguage<LangType>) {
   // keep it in a table instead of nesting it all manually.
 
   // This is our version of a math expression.
-  const MyMath = tableParser.trim(_);
+  const MyMath = tableParser.trim(r._);
   return MyMath;
 }

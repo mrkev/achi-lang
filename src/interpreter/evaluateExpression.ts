@@ -11,7 +11,7 @@ import {
 } from "./runtime/runtime.records";
 import { evaluateMatch } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
-import { BIN_OUT, FIX_OUT } from "../parser/parser.binex";
+import { BinaryOperation, UnaryOperation } from "../parser/parser.binex";
 import { factorial } from "./runtime/utils";
 
 export function evaluateExpression(
@@ -150,16 +150,14 @@ export function evaluateExpression(
     }
 
     // Unary
-    case "PREFIX":
-    case "POSTFIX": {
+    case "UnaryOperation": {
       return {
         kind: "number",
         value: evaluateUnaryExpression(expression, context, system),
       };
     }
 
-    case "BINARY_RIGHT":
-    case "BINARY_LEFT": {
+    case "BinaryOperation": {
       return {
         kind: "number",
         value: evaluateBinaryExpression(expression, context, system),
@@ -181,7 +179,7 @@ function expectNumber(value: Value): { kind: "number"; value: number } {
 }
 
 function evaluateUnaryExpression(
-  unex: FIX_OUT,
+  unex: UnaryOperation,
   context: Context,
   system: System
 ): number {
@@ -204,7 +202,7 @@ function evaluateUnaryExpression(
 }
 
 function evaluateBinaryExpression(
-  binex: BIN_OUT,
+  binex: BinaryOperation,
   context: Context,
   system: System
 ): number {
