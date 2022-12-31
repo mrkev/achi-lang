@@ -1,3 +1,7 @@
+NAME IDEAS
+- Tolang
+- Tol, Tol-lang
+
 PRIOS: 
 - destructuring, finish function evaluation
 - position for errors
