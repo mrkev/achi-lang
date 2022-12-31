@@ -52,7 +52,14 @@ function expectString(value: Value): { kind: "string"; value: string } {
   }
 }
 
-export { expectNumber, expectString };
+function expectBoolean(value: Value): { kind: "boolean"; value: boolean } {
+  if (value.kind === "boolean") {
+    return value;
+  } else {
+    throw new Error("BOOLEAN EXPECTED");
+  }
+}
+export { expectNumber, expectString, expectBoolean };
 
 // Constructors
 

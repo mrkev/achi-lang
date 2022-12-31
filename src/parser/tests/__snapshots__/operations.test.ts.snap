@@ -27,7 +27,7 @@ exports[`BinaryOperation 2`] = `
 {
   "kind": "BinaryOperation",
   "left": {
-    "kind": "UnaryOperation",
+    "kind": "PrefixUnaryOperation",
     "operator": "-",
     "value": {
       "kind": "BinaryOperation",
@@ -51,7 +51,7 @@ exports[`BinaryOperation 2`] = `
     },
     "operator": "^",
     "right": {
-      "kind": "UnaryOperation",
+      "kind": "SuffixUnaryOperation",
       "operator": "!",
       "value": {
         "kind": "NumberLiteral",
@@ -66,7 +66,7 @@ exports[`BinaryOperation 3`] = `
 {
   "kind": "BinaryOperation",
   "left": {
-    "kind": "UnaryOperation",
+    "kind": "PrefixUnaryOperation",
     "operator": "-",
     "value": {
       "kind": "BinaryOperation",
@@ -90,7 +90,7 @@ exports[`BinaryOperation 3`] = `
     },
     "operator": "^",
     "right": {
-      "kind": "UnaryOperation",
+      "kind": "SuffixUnaryOperation",
       "operator": "!",
       "value": {
         "kind": "NumberLiteral",
@@ -153,13 +153,13 @@ exports[`BinaryOperation.identifier 1`] = `
 
 exports[`UnaryOperation 1`] = `
 {
-  "kind": "UnaryOperation",
+  "kind": "SuffixUnaryOperation",
   "operator": "!",
   "value": {
-    "kind": "UnaryOperation",
+    "kind": "SuffixUnaryOperation",
     "operator": "!",
     "value": {
-      "kind": "UnaryOperation",
+      "kind": "SuffixUnaryOperation",
       "operator": "!",
       "value": {
         "kind": "NumberLiteral",
@@ -172,7 +172,7 @@ exports[`UnaryOperation 1`] = `
 
 exports[`UnaryOperation 2`] = `
 {
-  "kind": "UnaryOperation",
+  "kind": "PrefixUnaryOperation",
   "operator": "-",
   "value": {
     "kind": "NumberLiteral",

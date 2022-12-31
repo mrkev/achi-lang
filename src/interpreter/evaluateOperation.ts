@@ -1,29 +1,51 @@
-import { Value } from "./value";
+import { boolean, expectBoolean, Value } from "./value";
 import { Context } from "./Context";
 import { System } from "./runtime/System";
-import { BinaryOperation, UnaryOperation } from "../parser/parser.binex";
+import {
+  BinaryOperation,
+  PrefixUnaryOperation,
+  SuffixUnaryOperation,
+} from "../parser/parser.binex";
 import { factorial } from "./runtime/utils";
 import { expectNumber, expectString, number, string } from "./value";
 import { evaluateExpression } from "./evaluateExpression";
 
-export function evaluateUnaryExpression(
-  unex: UnaryOperation,
+export function evaluatePrefixUnaryExpression(
+  unex: PrefixUnaryOperation,
   context: Context,
   system: System
-): number {
-  const value = expectNumber(
-    evaluateExpression(unex.value, context, system) as Value
-  ).value;
+): Value {
+  const value = evaluateExpression(unex.value, context, system) as Value;
 
   switch (unex.operator) {
     case "-":
-      return -value;
+      return number(-expectNumber(value).value);
     case "!":
-      return factorial(value);
+      return boolean(!expectBoolean(value).value);
     case "*":
     case "+":
     case "^":
       throw new Error("invalid unary operator " + unex.operator);
+    default:
+      throw new Error("unknown operator " + unex.operator);
+  }
+}
+
+export function evaluateSuffixUnaryExpression(
+  unex: SuffixUnaryOperation,
+  context: Context,
+  system: System
+): Value {
+  const value = evaluateExpression(unex.value, context, system) as Value;
+
+  switch (unex.operator) {
+    case "!":
+      return number(factorial(expectNumber(value).value));
+    case "*":
+    case "+":
+    case "^":
+    case "-":
+      throw new Error("invalid suffix unary operator " + unex.operator);
     default:
       throw new Error("unknown operator " + unex.operator);
   }

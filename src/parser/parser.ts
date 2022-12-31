@@ -270,7 +270,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // card, point, doThisOrThat
   ValueIdentifier: () => {
     return Parsimmon.regexp(
-      /(?!string|number|boolean|object|array)[a-z][a-zA-Z0-9]*/
+      /(?!string|number|boolean|object|array|true|false)[a-z][a-zA-Z0-9]*/
     )
       .mark()
       .map(({ start, end, value }) => ({

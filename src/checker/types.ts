@@ -62,7 +62,8 @@ function typeOf(expression: LangType["Expression"], scope: Context): Type {
     case "MapLiteral":
     case "ListLiteral":
     case "AnonymousFunctionLiteral":
-    case "UnaryOperation":
+    case "PrefixUnaryOperation":
+    case "SuffixUnaryOperation":
     case "BinaryOperation":
       throw new Error("typeOf, not implemented");
     default: {

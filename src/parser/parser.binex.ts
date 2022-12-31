@@ -1,8 +1,14 @@
 import * as Parsimmon from "parsimmon";
 import { LangType } from "./parser";
 
-export type UnaryOperation = {
-  kind: "UnaryOperation";
+export type PrefixUnaryOperation = {
+  kind: "PrefixUnaryOperation";
+  operator: string;
+  value: any;
+};
+
+export type SuffixUnaryOperation = {
+  kind: "SuffixUnaryOperation";
   operator: string;
   value: any;
 };
@@ -17,7 +23,8 @@ export type BinaryOperation = {
 export type OperatableExpression =
   | LangType["NumberLiteral"]
   | LangType["ValueIdentifier"]
-  | LangType["StringLiteral"];
+  | LangType["StringLiteral"]
+  | LangType["BooleanLiteral"];
 
 // This parser supports basic math with + - * / ^, unary negation, factorial,
 // and parentheses. It does not evaluate the math, just turn it into a series of
@@ -31,7 +38,11 @@ export type OperatableExpression =
 
 ///////////////////////////////////////////////////////////////////////
 
-type NEXT_PARSER = OperatableExpression | UnaryOperation | BinaryOperation;
+type NEXT_PARSER =
+  | OperatableExpression
+  | PrefixUnaryOperation
+  | SuffixUnaryOperation
+  | BinaryOperation;
 
 // Takes a parser for the prefix operator, and a parser for the base thing being
 // parsed, and parses as many occurrences as possible of the prefix operator.
@@ -47,10 +58,10 @@ function PREFIX(
       parser,
       (operator, value) =>
         ({
-          kind: "UnaryOperation",
+          kind: "PrefixUnaryOperation",
           operator,
           value,
-        } as UnaryOperation)
+        } as PrefixUnaryOperation)
     ).or(nextParser);
     return res;
   });
@@ -82,10 +93,10 @@ function POSTFIX(
   return Parsimmon.seqMap(nextParser, operatorsParser.many(), (x, suffixes) =>
     suffixes.reduce((acc, op) => {
       return {
-        kind: "UnaryOperation",
+        kind: "SuffixUnaryOperation",
         operator: op,
         value: acc,
-      } as UnaryOperation;
+      } as SuffixUnaryOperation;
     }, x)
   );
 }
@@ -178,13 +189,14 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
       .or(r.NumberLiteral)
       .or(r.ValueIdentifier)
       .or(r.StringLiteral)
+      .or(r.BooleanLiteral)
   );
 
   // Now we can describe the operators in order by precedence. You just need to
   // re-order the table.
   const table = [
     { type: POSTFIX, ops: operators(["!"]) },
-    { type: PREFIX, ops: operators(["-"]) },
+    { type: PREFIX, ops: operators(["-", "!"]) },
     { type: BINARY_RIGHT, ops: operators(["^"]) },
     {
       type: BINARY_LEFT,

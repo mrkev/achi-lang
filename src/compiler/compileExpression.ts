@@ -80,7 +80,8 @@ export function compileExpression(
     case "MatchExpression":
     case "ListLiteral":
     case "MapLiteral":
-    case "UnaryOperation":
+    case "SuffixUnaryOperation":
+    case "PrefixUnaryOperation":
     case "BinaryOperation":
     // case "FunctionDefinition":
     case "AnonymousFunctionLiteral": {

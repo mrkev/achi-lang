@@ -1,14 +1,20 @@
+import { PrefixUnaryExpression } from "typescript";
 import { LangType } from "./parser";
 import {
   OperatorParser,
   BinaryOperation,
-  UnaryOperation,
   OperatableExpression,
+  SuffixUnaryOperation,
+  PrefixUnaryOperation,
 } from "./parser.binex";
 import { sublang } from "./sublang";
 
 export type LangType_BinOp = {
-  OperationExpression: BinaryOperation | UnaryOperation | OperatableExpression;
+  OperationExpression:
+    | OperatableExpression
+    | PrefixUnaryOperation
+    | SuffixUnaryOperation
+    | BinaryOperation;
 };
 
 /**

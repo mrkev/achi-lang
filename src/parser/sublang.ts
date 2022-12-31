@@ -15,7 +15,10 @@ type LT_NonNodeKey = {
 }[keyof LangType];
 
 // These are potential kinds, but they don't have an associated parser to them
-type LT_KindsButNotKeys = "UnaryOperation" | "BinaryOperation";
+type LT_KindsButNotKeys =
+  | "PrefixUnaryOperation"
+  | "SuffixUnaryOperation"
+  | "BinaryOperation";
 
 // LangType, but skipping any entry that isn't an object
 type LT_OnlyNodes = Omit<LangType, LT_NonNodeKey>;

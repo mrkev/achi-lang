@@ -226,7 +226,8 @@ function resolveExpressionTypes(
       return selfType;
     }
 
-    case "UnaryOperation": {
+    case "SuffixUnaryOperation":
+    case "PrefixUnaryOperation": {
       throw new Error("check OperatorExpression");
     }
 

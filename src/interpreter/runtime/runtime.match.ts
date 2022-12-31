@@ -143,7 +143,8 @@ function doMatch(
     case "FunctionCall":
     case "ListLiteral":
     case "MapLiteral":
-    case "UnaryOperation":
+    case "PrefixUnaryOperation":
+    case "SuffixUnaryOperation":
     case "BinaryOperation":
     // case "FunctionDefinition":
     case "AnonymousFunctionLiteral": {

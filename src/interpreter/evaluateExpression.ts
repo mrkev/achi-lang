@@ -12,9 +12,10 @@ import {
 import { evaluateMatch } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import {
-  evaluateUnaryExpression,
   evaluateBinaryExpression,
-} from "./evaluateOperations";
+  evaluateSuffixUnaryExpression,
+  evaluatePrefixUnaryExpression,
+} from "./evaluateOperation";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -151,12 +152,13 @@ export function evaluateExpression(
       return { kind: "AnonymousFunctionInstance", value: func };
     }
 
-    // Unary
-    case "UnaryOperation": {
-      return {
-        kind: "number",
-        value: evaluateUnaryExpression(expression, context, system),
-      };
+    // Operations
+    case "PrefixUnaryOperation": {
+      return evaluatePrefixUnaryExpression(expression, context, system);
+    }
+
+    case "SuffixUnaryOperation": {
+      return evaluateSuffixUnaryExpression(expression, context, system);
     }
 
     case "BinaryOperation": {

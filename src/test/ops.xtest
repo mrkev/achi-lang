@@ -16,10 +16,15 @@ const three = 3;
 #log two + one;
 #log three - two * two;
 
-#log "strings";
+#log "with strings";
 
 #log "hello" + "world";
-#log "hello" + ""
+#log "hello" + "";
+
+#log "with booleans";
+#log !true;
+#log !!!!!!!!false;
+
 
 ---------------
 -1
@@ -33,6 +38,9 @@ with identifiers
 6
 3
 -1
-strings
+with strings
 helloworld
 hello
+with booleans
+false
+false
