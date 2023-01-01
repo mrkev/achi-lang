@@ -15,7 +15,24 @@ export type SuffixUnaryOperation = {
   value: NEXT_PARSER;
 };
 
-type BinaryOperator = "*" | "/" | "+" | "-" | "^";
+type BinaryOperator =
+  // String + Numerial
+  | "+"
+  // Numerical
+  | "-"
+  | "*"
+  | "/"
+  | "^"
+  // Boolean
+  | "&&"
+  | "||"
+  // Comparison
+  | ">"
+  | "<"
+  | ">="
+  | "<="
+  | "=="
+  | "!=";
 export type BinaryOperation = {
   kind: "BinaryOperation";
   operator: BinaryOperator;
@@ -216,11 +233,15 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
   const table: Array<
     (next: Parsimmon.Parser<NEXT_PARSER>) => Parsimmon.Parser<NEXT_PARSER>
   > = [
+    (next) => BINARY_LEFT(operators(["==", "!="] as const), next),
     (next) => POSTFIX(operators(["!"] as const), next),
     (next) => PREFIX(operators(["-", "!"] as const), next),
     (next) => BINARY_RIGHT(operators(["^"] as const), next),
     (next) => BINARY_LEFT(operators(["*", "/"] as const), next),
     (next) => BINARY_LEFT(operators(["+", "-"] as const), next),
+    (next) => BINARY_LEFT(operators(["&&"] as const), next),
+    (next) => BINARY_LEFT(operators(["||"] as const), next),
+    (next) => BINARY_LEFT(operators([">=", "<=", ">", "<"] as const), next),
   ];
 
   // Start off with Num as the base parser for numbers and thread that through the

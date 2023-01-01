@@ -56,6 +56,7 @@ export function evaluateBinaryExpression(
     case "*": {
       return number(expectNumber(left).value * expectNumber(right).value);
     }
+
     case "+": {
       switch (left.kind) {
         case "number": {
@@ -70,15 +71,45 @@ export function evaluateBinaryExpression(
           throw new Error("UNEXPECTED VALUE FOR BINOP " + left.kind);
       }
     }
+
     case "-":
       return number(expectNumber(left).value - expectNumber(right).value);
+
     case "^": {
       return number(
         Math.pow(expectNumber(left).value, expectNumber(right).value)
       );
     }
+
     case "/":
       return number(expectNumber(left).value / expectNumber(right).value);
+
+    // Boolean
+    case "&&":
+      return boolean(expectBoolean(left).value && expectBoolean(right).value);
+
+    case "||":
+      return boolean(expectBoolean(left).value || expectBoolean(right).value);
+
+    // Comparison
+    case ">":
+      return boolean(expectNumber(left).value > expectNumber(right).value);
+
+    case "<":
+      return boolean(expectNumber(left).value < expectNumber(right).value);
+
+    case ">=":
+      return boolean(expectNumber(left).value >= expectNumber(right).value);
+
+    case "<=":
+      return boolean(expectNumber(left).value <= expectNumber(right).value);
+
+    case "==":
+      return boolean(expectNumber(left).value == expectNumber(right).value);
+
+    case "!=":
+      return boolean(expectNumber(left).value != expectNumber(right).value);
+
     default:
       exhaustive(binex.operator);
       throw new Error("unknown operator " + binex.operator);

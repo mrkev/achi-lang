@@ -25,6 +25,20 @@ const three = 3;
 #log "with booleans";
 #log !true;
 #log !!!!!!!!false;
+#log true && true;
+#log true || false;
+#log true && false;
+#log true && false || false;
+
+
+#log "with comparisons";
+
+#log 3 > 3;
+#log 3 < 3;
+#log 3 >= 3;
+#log 3 <= 3;
+#log 3 == 3;
+#log 3 != 3;
 
 
 ---------------
@@ -45,4 +59,15 @@ helloworld
 hello
 with booleans
 false
+false
+true
+true
+false
+false
+with comparisons
+false
+false
+true
+true
+true
 false

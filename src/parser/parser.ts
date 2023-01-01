@@ -319,11 +319,11 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     const expressionParsers: ExhaustiveParsers<LangType["Expression"]> & {
       OperationExpression: Parsimmon.Parser<LangType["OperationExpression"]>;
     } = {
-      BooleanLiteral: r.BooleanLiteral,
       // FunctionDefinition: r.FunctionDefinition,
       MatchExpression: r.MatchExpression,
       FunctionCall: r.FunctionCall,
       OperationExpression: r.OperationExpression,
+      BooleanLiteral: r.BooleanLiteral,
       NumberLiteral: r.NumberLiteral,
       NamedRecordLiteral: r.NamedRecordLiteral,
       ValueIdentifier: r.ValueIdentifier,
