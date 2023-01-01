@@ -14,6 +14,7 @@ const three = 3;
 #log -(two + 1)!;
 #log two * three;
 #log two + one;
+#log 16 / two;
 #log three - two * two;
 
 #log "with strings";
@@ -37,6 +38,7 @@ with identifiers
 -6
 6
 3
+8
 -1
 with strings
 helloworld

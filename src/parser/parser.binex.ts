@@ -1,23 +1,26 @@
 import * as Parsimmon from "parsimmon";
 import { LangType } from "./parser";
 
+type PrefixUnaryOperator = "-" | "!";
 export type PrefixUnaryOperation = {
   kind: "PrefixUnaryOperation";
-  operator: string;
-  value: any;
+  operator: PrefixUnaryOperator;
+  value: NEXT_PARSER;
 };
 
+type SuffixUnaryOperator = "!";
 export type SuffixUnaryOperation = {
   kind: "SuffixUnaryOperation";
-  operator: string;
-  value: any;
+  operator: SuffixUnaryOperator;
+  value: NEXT_PARSER;
 };
 
+type BinaryOperator = "*" | "/" | "+" | "-" | "^";
 export type BinaryOperation = {
   kind: "BinaryOperation";
-  operator: string;
-  left: any;
-  right: any;
+  operator: BinaryOperator;
+  left: NEXT_PARSER;
+  right: NEXT_PARSER;
 };
 
 export type OperatableExpression =
@@ -49,7 +52,7 @@ type NEXT_PARSER =
 // Note that the parser is created using `Parsimmon.lazy` because it's recursive. It's
 // valid for there to be zero occurrences of the prefix operator.
 function PREFIX(
-  operatorsParser: Parsimmon.Parser<string>,
+  operatorsParser: Parsimmon.Parser<"-" | "!">,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ): Parsimmon.Parser<NEXT_PARSER> {
   const parser = Parsimmon.lazy<NEXT_PARSER>(() => {
@@ -61,7 +64,7 @@ function PREFIX(
           kind: "PrefixUnaryOperation",
           operator,
           value,
-        } as PrefixUnaryOperation)
+        } as const)
     ).or(nextParser);
     return res;
   });
@@ -78,7 +81,7 @@ function PREFIX(
 // parser will never actually look far enough ahead to see the postfix
 // operators.
 function POSTFIX(
-  operatorsParser: Parsimmon.Parser<string>,
+  operatorsParser: Parsimmon.Parser<"!">,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ) {
   // Because we can't use recursion like stated above, we just match a flat list
@@ -96,7 +99,7 @@ function POSTFIX(
         kind: "SuffixUnaryOperation",
         operator: op,
         value: acc,
-      } as SuffixUnaryOperation;
+      } as const;
     }, x)
   );
 }
@@ -106,7 +109,7 @@ function POSTFIX(
 // that parses as many binary operations as possible, associating them to the
 // right. (e.g. 1^2^3 is 1^(2^3) not (1^2)^3)
 function BINARY_RIGHT(
-  operatorsParser: Parsimmon.Parser<string>,
+  operatorsParser: Parsimmon.Parser<BinaryOperator>,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ): Parsimmon.Parser<NEXT_PARSER> {
   const parser = Parsimmon.lazy<NEXT_PARSER>(() => {
@@ -121,7 +124,7 @@ function BINARY_RIGHT(
             operator,
             left: next,
             right: p,
-          } as BinaryOperation)
+          } as const)
       ).or(Parsimmon.of(next))
     );
 
@@ -135,7 +138,7 @@ function BINARY_RIGHT(
 // that parses as many binary operations as possible, associating them to the
 // left. (e.g. 1-2-3 is (1-2)-3 not 1-(2-3))
 function BINARY_LEFT(
-  operatorsParser: Parsimmon.Parser<string>,
+  operatorsParser: Parsimmon.Parser<BinaryOperator>,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ) {
   // We run into a similar problem as with the `POSTFIX` parser above where we
@@ -159,7 +162,7 @@ function BINARY_LEFT(
           operator: op,
           left: acc,
           right: another,
-        } as BinaryOperation;
+        } as const;
       }, first);
     }
   );
@@ -173,7 +176,9 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
   //
   // Gives back an operator that parses either + or - surrounded by optional
   // whitespace, and gives back the word "Add" or "Sub" instead of the character.
-  function operators(ops: string[]): Parsimmon.Parser<string> {
+  function operators<Ops extends readonly string[]>(
+    ops: Ops
+  ): Parsimmon.Parser<Ops[number]> {
     const withWhitespace = ops.map((sym) =>
       Parsimmon.seqMap(r._, Parsimmon.string(sym), r._, (_0, op, _2) => op)
     );
@@ -194,26 +199,33 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
 
   // Now we can describe the operators in order by precedence. You just need to
   // re-order the table.
-  const table = [
-    { type: POSTFIX, ops: operators(["!"]) },
-    { type: PREFIX, ops: operators(["-", "!"]) },
-    { type: BINARY_RIGHT, ops: operators(["^"]) },
-    {
-      type: BINARY_LEFT,
-      ops: operators(["*", "/"]),
-    },
-    {
-      type: BINARY_LEFT,
-      ops: operators(["+", "-"]),
-    },
+  // const table = [
+  //   { type: POSTFIX, ops: operators(["!"] as const) },
+  //   { type: PREFIX, ops: operators(["-", "!"] as const) },
+  //   { type: BINARY_RIGHT, ops: operators(["^"] as const) },
+  //   {
+  //     type: BINARY_LEFT,
+  //     ops: operators(["*", "/"] as const),
+  //   },
+  //   {
+  //     type: BINARY_LEFT,
+  //     ops: operators(["+", "-"] as const),
+  //   },
+  // ];
+
+  const table: Array<
+    (next: Parsimmon.Parser<NEXT_PARSER>) => Parsimmon.Parser<NEXT_PARSER>
+  > = [
+    (next) => POSTFIX(operators(["!"] as const), next),
+    (next) => PREFIX(operators(["-", "!"] as const), next),
+    (next) => BINARY_RIGHT(operators(["^"] as const), next),
+    (next) => BINARY_LEFT(operators(["*", "/"] as const), next),
+    (next) => BINARY_LEFT(operators(["+", "-"] as const), next),
   ];
 
   // Start off with Num as the base parser for numbers and thread that through the
   // entire table of operator parsers.
-  const tableParser = table.reduce(
-    (next, level) => level.type(level.ops, next),
-    Basic
-  );
+  const tableParser = table.reduce((next, level) => level(next), Basic);
 
   // The above is equivalent to:
   //

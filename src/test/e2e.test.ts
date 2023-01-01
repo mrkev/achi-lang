@@ -15,6 +15,7 @@ function exec(script: string, ...extra: ("compile" | "typecheck")[]): string {
     }
     console.error(e);
   }
+
   return system.console._log.join("\n");
 }
 

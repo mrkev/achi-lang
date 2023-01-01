@@ -9,6 +9,7 @@ import {
 import { factorial } from "./runtime/utils";
 import { expectNumber, expectString, number, string } from "./value";
 import { evaluateExpression } from "./evaluateExpression";
+import { exhaustive } from "./nullthrows";
 
 export function evaluatePrefixUnaryExpression(
   unex: PrefixUnaryOperation,
@@ -22,11 +23,8 @@ export function evaluatePrefixUnaryExpression(
       return number(-expectNumber(value).value);
     case "!":
       return boolean(!expectBoolean(value).value);
-    case "*":
-    case "+":
-    case "^":
-      throw new Error("invalid unary operator " + unex.operator);
     default:
+      exhaustive(unex.operator);
       throw new Error("unknown operator " + unex.operator);
   }
 }
@@ -37,16 +35,11 @@ export function evaluateSuffixUnaryExpression(
   system: System
 ): Value {
   const value = evaluateExpression(unex.value, context, system) as Value;
-
   switch (unex.operator) {
     case "!":
       return number(factorial(expectNumber(value).value));
-    case "*":
-    case "+":
-    case "^":
-    case "-":
-      throw new Error("invalid suffix unary operator " + unex.operator);
     default:
+      exhaustive(unex.operator);
       throw new Error("unknown operator " + unex.operator);
   }
 }
@@ -84,9 +77,10 @@ export function evaluateBinaryExpression(
         Math.pow(expectNumber(left).value, expectNumber(right).value)
       );
     }
-    case "!":
-      throw new Error("invalid binary operator " + binex.operator);
+    case "/":
+      return number(expectNumber(left).value / expectNumber(right).value);
     default:
+      exhaustive(binex.operator);
       throw new Error("unknown operator " + binex.operator);
   }
 }
