@@ -321,8 +321,8 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     } = {
       // FunctionDefinition: r.FunctionDefinition,
       MatchExpression: r.MatchExpression,
-      FunctionCall: r.FunctionCall,
       OperationExpression: r.OperationExpression,
+      FunctionCall: r.FunctionCall,
       BooleanLiteral: r.BooleanLiteral,
       NumberLiteral: r.NumberLiteral,
       NamedRecordLiteral: r.NamedRecordLiteral,

@@ -20,12 +20,6 @@ exports[`if.true 1`] = `
 ]
 `;
 
-exports[`if.true 2`] = `
-[
-  "pass",
-]
-`;
-
 exports[`simple.1 1`] = `
 [
   "hi",

@@ -40,6 +40,14 @@ const three = 3;
 #log 3 == 3;
 #log 3 != 3;
 
+#log "with function calls";
+
+const num = (n: number) => {
+  return n;
+};
+
+#log num(n: 4) + num(n: 5);
+
 
 ---------------
 -1
@@ -71,3 +79,5 @@ true
 true
 true
 false
+with function calls
+9

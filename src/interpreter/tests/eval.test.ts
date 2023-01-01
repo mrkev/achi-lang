@@ -7,16 +7,7 @@ test("simple.1", () => {
 
 test("if.true", () => {
   const logs = logsFor(`
-  if (1) {
-    #log "pass"
-  }
-  `);
-  expect(logs).toMatchSnapshot();
-});
-
-test("if.true", () => {
-  const logs = logsFor(`
-  if (1) {
+  if (1 == 1) {
     #log "pass"
   }
   `);

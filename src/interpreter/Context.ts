@@ -147,7 +147,11 @@ class Scope<K, V> {
     for (let i = this.stack.length - 1; i > -1; i--) {
       const current = this.stack[i];
       if (current.has(key)) {
-        return nullthrows(top.get(key), "checked for existance above");
+        // const val = top.get(key);
+        // if (val == null) {
+        //   console.log("key", key, top.get(key));
+        // }
+        return nullthrows(current.get(key), "checked for existance above");
       }
     }
     throw new Error(errMsg ?? `'${key}' not in scope`);

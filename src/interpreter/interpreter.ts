@@ -80,6 +80,7 @@ export function stringOfValue(value: Value): string {
     case "number":
     case "string":
     case "boolean": {
+      // console.log(value.value, "to string", String(value.value));
       return String(value.value);
     }
     case "NamedRecordInstance": {
@@ -128,7 +129,7 @@ export function stringOfValue(value: Value): string {
       return "<anonymous function>";
     }
 
-    case "empty": {
+    case "nil": {
       return "null";
     }
 

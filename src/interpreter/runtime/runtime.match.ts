@@ -38,7 +38,7 @@ export function evaluateMatch(
         system
       );
       context.valueScope.pop();
-      return result ?? { kind: "empty", value: null };
+      return result ?? { kind: "nil", value: null };
     }
   }
   // TODO runtime or static checks for completeness

@@ -18,7 +18,7 @@ export type Value =
   // false
   | { kind: "boolean"; value: boolean }
   // null
-  | { kind: "empty"; value: null }
+  | { kind: "nil"; value: null }
   /*
    * Data Structures
    */
@@ -83,9 +83,8 @@ function boolean(
   return { kind: "boolean", value } as const;
 }
 
-// TODO: rename to null
-function empty(value: null): Readonly<{ kind: "empty"; value: null }> {
-  return { kind: "empty", value } as const;
+function nil(value: null): Readonly<{ kind: "nil"; value: null }> {
+  return { kind: "nil", value } as const;
 }
 
 // TODO: kind: "NamedRecordInstance" (and others) lowercase like primitives?
@@ -102,7 +101,7 @@ function recordInstance(
   return { kind: "RecordInstance", value } as const;
 }
 
-export { number, string, boolean, empty };
+export { number, string, boolean, nil };
 export { namedRecordInstance, recordInstance };
 
 // // function printPoint matches (point: Point) { ... }

@@ -17,8 +17,27 @@ const ident = (value: number) => {
 };
 #log ident(value: 3);
 
-const multi = (a: number, b: number) => {
-  return a;
+const greet = (s: string) => {
+  return "Hello " + s;
+};
+#log greet(s: "world");
+
+const rec = (n: number) => {
+  if (n < 1) {
+    #log "end!";
+  } else {
+    #log n;
+    rec(n: n - 1);
+  }
+};
+rec(n: 5);
+
+const fib = (n: number) => {
+  if (n <= 1) {
+    return n;
+  } else {
+    return fib(n: n - 1) + fib(n: n - 2);
+  }
 };
 
 function printCard matches (card: Card) {
@@ -39,3 +58,10 @@ function printCard matches (card: Card) {
 ---------------------------
 0
 3
+Hello world
+5
+4
+3
+2
+1
+end!

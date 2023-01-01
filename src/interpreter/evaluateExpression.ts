@@ -23,6 +23,7 @@ import {
   evaluateSuffixUnaryExpression,
   evaluatePrefixUnaryExpression,
 } from "./evaluateOperation";
+import { nil } from "./value";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -185,8 +186,6 @@ function destructureWithRecordDefintion(
   value: Value,
   context: Context
 ) {
-  console.log("DESTRUCTURING");
-
   switch (value.kind) {
     case "RecordInstance":
     case "NamedRecordInstance":
@@ -227,13 +226,19 @@ function callFunction(
   context: Context,
   system: System
 ): Value {
-  console.log("CALL");
   if (func.kind === "AnonymousFunctionLiteral") {
     context.valueScope.push();
     destructureWithRecordDefintion(func.argument, argument, context);
     const result = evaluateStatements(func.block.statements, context, system);
     context.valueScope.pop();
-    return nullthrows(result, "fixme, case block returns nothing");
+    console.log("HERE", result);
+
+    if (result == null) {
+      // TODO: do I really want functions to return an implicit null?
+      return nil(result);
+    } else {
+      return result;
+    }
   }
 
   if (func.kind === "MatchFunction") {

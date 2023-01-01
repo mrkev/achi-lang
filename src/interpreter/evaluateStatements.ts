@@ -10,7 +10,7 @@ import {
 } from "./runtime/runtime.records";
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import { stringOfType } from "./types";
-import { Value } from "./value";
+import { expectBoolean, Value } from "./value";
 
 /**
  * Evaluates all statements sequentially, returning the
@@ -83,12 +83,24 @@ export function evaluateStatements(
 
       case "IfStatement": {
         const guardValue = evaluateExpression(statement.guard, context, system);
-        // TODO: determine truthiness
-        if (guardValue) {
+        const guardBool = expectBoolean(guardValue).value;
+        if (guardBool) {
           // TODO: scoping!
           context.valueScope.push();
           evaluateStatements(statement.block.statements, context, system);
           context.valueScope.pop();
+        } else if (statement.elseCase == null) {
+          // noop
+        } else if (statement.elseCase.kind === "Block") {
+          context.valueScope.push();
+          evaluateStatements(statement.elseCase.statements, context, system);
+          context.valueScope.pop();
+        } else if (statement.elseCase.kind === "IfStatement") {
+          context.valueScope.push();
+          evaluateStatements([statement.elseCase], context, system);
+          context.valueScope.pop();
+        } else {
+          throw exhaustive(statement.elseCase, "unhanlded if case");
         }
         break;
       }
@@ -123,7 +135,6 @@ export function evaluateStatements(
       case "ReturnStatement": {
         const value = evaluateExpression(statement.expression, context, system);
         // We don't evaluate further, and instead return immediately //
-
         return value;
       }
 

@@ -96,6 +96,12 @@ export function evaluateBinaryExpression(
       return boolean(expectNumber(left).value > expectNumber(right).value);
 
     case "<":
+      console.log(
+        expectNumber(left).value,
+        "<",
+        expectNumber(right).value,
+        boolean(expectNumber(left).value < expectNumber(right).value)
+      );
       return boolean(expectNumber(left).value < expectNumber(right).value);
 
     case ">=":

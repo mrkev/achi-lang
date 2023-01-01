@@ -44,7 +44,8 @@ export type OperatableExpression =
   | LangType["NumberLiteral"]
   | LangType["ValueIdentifier"]
   | LangType["StringLiteral"]
-  | LangType["BooleanLiteral"];
+  | LangType["BooleanLiteral"]
+  | LangType["FunctionCall"];
 
 // This parser supports basic math with + - * / ^, unary negation, factorial,
 // and parentheses. It does not evaluate the math, just turn it into a series of
@@ -209,9 +210,10 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
       .then(MyMath)
       .skip(Parsimmon.string(")"))
       .or(r.NumberLiteral)
-      .or(r.ValueIdentifier)
       .or(r.StringLiteral)
       .or(r.BooleanLiteral)
+      .or(r.FunctionCall)
+      .or(r.ValueIdentifier)
   );
 
   // Now we can describe the operators in order by precedence. You just need to
