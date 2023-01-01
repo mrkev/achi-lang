@@ -5,7 +5,7 @@ import { Value } from "../value";
 import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./System";
 import { aSubsetB } from "./utils";
-import { NamedRecordKlass, RecordLiteralInstance } from "./runtime.records";
+import { NamedRecordKlass, RecordInstance } from "./runtime.records";
 
 // ie, function print matches Card
 export class MatchFunctionInstance {
@@ -93,7 +93,7 @@ function doMatch(
 
       return doMatch(
         {
-          kind: "RecordLiteralInstance",
+          kind: "RecordInstance",
           value: valueToMatch.recordLiteral,
         },
         expression.recordLiteral,
@@ -103,7 +103,7 @@ function doMatch(
 
     // TODO: TEST TEST TEST
     case "RecordLiteral": {
-      if (value.kind !== "RecordLiteralInstance") {
+      if (value.kind !== "RecordInstance") {
         return { isMatch: false };
       }
 

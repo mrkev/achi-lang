@@ -1,5 +1,12 @@
 import { LangType } from "../parser/parser";
-import { Value } from "./value";
+import {
+  boolean,
+  namedRecordInstance,
+  number,
+  recordInstance,
+  string,
+  Value,
+} from "./value";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { Context, ScopeError } from "./Context";
 import { evaluateStatements } from "./evaluateStatements";
@@ -7,7 +14,7 @@ import { System } from "./runtime/System";
 import {
   NamedRecordInstance,
   NamedRecordKlass,
-  RecordLiteralInstance,
+  RecordInstance,
 } from "./runtime/runtime.records";
 import { evaluateMatch } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
@@ -21,7 +28,7 @@ export function evaluateExpression(
   expression: LangType["RecordLiteral"],
   context: Context,
   system: System
-): { kind: "RecordLiteralInstance"; value: RecordLiteralInstance };
+): { kind: "RecordInstance"; value: RecordInstance };
 export function evaluateExpression(
   expression: LangType["Expression"],
   context: Context,
@@ -72,15 +79,19 @@ export function evaluateExpression(
         recordLiteral.value
       );
 
-      return { kind: "NamedRecordInstance", value: instance };
+      return namedRecordInstance(instance);
     }
 
     case "NumberLiteral": {
-      return { kind: "number", value: expression.value };
+      return number(expression.value);
+    }
+
+    case "StringLiteral": {
+      return string(expression.value);
     }
 
     case "BooleanLiteral": {
-      return { kind: "boolean", value: expression.value };
+      return boolean(expression.value);
     }
 
     case "RecordLiteral": {
@@ -92,12 +103,8 @@ export function evaluateExpression(
         props.set(def.identifier.value, value);
       }
 
-      const instance = new RecordLiteralInstance(expression, props);
-      return { kind: "RecordLiteralInstance", value: instance };
-    }
-
-    case "StringLiteral": {
-      return { kind: "string", value: expression.value };
+      const instance = new RecordInstance(expression, props);
+      return recordInstance(instance);
     }
 
     case "FunctionCall": {
@@ -171,15 +178,59 @@ export function evaluateExpression(
   }
 }
 
+// The type of destructuring for function arguments, with types
+// const foo = (a: number, b: string) => {}
+function destructureWithRecordDefintion(
+  recordDef: LangType["RecordDefinition"],
+  value: Value,
+  context: Context
+) {
+  console.log("DESTRUCTURING");
+
+  switch (value.kind) {
+    case "RecordInstance":
+    case "NamedRecordInstance":
+      break;
+    default:
+      // TODO: not exhaustive
+      throw new Error(
+        "Can't destrucutre, not RecordInstance or NamedRecordInstance"
+      );
+  }
+
+  const props =
+    value.kind === "RecordInstance"
+      ? value.value.props
+      : value.value.recordLiteral.props;
+
+  for (const def of recordDef.definitions) {
+    const val = props.get(def.identifier.value);
+
+    if (val == null) {
+      throw new Error(
+        `Prop ${def.identifier.value} doesn't exist in value to deconstruct`
+      );
+    }
+
+    context.valueScope.define(def.identifier.value, val);
+    // TODO: anything else?
+  }
+}
+
+// The type of destructuring for assignments, without types
+// const (a: foo, b) = thing;
+function destructureWithRecordLiteral() {}
+
 function callFunction(
   func: LangType["MatchFunction"] | LangType["AnonymousFunctionLiteral"],
   argument: Value,
   context: Context,
   system: System
 ): Value {
+  console.log("CALL");
   if (func.kind === "AnonymousFunctionLiteral") {
     context.valueScope.push();
-    // TODO: add argument values to context, do when I implement destructuring
+    destructureWithRecordDefintion(func.argument, argument, context);
     const result = evaluateStatements(func.block.statements, context, system);
     context.valueScope.pop();
     return nullthrows(result, "fixme, case block returns nothing");

@@ -60,9 +60,9 @@ test("func.1", () => {
 
 test("func.2", () => {
   const logs = logsFor(`
-  const foo = (x: number) => { return "hello" };
-  #log foo()`);
-  expect(logs).toEqual(["hello"]);
+  const greet = (s: string) => { return "hello " + s };
+  #log greet(s: "world")`);
+  expect(logs).toEqual(["hello world"]);
 });
 
 // test("evaluateExpression.NamedRecordLiteral", () => {

@@ -15,6 +15,7 @@ const zero = () => { return 0 };
 const ident = (value: number) => {
   return value
 };
+#log ident(value: 3);
 
 const multi = (a: number, b: number) => {
   return a;
@@ -37,3 +38,4 @@ function printCard matches (card: Card) {
 
 ---------------------------
 0
+3

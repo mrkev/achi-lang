@@ -4,10 +4,13 @@ import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordInstance,
   NamedRecordKlass,
-  RecordLiteralInstance,
+  RecordInstance,
 } from "./runtime/runtime.records";
 
 export type Value =
+  /*
+   * Primitives
+   */
   // 3
   | { kind: "number"; value: number }
   // "hello"
@@ -16,14 +19,17 @@ export type Value =
   | { kind: "boolean"; value: boolean }
   // null
   | { kind: "empty"; value: null }
+  /*
+   * Data Structures
+   */
+  // (x: 3, y: 2)
+  | { kind: "RecordInstance"; value: RecordInstance }
   // Point(x: 3, y: 2)
   | { kind: "NamedRecordInstance"; value: NamedRecordInstance }
-  // function printPoint matches (point: Point) { ... }
-  | { kind: "MatchFunctionInstance"; value: MatchFunctionInstance }
   // class Point(x: number, y: number)
   | { kind: "NamedRecordKlass"; value: NamedRecordKlass }
-  // (x: 3, y: 2)
-  | { kind: "RecordLiteralInstance"; value: RecordLiteralInstance }
+  // function printPoint matches (point: Point) { ... }
+  | { kind: "MatchFunctionInstance"; value: MatchFunctionInstance }
   // classes Cards { ... }
   | {
       kind: "NamedRecordDefinitionGroupInstance";
@@ -63,31 +69,42 @@ export { expectNumber, expectString, expectBoolean };
 
 // Constructors
 
-function number(value: number): { kind: "number"; value: number } {
-  return { kind: "number", value };
+function number(value: number): Readonly<{ kind: "number"; value: number }> {
+  return { kind: "number", value } as const;
 }
 
-function string(value: string): { kind: "string"; value: string } {
-  return { kind: "string", value };
+function string(value: string): Readonly<{ kind: "string"; value: string }> {
+  return { kind: "string", value } as const;
 }
 
-function boolean(value: boolean): { kind: "boolean"; value: boolean } {
-  return { kind: "boolean", value };
+function boolean(
+  value: boolean
+): Readonly<{ kind: "boolean"; value: boolean }> {
+  return { kind: "boolean", value } as const;
 }
 
-function empty(value: null): { kind: "empty"; value: null } {
-  return { kind: "empty", value };
+// TODO: rename to null
+function empty(value: null): Readonly<{ kind: "empty"; value: null }> {
+  return { kind: "empty", value } as const;
+}
+
+// TODO: kind: "NamedRecordInstance" (and others) lowercase like primitives?
+function namedRecordInstance(
+  value: NamedRecordInstance
+): Readonly<{ kind: "NamedRecordInstance"; value: NamedRecordInstance }> {
+  return { kind: "NamedRecordInstance", value } as const;
+}
+
+// TODO: kind: "RecordInstance" (and others) lowercase like primitives?
+function recordInstance(
+  value: RecordInstance
+): Readonly<{ kind: "RecordInstance"; value: RecordInstance }> {
+  return { kind: "RecordInstance", value } as const;
 }
 
 export { number, string, boolean, empty };
+export { namedRecordInstance, recordInstance };
 
-// // Point(x: 3, y: 2)
-// function NamedRecordInstance(value: NamedRecordInstance): {
-//   kind: "NamedRecordInstance";
-//   value: NamedRecordInstance;
-// } {
-//   return { kind: "NamedRecordInstance", value };
-// }
 // // function printPoint matches (point: Point) { ... }
 // function MatchFunctionInstance(value: MatchFunctionInstance): {
 //   kind: "MatchFunctionInstance";

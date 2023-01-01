@@ -54,12 +54,12 @@ export class NamedRecordKlass {
 // ie, Point(x: 3, y: 3)
 export class NamedRecordInstance {
   readonly konstructor: NamedRecordKlass;
-  readonly recordLiteral: RecordLiteralInstance;
+  readonly recordLiteral: RecordInstance;
   ast: LangType["NamedRecordLiteral"];
   constructor(
     ast: LangType["NamedRecordLiteral"],
     konstructor: NamedRecordKlass,
-    recordLiteralInstance: RecordLiteralInstance
+    recordLiteralInstance: RecordInstance
   ) {
     this.ast = ast;
     this.konstructor = konstructor;
@@ -68,7 +68,7 @@ export class NamedRecordInstance {
 }
 
 // ie, (x: 3, y: 4)
-export class RecordLiteralInstance {
+export class RecordInstance {
   ast: LangType["RecordLiteral"];
   props: Map<string, Value>;
   constructor(ast: LangType["RecordLiteral"], props: Map<string, Value>) {

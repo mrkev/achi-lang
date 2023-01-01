@@ -5,7 +5,7 @@ import { exhaustive, nullthrows } from "./nullthrows";
 import { evaluateStatements } from "./evaluateStatements";
 import {
   NamedRecordKlass,
-  RecordLiteralInstance,
+  RecordInstance,
   NamedRecordDefinitionGroupInstance,
   NamedRecordInstance,
 } from "./runtime/runtime.records";
@@ -105,7 +105,7 @@ export function stringOfValue(value: Value): string {
       return `[Class: ${value.value.classname}]`;
     }
 
-    case "RecordLiteralInstance": {
+    case "RecordInstance": {
       // return "todo RecordLiteral";
       let str = "(\n";
       for (const [key, val] of value.value.props.entries()) {
