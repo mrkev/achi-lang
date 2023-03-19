@@ -201,6 +201,7 @@ export default function App() {
         <div
           style={{
             width: "100%",
+            height: "100%",
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
             gridTemplateRows: "repeat(2, 1fr)",

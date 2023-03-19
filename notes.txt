@@ -6,6 +6,48 @@ PRIOS:
 - destructuring, finish function evaluation
 - position for errors
 
+----------------
+
+Functions:
+
+//
+  const add = (a: number, b: number) =>  {
+    return a + b;
+  }
+
+  add(a: 3, b: 4);
+
+//
+  const add = (0: number, 1: number, ...args: number[]) =>  {
+    return a + b;
+  }
+
+  add(3, 4)
+
+//
+  const add = (...args: number[]) =>  {
+    return a + b;
+  }
+
+  add(3, 4, 5);
+
+// unnamed data, ordered entries, static shape
+// (...items: number[]) describes any tuple of numbers
+// so it matches (), (1), (1,2), (1,2,3), etc etc
+// but the tuples themselves are not dynamically sized
+// (that is, items cannot be added).
+// Since it's unclear how many items are in the tuple,
+// they can't be indexed into directly (ie, no items[1])
+// and can only be iterated over (ie, for of):
+
+const tuple: (...items: number[]) = (a, b, c, d)
+// same as:
+const tuple: number() = (a, b, c, d)
+
+
+
+----------------
+
 ## Descrption
 
 Three data structures:
@@ -19,6 +61,89 @@ Tuples N/A unnamed data, ordered entries, static shape
 
 unnamed + unordered doesn't make sense
 named + ordered sounds useful, but hard to define and edit mantaining consistency
+
+NOTE: since records and tuples share (), and only the naming changes, in theory
+maps and lists could also share notation, say []:
+
+const list: [...items: number[]] = [1, 2, 3]
+// same as:
+const list: number[] = [1, 2, 3]
+// same as?:
+const list: [$index: number] = [1,2,3]
+// note, not: 
+const list: [number: number] = [1,2,3]
+// ^ because this implies any number, not an ordered index. Ie,
+// it allows for [0: 1, 4: 5, 3: 2] for example.
+
+
+const map: [string: number] = [a: 1, b: 2, c: 3]
+
+// much like records/tuples this is INVALID: [a: 1, 2, 3] 
+// because either everything is named or nothing. A type
+// for the above can't be defied. 
+
+///////////////////////////////////////////
+
+There's two holding structures. Dynamic [] and static ().
+
+Dynamic allows for things to grow:
+  
+  const a: number[] = [1, 2, 3];
+  a.push(3)
+
+Static does not:
+
+  const a: number() = (1, 2, 3); // this type allows any number tuple
+  a.push(3) // not a function
+
+In fact, you can tell static how many things there will be
+
+  const a: (number, number, number) = (1, 2, 3);
+
+
+Dynamic can be unkeyed as above, but also keyed:
+
+  const a: [[key: string]: number] = [a: 1, b: 2, c: 3];
+  a.d = 4;
+
+Static can be keyed or unkeyed too:
+
+  const a: ([key: string]: number) = (a: 1, b: 2, c: 3) // this type allows any string:number record
+  a.d = 4; // ERROR: we don't know if d is a key or not (via the type)
+  a.c = 4; // ERROR: we don't know if c is a key or not (via the type)
+
+In fact, you can tell static what the name for each thing it'll hold will be:
+
+  const a: (foo: number, bar: string) = (foo: 3, bar: "hello");
+
+Static can be given a name. This is called a class:
+
+  class Point(number, number);
+  const origin = Point(0, 0);
+
+This is true with keyed statics too:
+
+  class Point(x: number, y: number);
+  const origin = Point(x: 0, y: 0)
+
+Only keyed statics can be used as the argument to a function:
+
+  const foo = (x: number, y: string) => {...}
+
+And they can be called with keyed statics or equivalent class instances:
+
+  const p1 = (x: 2, y: 2)
+  const p2 = Point(x: 2, y: 2)
+
+  foo(x: 2, y: 3)
+  foo(...p1)
+  foo(...p2)
+
+
+
+
+
+
 
 match list {
   case []

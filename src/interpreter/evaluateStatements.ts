@@ -12,6 +12,13 @@ import { MatchFunctionInstance } from "./runtime/runtime.match";
 import { stringOfType } from "./types";
 import { expectBoolean, Value } from "./value";
 
+export class ReturnInterrupt {
+  readonly value: Value;
+  constructor(value: Value) {
+    this.value = value;
+  }
+}
+
 /**
  * Evaluates all statements sequentially, returning the
  * value of the first "ReturnStatement" found or void
@@ -20,7 +27,7 @@ export function evaluateStatements(
   statements: LangType["Statement"][],
   context: Context,
   system: System
-): Value | null {
+): null {
   for (const statement of statements) {
     const { kind } = statement;
     switch (kind) {
@@ -134,8 +141,9 @@ export function evaluateStatements(
 
       case "ReturnStatement": {
         const value = evaluateExpression(statement.expression, context, system);
-        // We don't evaluate further, and instead return immediately //
-        return value;
+        // We don't evaluate further, and instead throw to exit all execution
+        // up to the call boundary. See the try/catch on `callFunction`
+        throw new ReturnInterrupt(value);
       }
 
       // evaluates

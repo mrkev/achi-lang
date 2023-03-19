@@ -23,6 +23,11 @@ export class Context {
     return new Context();
   }
 
+  // Currently unused
+  readonly stack: Array<
+    LangType["AnonymousFunctionLiteral"] | LangType["MatchFunction"]
+  > = [];
+
   // Identifier "string" => Value
   // Operates at a block level
   readonly valueScope: Scope<string, Value> = new Scope();

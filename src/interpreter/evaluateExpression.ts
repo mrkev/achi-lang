@@ -9,7 +9,7 @@ import {
 } from "./value";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { Context, ScopeError } from "./Context";
-import { evaluateStatements } from "./evaluateStatements";
+import { evaluateStatements, ReturnInterrupt } from "./evaluateStatements";
 import { System } from "./runtime/System";
 import {
   NamedRecordInstance,
@@ -226,40 +226,64 @@ function callFunction(
   context: Context,
   system: System
 ): Value {
-  if (func.kind === "AnonymousFunctionLiteral") {
-    context.valueScope.push();
-    destructureWithRecordDefintion(func.argument, argument, context);
-    const result = evaluateStatements(func.block.statements, context, system);
-    context.valueScope.pop();
-    console.log("HERE", result);
-
-    if (result == null) {
-      // TODO: do I really want functions to return an implicit null?
-      return nil(result);
-    } else {
-      return result;
-    }
-  }
-
-  if (func.kind === "MatchFunction") {
-    // TODO: test types
-    // TODO: ensure pattern is exhaustive, so we don't have to worry about that here
-    // TODO: just executing first case for now
-
-    for (const caseEntry of func.block.caseEntries) {
-      // caseEntry.guard
+  switch (func.kind) {
+    case "AnonymousFunctionLiteral": {
+      context.stack.push(func);
       context.valueScope.push();
-      const result = evaluateStatements(
-        caseEntry.block.statements,
-        context,
-        system
-      );
+      destructureWithRecordDefintion(func.argument, argument, context);
+      let result = null;
+      try {
+        evaluateStatements(func.block.statements, context, system);
+      } catch (interrupt) {
+        if (interrupt instanceof ReturnInterrupt) {
+          result = interrupt.value;
+        } else {
+          throw interrupt;
+        }
+      }
+
+      context.stack.pop();
       context.valueScope.pop();
-      return nullthrows(result, "fixme, case block returns nothing");
+      console.log("HERE", result);
+      if (result == null) {
+        // TODO: do I really want functions to return an implicit null?
+        return nil(result);
+      } else {
+        return result;
+      }
     }
 
-    throw new Error("fixme, no case blocks");
-  }
+    case "MatchFunction": {
+      // TODO: test types
+      // TODO: ensure pattern is exhaustive, so we don't have to worry about that here
+      // TODO: just executing first case for now
 
-  throw exhaustive(func);
+      for (const caseEntry of func.block.caseEntries) {
+        // caseEntry.guard
+        context.valueScope.push();
+        context.stack.push(func);
+
+        let result = null;
+        try {
+          evaluateStatements(caseEntry.block.statements, context, system);
+        } catch (interrupt) {
+          if (interrupt instanceof ReturnInterrupt) {
+            result = interrupt.value;
+          } else {
+            throw interrupt;
+          }
+        }
+
+        context.stack.pop();
+        context.valueScope.pop();
+        return nullthrows(result, "fixme, case block returns nothing");
+      }
+
+      throw new Error("fixme, no case blocks");
+    }
+
+    default: {
+      throw exhaustive(func);
+    }
+  }
 }
