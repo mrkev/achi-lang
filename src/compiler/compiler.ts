@@ -5,7 +5,6 @@ import { compileExpression } from "./compileExpression";
 export function generateEmptyExports() {
   return ts.factory.createExportDeclaration(
     undefined,
-    undefined,
     false,
     ts.factory.createNamedExports([]),
     undefined,
@@ -85,7 +84,6 @@ export function compileStatement(
         classMembers.push(
           ts.factory.createPropertyDeclaration(
             [],
-            [],
             defn.identifier.value,
             undefined,
             typeRef,
@@ -124,7 +122,6 @@ export function compileStatement(
       const constructorParam = ts.factory.createParameterDeclaration(
         undefined,
         undefined,
-        undefined,
         "props",
         undefined,
         ts.factory.createTypeLiteralNode(constructorTypeLiteralParams),
@@ -133,14 +130,12 @@ export function compileStatement(
 
       const constructorDeclaration = ts.factory.createConstructorDeclaration(
         undefined,
-        undefined,
         [constructorParam],
         ts.factory.createBlock(constructorStatements, true)
       );
       classMembers.push(constructorDeclaration);
 
       const classDeclaration = ts.factory.createClassDeclaration(
-        undefined,
         undefined,
         ts.factory.createIdentifier(identifier.value),
         undefined,
