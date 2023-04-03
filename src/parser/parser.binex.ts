@@ -1,6 +1,6 @@
 import * as Parsimmon from "parsimmon";
 import { LangType } from "./parser";
-import { Node } from "./Node";
+import { Node, withAt } from "./Node";
 
 type PrefixUnaryOperator = "-" | "!";
 export type PrefixUnaryOperation = Node<{
@@ -10,11 +10,11 @@ export type PrefixUnaryOperation = Node<{
 }>;
 
 type SuffixUnaryOperator = "!";
-export type SuffixUnaryOperation = {
+export type SuffixUnaryOperation = Node<{
   kind: "SuffixUnaryOperation";
   operator: SuffixUnaryOperator;
   value: NEXT_PARSER;
-};
+}>;
 
 type BinaryOperator =
   // String + Numerial
@@ -35,12 +35,12 @@ type BinaryOperator =
   | "=="
   | "!=";
 
-export type BinaryOperation = {
+export type BinaryOperation = Node<{
   kind: "BinaryOperation";
   operator: BinaryOperator;
   left: NEXT_PARSER;
   right: NEXT_PARSER;
-};
+}>;
 
 export type OperatableExpression =
   | LangType["NumberLiteral"]
@@ -72,7 +72,7 @@ type NEXT_PARSER =
 // Note that the parser is created using `Parsimmon.lazy` because it's recursive. It's
 // valid for there to be zero occurrences of the prefix operator.
 function PREFIX(
-  operatorsParser: Parsimmon.Parser<"-" | "!">,
+  operatorsParser: Parsimmon.Parser<OpLoc<"-" | "!">>,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ): Parsimmon.Parser<NEXT_PARSER> {
   const parser = Parsimmon.lazy<NEXT_PARSER>(() => {
@@ -84,7 +84,7 @@ function PREFIX(
       (start, operator, value, end) =>
         ({
           kind: "PrefixUnaryOperation",
-          operator,
+          operator: operator.op,
           value,
           "@": { start, end },
         } as const)
@@ -93,6 +93,12 @@ function PREFIX(
   });
   return parser;
 }
+
+type OpLoc<T extends string> = {
+  op: T;
+  start: Parsimmon.Index;
+  end: Parsimmon.Index;
+};
 
 // Ideally this function would be just like `PREFIX` but reordered like
 // `Parsimmon.seq(parser, operatorsParser).or(nextParser)`, but that doesn't work. The
@@ -104,7 +110,7 @@ function PREFIX(
 // parser will never actually look far enough ahead to see the postfix
 // operators.
 function POSTFIX(
-  operatorsParser: Parsimmon.Parser<"!">,
+  operatorsParser: Parsimmon.Parser<OpLoc<"!">>,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ) {
   // Because we can't use recursion like stated above, we just match a flat list
@@ -117,11 +123,15 @@ function POSTFIX(
   // PARSE  :: [4, "factorial", "factorial", "factorial"]
   // REDUCE :: ["factorial", ["factorial", ["factorial", 4]]]
   return Parsimmon.seqMap(nextParser, operatorsParser.many(), (x, suffixes) =>
-    suffixes.reduce((acc, op) => {
+    suffixes.reduce((acc, { op, end }) => {
       return {
         kind: "SuffixUnaryOperation",
         operator: op,
         value: acc,
+        "@": {
+          start: acc["@"].start,
+          end,
+        },
       } as const;
     }, x)
   );
@@ -132,22 +142,24 @@ function POSTFIX(
 // that parses as many binary operations as possible, associating them to the
 // right. (e.g. 1^2^3 is 1^(2^3) not (1^2)^3)
 function BINARY_RIGHT(
-  operatorsParser: Parsimmon.Parser<BinaryOperator>,
+  operatorsParser: Parsimmon.Parser<OpLoc<BinaryOperator>>,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ): Parsimmon.Parser<NEXT_PARSER> {
   const parser = Parsimmon.lazy<NEXT_PARSER>(() => {
     const chainRes: Parsimmon.Parser<NEXT_PARSER> = nextParser.chain((next) =>
-      Parsimmon.seqMap(
-        operatorsParser,
-        Parsimmon.of(next),
-        parser,
-        (operator, next, p) =>
-          ({
-            kind: "BinaryOperation",
-            operator,
-            left: next,
-            right: p,
-          } as const)
+      withAt(
+        Parsimmon.seqMap(
+          operatorsParser,
+          Parsimmon.of(next),
+          parser,
+          (operator, next, p) =>
+            ({
+              kind: "BinaryOperation",
+              operator: operator.op,
+              left: next,
+              right: p,
+            } as const)
+        )
       ).or(Parsimmon.of(next))
     );
 
@@ -161,7 +173,7 @@ function BINARY_RIGHT(
 // that parses as many binary operations as possible, associating them to the
 // left. (e.g. 1-2-3 is (1-2)-3 not 1-(2-3))
 function BINARY_LEFT(
-  operatorsParser: Parsimmon.Parser<BinaryOperator>,
+  operatorsParser: Parsimmon.Parser<OpLoc<BinaryOperator>>,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ) {
   // We run into a similar problem as with the `POSTFIX` parser above where we
@@ -182,9 +194,13 @@ function BINARY_LEFT(
         const [op, another] = ch;
         return {
           kind: "BinaryOperation",
-          operator: op,
+          operator: op.op,
           left: acc,
           right: another,
+          "@": {
+            start: acc["@"].start,
+            end: another["@"].end,
+          },
         } as const;
       }, first);
     }
@@ -201,15 +217,25 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
   // whitespace, and gives back the word "Add" or "Sub" instead of the character.
   function operators<Ops extends readonly string[]>(
     ops: Ops
-  ): Parsimmon.Parser<Ops[number]> {
+  ): Parsimmon.Parser<OpLoc<Ops[number]>> {
     const withWhitespace = ops.map((sym) =>
-      Parsimmon.seqMap(r._, Parsimmon.string(sym), r._, (_0, op, _2) => op)
+      Parsimmon.seqMap(
+        Parsimmon.index,
+        r._,
+        Parsimmon.string(sym),
+        r._,
+        Parsimmon.index,
+        (start, _0, op, _2, end) => {
+          return { op, start, end };
+        }
+      )
     );
     const res = Parsimmon.alt(...withWhitespace);
     return res;
   }
 
   // A basic value is any parenthesized expression or a number.
+  // TODO: start, end don't take the parens into consideration. Is that an issue?
   const Basic: Parsimmon.Parser<NEXT_PARSER> = Parsimmon.lazy<NEXT_PARSER>(() =>
     Parsimmon.string("(")
       .then(MyMath)

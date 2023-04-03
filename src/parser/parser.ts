@@ -67,24 +67,24 @@ export type LangType = LangType_BinOp &
     // Records
 
     // Point(x: number, y: number)
-    NamedRecordDefinition: {
+    NamedRecordDefinition: Node<{
       kind: "NamedRecordDefinition";
       identifier: LangType["TypeIdentifier"];
       record: LangType["RecordDefinition"];
-    };
+    }>;
 
     // class Point(x: number, y: number)
-    NamedRecordDefinitionStatement: {
+    NamedRecordDefinitionStatement: Node<{
       kind: "NamedRecordDefinitionStatement";
       namedRecordDefinition: LangType["NamedRecordDefinition"];
-    };
+    }>;
 
     // classes Card { King(); Queen(); Jack(); Number(value: number) }
-    NamedRecordDefinitionGroup: {
+    NamedRecordDefinitionGroup: Node<{
       kind: "NamedRecordDefinitionGroup";
       identifier: LangType["TypeIdentifier"];
       namedRecordDefinitions: Array<LangType["NamedRecordDefinition"]>;
-    };
+    }>;
 
     // Point(x: 5, y: 3)
     NamedRecordLiteral: Node<{
@@ -94,10 +94,10 @@ export type LangType = LangType_BinOp &
     }>;
 
     //* (x: 5, y: 5)
-    RecordLiteral: {
+    RecordLiteral: Node<{
       kind: "RecordLiteral";
       definitions: Array<LangType["NamedLiteral"]>;
-    };
+    }>;
 
     //* (x: number, y: number)
     RecordDefinition: Node<{
@@ -106,11 +106,11 @@ export type LangType = LangType_BinOp &
     }>;
 
     // x: 5
-    NamedLiteral: {
+    NamedLiteral: Node<{
       kind: "NamedLiteral";
       identifier: LangType["ValueIdentifier"];
       expression: LangType["Expression"];
-    };
+    }>;
 
     // x: number
     NamedDefinition: Node<{
@@ -131,16 +131,16 @@ export type LangType = LangType_BinOp &
     }>;
 
     // #log value
-    DEBUG_Log: {
+    DEBUG_Log: Node<{
       kind: "DEBUG_Log";
       expression: LangType["Expression"];
-    };
+    }>;
 
     // #log Type
-    DEBUG_LogType: {
+    DEBUG_LogType: Node<{
       kind: "DEBUG_LogType";
       typeExpression: LangType["TypeExpression"];
-    };
+    }>;
 
     Statement:
       | LangType["ReturnStatement"]
@@ -154,22 +154,26 @@ export type LangType = LangType_BinOp &
       | LangType["DEBUG_LogType"]
       | LangType["DEBUG_Log"];
 
-    Program: { kind: "Program"; statements: Array<LangType["Statement"]> };
-    StatementList: {
+    Program: Node<{
+      kind: "Program";
+      statements: Array<LangType["Statement"]>;
+    }>;
+
+    StatementList: Node<{
       kind: "StatementList";
       statements: Array<LangType["Statement"]>;
-    };
+    }>;
     Block: Node<{ kind: "Block"; statements: Array<LangType["Statement"]> }>;
 
-    ListLiteral: {
+    ListLiteral: Node<{
       kind: "ListLiteral";
       expressions: Array<LangType["Expression"]>;
-    };
+    }>;
 
-    MapLiteral: {
+    MapLiteral: Node<{
       kind: "MapLiteral";
       entries: Array<LangType["NamedLiteral"]>;
-    };
+    }>;
 
     // TupleDefinition: any;
     // NamedTupleDefinition: any;
@@ -282,34 +286,38 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // [2,3,4]
   ListLiteral: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("["),
-      r._,
-      r.Expression.sepBy(r._comma),
-      Parsimmon.string("]"),
-      function (_0, _1, expressions, _2) {
-        return {
-          kind: "ListLiteral",
-          expressions,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("["),
+        r._,
+        r.Expression.sepBy(r._comma),
+        Parsimmon.string("]"),
+        function (_0, _1, expressions, _2) {
+          return {
+            kind: "ListLiteral",
+            expressions,
+          };
+        }
+      )
     );
   },
 
   //* {x: 5, y: 5}, basically the same as RecordLiteral
   MapLiteral: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("{"),
-      r._,
-      Parsimmon.sepBy(r.NamedLiteral, r._comma),
-      r._,
-      Parsimmon.string("}"),
-      (_0, _1, entries, _3, _4) => {
-        return {
-          kind: "MapLiteral",
-          entries,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("{"),
+        r._,
+        Parsimmon.sepBy(r.NamedLiteral, r._comma),
+        r._,
+        Parsimmon.string("}"),
+        (_0, _1, entries, _3, _4) => {
+          return {
+            kind: "MapLiteral",
+            entries,
+          };
+        }
+      )
     );
   },
 
@@ -341,24 +349,28 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   ////////
 
   Program: (r) => {
-    return r.StatementList.map(({ statements }) => {
-      return {
-        kind: "Program",
-        statements,
-      };
-    });
+    return withAt(
+      r.StatementList.map(({ statements }) => {
+        return {
+          kind: "Program",
+          statements,
+        };
+      })
+    );
   },
 
   // return 5; f(); class Point()
   StatementList: (r) => {
-    return Parsimmon.sepBy(r.Statement, r.__nl)
-      .trim(r._nl)
-      .map((statements) => {
-        return {
-          kind: "StatementList",
-          statements,
-        };
-      });
+    return withAt(
+      Parsimmon.sepBy(r.Statement, r.__nl)
+        .trim(r._nl)
+        .map((statements) => {
+          return {
+            kind: "StatementList",
+            statements,
+          };
+        })
+    );
   },
 
   Statement: (r) => {
@@ -437,30 +449,34 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // #log <expression> logs for debugging
   // we don't have function calls yet but this will do
   DEBUG_Log: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("#log"),
-      r.__,
-      r.Expression,
-      function (_0, _1, expression) {
-        return {
-          kind: "DEBUG_Log",
-          expression,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("#log"),
+        r.__,
+        r.Expression,
+        function (_0, _1, expression) {
+          return {
+            kind: "DEBUG_Log",
+            expression,
+          };
+        }
+      )
     );
   },
 
   DEBUG_LogType: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("#logtype"),
-      r.__,
-      r.TypeExpression,
-      function (_0, _1, typeExpression) {
-        return {
-          kind: "DEBUG_LogType",
-          typeExpression,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("#logtype"),
+        r.__,
+        r.TypeExpression,
+        function (_0, _1, typeExpression) {
+          return {
+            kind: "DEBUG_LogType",
+            typeExpression,
+          };
+        }
+      )
     );
   },
 
@@ -543,114 +559,126 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   //* Point(x: 5, y: 5)
   NamedRecordLiteral: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.index,
-      Parsimmon.alt<
-        LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"]
-      >(
-        r.TypeIdentifier.notFollowedBy(Parsimmon.string(".")),
-        r.NestedTypeIdentifier
-      ),
-      r.RecordLiteral,
-      Parsimmon.index,
-      function (start, identifier, recordLiteral, end) {
-        return {
-          kind: "NamedRecordLiteral",
-          identifier,
-          recordLiteral,
-          "@": { start, end },
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.index,
+        Parsimmon.alt<
+          LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"]
+        >(
+          r.TypeIdentifier.notFollowedBy(Parsimmon.string(".")),
+          r.NestedTypeIdentifier
+        ),
+        r.RecordLiteral,
+        Parsimmon.index,
+        function (start, identifier, recordLiteral, end) {
+          return {
+            kind: "NamedRecordLiteral",
+            identifier,
+            recordLiteral,
+            "@": { start, end },
+          };
+        }
+      )
     );
   },
 
   //* Point(x: number, y: number)
   NamedRecordDefinition: (r) => {
-    return Parsimmon.seqMap(
-      r.TypeIdentifier,
-      r.RecordDefinition,
-      function (identifier, record) {
-        return {
-          kind: "NamedRecordDefinition",
-          identifier,
-          record,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        r.TypeIdentifier,
+        r.RecordDefinition,
+        function (identifier, record) {
+          return {
+            kind: "NamedRecordDefinition",
+            identifier,
+            record,
+          };
+        }
+      )
     );
   },
 
   //* class Point(x: number, y: number)
   NamedRecordDefinitionStatement: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("class"),
-      r._,
-      r.NamedRecordDefinition,
-      function (_0, _1, namedRecordDefinition) {
-        return {
-          kind: "NamedRecordDefinitionStatement",
-          namedRecordDefinition,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("class"),
+        r._,
+        r.NamedRecordDefinition,
+        function (_0, _1, namedRecordDefinition) {
+          return {
+            kind: "NamedRecordDefinitionStatement",
+            namedRecordDefinition,
+          };
+        }
+      )
     );
   },
 
   // classes Card { King(); Queen(); Jack(); Number(value: number); }
   NamedRecordDefinitionGroup: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("classes"),
-      r._,
-      r.TypeIdentifier,
-      r._,
-      Parsimmon.string("{"),
-      r._,
-      Parsimmon.sepBy1(r.NamedRecordDefinition, r.__nl),
-      r._,
-      Parsimmon.string("}"),
-      function (_0, _1, identifier, _3, _4, _5, nrdList, _7, _8) {
-        return {
-          kind: "NamedRecordDefinitionGroup",
-          identifier,
-          namedRecordDefinitions: nrdList,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("classes"),
+        r._,
+        r.TypeIdentifier,
+        r._,
+        Parsimmon.string("{"),
+        r._,
+        Parsimmon.sepBy1(r.NamedRecordDefinition, r.__nl),
+        r._,
+        Parsimmon.string("}"),
+        function (_0, _1, identifier, _3, _4, _5, nrdList, _7, _8) {
+          return {
+            kind: "NamedRecordDefinitionGroup",
+            identifier,
+            namedRecordDefinitions: nrdList,
+          };
+        }
+      )
     );
   },
 
   //* (x: 5, y: 5)
   RecordLiteral: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("("),
-      r._,
-      Parsimmon.sepBy(r.NamedLiteral, r._comma),
-      r._,
-      Parsimmon.string(")"),
-      (_0, _1, definitions, _3, _4) => {
-        return {
-          kind: "RecordLiteral",
-          definitions,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("("),
+        r._,
+        Parsimmon.sepBy(r.NamedLiteral, r._comma),
+        r._,
+        Parsimmon.string(")"),
+        (_0, _1, definitions, _3, _4) => {
+          return {
+            kind: "RecordLiteral",
+            definitions,
+          };
+        }
+      )
     );
   },
 
   //* (x: number, y: number)
   RecordDefinition: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.index,
-      Parsimmon.string("("),
-      r._,
-      // TBD: sepBy1 and make a different parser for Unit?
-      Parsimmon.sepBy(r.NamedDefinition, r._comma),
-      r._,
-      Parsimmon.string(")"),
-      Parsimmon.index,
-      function (start, _0, _1, definitions, _2, _3, end) {
-        return {
-          kind: "RecordDefinition",
-          definitions,
-          "@": { start, end },
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.index,
+        Parsimmon.string("("),
+        r._,
+        // TBD: sepBy1 and make a different parser for Unit?
+        Parsimmon.sepBy(r.NamedDefinition, r._comma),
+        r._,
+        Parsimmon.string(")"),
+        Parsimmon.index,
+        function (start, _0, _1, definitions, _2, _3, end) {
+          return {
+            kind: "RecordDefinition",
+            definitions,
+            "@": { start, end },
+          };
+        }
+      )
     );
   },
 
@@ -658,19 +686,21 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // x: 5
   NamedLiteral: (r) => {
-    return Parsimmon.seqMap(
-      r.ValueIdentifier,
-      r._,
-      Parsimmon.string(":"),
-      r._,
-      r.Expression,
-      (identifier, _1, _2, _3, expression) => {
-        return {
-          kind: "NamedLiteral",
-          identifier,
-          expression,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        r.ValueIdentifier,
+        r._,
+        Parsimmon.string(":"),
+        r._,
+        r.Expression,
+        (identifier, _1, _2, _3, expression) => {
+          return {
+            kind: "NamedLiteral",
+            identifier,
+            expression,
+          };
+        }
+      )
     );
   },
 

@@ -1,15 +1,15 @@
 import * as Parsimmon from "parsimmon";
 import { LangType } from "./parser";
 import { sublang } from "./sublang";
-import { Meta } from "../parser/Node";
+import { Node, withAt } from "../parser/Node";
 
 export type LangType_Function = {
   // printPoint(x: 3, y: 4)
-  FunctionCall: {
+  FunctionCall: Node<{
     kind: "FunctionCall";
     identifier: LangType["ValueIdentifier"];
     argument: LangType["RecordLiteral"];
-  };
+  }>;
 
   // FunctionDefinition: {
   //   kind: "FunctionDefinition";
@@ -18,12 +18,11 @@ export type LangType_Function = {
   // };
 
   // (x: number) => { ... }
-  AnonymousFunctionLiteral: {
+  AnonymousFunctionLiteral: Node<{
     kind: "AnonymousFunctionLiteral";
     argument: LangType["RecordDefinition"];
     block: LangType["Block"];
-    "@": Meta;
-  };
+  }>;
 };
 
 /**
@@ -32,37 +31,41 @@ export type LangType_Function = {
 export const LangDef_Function = sublang<LangType, LangType_Function>({
   // log(msg: "hello")
   FunctionCall: (r) => {
-    return Parsimmon.seqMap(
-      r.ValueIdentifier,
-      r.RecordLiteral,
-      function (identifier, argument) {
-        return {
-          kind: "FunctionCall",
-          identifier,
-          argument,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        r.ValueIdentifier,
+        r.RecordLiteral,
+        function (identifier, argument) {
+          return {
+            kind: "FunctionCall",
+            identifier,
+            argument,
+          };
+        }
+      )
     );
   },
 
   // (foo: string) => {}
   AnonymousFunctionLiteral: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.index,
-      r.RecordDefinition,
-      r.__,
-      Parsimmon.string("=>"),
-      r.__,
-      r.Block,
-      Parsimmon.index,
-      (start, argument, _1, _2, _3, block, end) => {
-        return {
-          kind: "AnonymousFunctionLiteral",
-          argument,
-          block,
-          "@": { start, end },
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.index,
+        r.RecordDefinition,
+        r.__,
+        Parsimmon.string("=>"),
+        r.__,
+        r.Block,
+        Parsimmon.index,
+        (start, argument, _1, _2, _3, block, end) => {
+          return {
+            kind: "AnonymousFunctionLiteral",
+            argument,
+            block,
+            "@": { start, end },
+          };
+        }
+      )
     );
   },
 

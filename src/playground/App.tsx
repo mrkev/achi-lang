@@ -104,7 +104,7 @@ export default function App() {
 
         const parsed = JSON.parse(value);
         const { kind, "@": pos } = parsed;
-        if (!kind || !pos) {
+        if (!kind || !pos || kind === "Program") {
           return;
         }
 
