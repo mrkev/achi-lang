@@ -2,11 +2,47 @@
 
 exports[`AnonymousFunctionLiteral 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 36,
+      "line": 1,
+      "offset": 35,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "argument": {
+    "@": {
+      "end": {
+        "column": 16,
+        "line": 1,
+        "offset": 15,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "definitions": [
       {
+        "@": {
+          "end": {
+            "column": 15,
+            "line": 1,
+            "offset": 14,
+          },
+          "start": {
+            "column": 2,
+            "line": 1,
+            "offset": 1,
+          },
+        },
         "identifier": {
-          "_meta": {
+          "@": {
             "end": {
               "column": 7,
               "line": 1,
@@ -23,7 +59,31 @@ exports[`AnonymousFunctionLiteral 1`] = `
         },
         "kind": "NamedDefinition",
         "typeTag": {
+          "@": {
+            "end": {
+              "column": 15,
+              "line": 1,
+              "offset": 14,
+            },
+            "start": {
+              "column": 7,
+              "line": 1,
+              "offset": 6,
+            },
+          },
           "identifier": {
+            "@": {
+              "end": {
+                "column": 15,
+                "line": 1,
+                "offset": 14,
+              },
+              "start": {
+                "column": 9,
+                "line": 1,
+                "offset": 8,
+              },
+            },
             "kind": "TypeIdentifier",
             "value": "number",
           },
@@ -34,11 +94,35 @@ exports[`AnonymousFunctionLiteral 1`] = `
     "kind": "RecordDefinition",
   },
   "block": {
+    "@": {
+      "end": {
+        "column": 36,
+        "line": 1,
+        "offset": 35,
+      },
+      "start": {
+        "column": 20,
+        "line": 1,
+        "offset": 19,
+      },
+    },
     "kind": "Block",
     "statements": [
       {
+        "@": {
+          "end": {
+            "column": 35,
+            "line": 1,
+            "offset": 34,
+          },
+          "start": {
+            "column": 22,
+            "line": 1,
+            "offset": 21,
+          },
+        },
         "expression": {
-          "_meta": {
+          "@": {
             "end": {
               "column": 34,
               "line": 1,
@@ -63,15 +147,75 @@ exports[`AnonymousFunctionLiteral 1`] = `
 
 exports[`AnonymousFunctionLiteral.emptyArg 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 19,
+      "line": 1,
+      "offset": 18,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "argument": {
+    "@": {
+      "end": {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "definitions": [],
     "kind": "RecordDefinition",
   },
   "block": {
+    "@": {
+      "end": {
+        "column": 19,
+        "line": 1,
+        "offset": 18,
+      },
+      "start": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
     "kind": "Block",
     "statements": [
       {
+        "@": {
+          "end": {
+            "column": 18,
+            "line": 1,
+            "offset": 17,
+          },
+          "start": {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+        },
         "expression": {
+          "@": {
+            "end": {
+              "column": 17,
+              "line": 1,
+              "offset": 16,
+            },
+            "start": {
+              "column": 16,
+              "line": 1,
+              "offset": 15,
+            },
+          },
           "kind": "NumberLiteral",
           "value": 3,
         },
@@ -85,15 +229,63 @@ exports[`AnonymousFunctionLiteral.emptyArg 1`] = `
 
 exports[`FunctionCall 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 18,
+      "line": 1,
+      "offset": 17,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "argument": {
+    "@": {
+      "end": {
+        "column": 18,
+        "line": 1,
+        "offset": 17,
+      },
+      "start": {
+        "column": 4,
+        "line": 1,
+        "offset": 3,
+      },
+    },
     "definitions": [
       {
+        "@": {
+          "end": {
+            "column": 17,
+            "line": 1,
+            "offset": 16,
+          },
+          "start": {
+            "column": 5,
+            "line": 1,
+            "offset": 4,
+          },
+        },
         "expression": {
+          "@": {
+            "end": {
+              "column": 17,
+              "line": 1,
+              "offset": 16,
+            },
+            "start": {
+              "column": 10,
+              "line": 1,
+              "offset": 9,
+            },
+          },
           "kind": "StringLiteral",
           "value": "hello",
         },
         "identifier": {
-          "_meta": {
+          "@": {
             "end": {
               "column": 8,
               "line": 1,
@@ -114,7 +306,7 @@ exports[`FunctionCall 1`] = `
     "kind": "RecordLiteral",
   },
   "identifier": {
-    "_meta": {
+    "@": {
       "end": {
         "column": 4,
         "line": 1,
@@ -135,12 +327,36 @@ exports[`FunctionCall 1`] = `
 
 exports[`FunctionCall.emtpyArg 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 6,
+      "line": 1,
+      "offset": 5,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "argument": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "start": {
+        "column": 4,
+        "line": 1,
+        "offset": 3,
+      },
+    },
     "definitions": [],
     "kind": "RecordLiteral",
   },
   "identifier": {
-    "_meta": {
+    "@": {
       "end": {
         "column": 4,
         "line": 1,

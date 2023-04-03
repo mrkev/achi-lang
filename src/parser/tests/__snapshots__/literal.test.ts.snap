@@ -2,6 +2,18 @@
 
 exports[`BooleanLiteral.false 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 6,
+      "line": 1,
+      "offset": 5,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "kind": "BooleanLiteral",
   "value": false,
 }
@@ -9,6 +21,18 @@ exports[`BooleanLiteral.false 1`] = `
 
 exports[`BooleanLiteral.true 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 5,
+      "line": 1,
+      "offset": 4,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "kind": "BooleanLiteral",
   "value": true,
 }
@@ -16,16 +40,64 @@ exports[`BooleanLiteral.true 1`] = `
 
 exports[`ListLiteral 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 19,
+      "line": 1,
+      "offset": 18,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "expressions": [
     {
+      "@": {
+        "end": {
+          "column": 3,
+          "line": 1,
+          "offset": 2,
+        },
+        "start": {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 3,
     },
     {
+      "@": {
+        "end": {
+          "column": 9,
+          "line": 1,
+          "offset": 8,
+        },
+        "start": {
+          "column": 4,
+          "line": 1,
+          "offset": 3,
+        },
+      },
       "kind": "BooleanLiteral",
       "value": false,
     },
     {
+      "@": {
+        "end": {
+          "column": 18,
+          "line": 1,
+          "offset": 17,
+        },
+        "start": {
+          "column": 10,
+          "line": 1,
+          "offset": 9,
+        },
+      },
       "kind": "StringLiteral",
       "value": "string",
     },
@@ -36,14 +108,62 @@ exports[`ListLiteral 1`] = `
 
 exports[`ListLiteral.recursive 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 21,
+      "line": 1,
+      "offset": 20,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "expressions": [
     {
+      "@": {
+        "end": {
+          "column": 3,
+          "line": 1,
+          "offset": 2,
+        },
+        "start": {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 3,
     },
     {
+      "@": {
+        "end": {
+          "column": 11,
+          "line": 1,
+          "offset": 10,
+        },
+        "start": {
+          "column": 4,
+          "line": 1,
+          "offset": 3,
+        },
+      },
       "expressions": [
         {
+          "@": {
+            "end": {
+              "column": 10,
+              "line": 1,
+              "offset": 9,
+            },
+            "start": {
+              "column": 5,
+              "line": 1,
+              "offset": 4,
+            },
+          },
           "kind": "BooleanLiteral",
           "value": false,
         },
@@ -51,6 +171,18 @@ exports[`ListLiteral.recursive 1`] = `
       "kind": "ListLiteral",
     },
     {
+      "@": {
+        "end": {
+          "column": 20,
+          "line": 1,
+          "offset": 19,
+        },
+        "start": {
+          "column": 12,
+          "line": 1,
+          "offset": 11,
+        },
+      },
       "kind": "StringLiteral",
       "value": "string",
     },
@@ -61,14 +193,50 @@ exports[`ListLiteral.recursive 1`] = `
 
 exports[`MapLiteral 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 21,
+      "line": 1,
+      "offset": 20,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "entries": [
     {
+      "@": {
+        "end": {
+          "column": 8,
+          "line": 1,
+          "offset": 7,
+        },
+        "start": {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+      },
       "expression": {
+        "@": {
+          "end": {
+            "column": 8,
+            "line": 1,
+            "offset": 7,
+          },
+          "start": {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 3,
       },
       "identifier": {
-        "_meta": {
+        "@": {
           "end": {
             "column": 5,
             "line": 1,
@@ -86,12 +254,36 @@ exports[`MapLiteral 1`] = `
       "kind": "NamedLiteral",
     },
     {
+      "@": {
+        "end": {
+          "column": 20,
+          "line": 1,
+          "offset": 19,
+        },
+        "start": {
+          "column": 10,
+          "line": 1,
+          "offset": 9,
+        },
+      },
       "expression": {
+        "@": {
+          "end": {
+            "column": 20,
+            "line": 1,
+            "offset": 19,
+          },
+          "start": {
+            "column": 15,
+            "line": 1,
+            "offset": 14,
+          },
+        },
         "kind": "BooleanLiteral",
         "value": false,
       },
       "identifier": {
-        "_meta": {
+        "@": {
           "end": {
             "column": 13,
             "line": 1,
@@ -115,14 +307,50 @@ exports[`MapLiteral 1`] = `
 
 exports[`MapLiteral.recursive 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 24,
+      "line": 1,
+      "offset": 23,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "entries": [
     {
+      "@": {
+        "end": {
+          "column": 8,
+          "line": 1,
+          "offset": 7,
+        },
+        "start": {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+      },
       "expression": {
+        "@": {
+          "end": {
+            "column": 8,
+            "line": 1,
+            "offset": 7,
+          },
+          "start": {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 3,
       },
       "identifier": {
-        "_meta": {
+        "@": {
           "end": {
             "column": 5,
             "line": 1,
@@ -140,15 +368,63 @@ exports[`MapLiteral.recursive 1`] = `
       "kind": "NamedLiteral",
     },
     {
+      "@": {
+        "end": {
+          "column": 23,
+          "line": 1,
+          "offset": 22,
+        },
+        "start": {
+          "column": 10,
+          "line": 1,
+          "offset": 9,
+        },
+      },
       "expression": {
+        "@": {
+          "end": {
+            "column": 23,
+            "line": 1,
+            "offset": 22,
+          },
+          "start": {
+            "column": 15,
+            "line": 1,
+            "offset": 14,
+          },
+        },
         "entries": [
           {
+            "@": {
+              "end": {
+                "column": 22,
+                "line": 1,
+                "offset": 21,
+              },
+              "start": {
+                "column": 16,
+                "line": 1,
+                "offset": 15,
+              },
+            },
             "expression": {
+              "@": {
+                "end": {
+                  "column": 22,
+                  "line": 1,
+                  "offset": 21,
+                },
+                "start": {
+                  "column": 21,
+                  "line": 1,
+                  "offset": 20,
+                },
+              },
               "kind": "NumberLiteral",
               "value": 3,
             },
             "identifier": {
-              "_meta": {
+              "@": {
                 "end": {
                   "column": 19,
                   "line": 1,
@@ -169,7 +445,7 @@ exports[`MapLiteral.recursive 1`] = `
         "kind": "MapLiteral",
       },
       "identifier": {
-        "_meta": {
+        "@": {
           "end": {
             "column": 13,
             "line": 1,

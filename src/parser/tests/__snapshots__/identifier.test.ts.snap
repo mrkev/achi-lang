@@ -2,7 +2,7 @@
 
 exports[`Identifier 1`] = `
 {
-  "_meta": {
+  "@": {
     "end": {
       "column": 7,
       "line": 1,

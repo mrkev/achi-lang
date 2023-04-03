@@ -2,11 +2,59 @@
 
 exports[`IfStatement 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 26,
+      "line": 1,
+      "offset": 25,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "block": {
+    "@": {
+      "end": {
+        "column": 26,
+        "line": 1,
+        "offset": 25,
+      },
+      "start": {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+    },
     "kind": "Block",
     "statements": [
       {
+        "@": {
+          "end": {
+            "column": 25,
+            "line": 1,
+            "offset": 24,
+          },
+          "start": {
+            "column": 10,
+            "line": 1,
+            "offset": 9,
+          },
+        },
         "expression": {
+          "@": {
+            "end": {
+              "column": 25,
+              "line": 1,
+              "offset": 24,
+            },
+            "start": {
+              "column": 17,
+              "line": 1,
+              "offset": 16,
+            },
+          },
           "kind": "StringLiteral",
           "value": "hello",
         },
@@ -16,6 +64,18 @@ exports[`IfStatement 1`] = `
   },
   "elseCase": null,
   "guard": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "start": {
+        "column": 5,
+        "line": 1,
+        "offset": 4,
+      },
+    },
     "kind": "NumberLiteral",
     "value": 3,
   },
@@ -25,11 +85,59 @@ exports[`IfStatement 1`] = `
 
 exports[`IfStatement.else 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 6,
+      "line": 5,
+      "offset": 69,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "block": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 3,
+        "offset": 35,
+      },
+      "start": {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+    },
     "kind": "Block",
     "statements": [
       {
+        "@": {
+          "end": {
+            "column": 5,
+            "line": 3,
+            "offset": 34,
+          },
+          "start": {
+            "column": 7,
+            "line": 2,
+            "offset": 15,
+          },
+        },
         "expression": {
+          "@": {
+            "end": {
+              "column": 5,
+              "line": 3,
+              "offset": 34,
+            },
+            "start": {
+              "column": 14,
+              "line": 2,
+              "offset": 22,
+            },
+          },
           "kind": "StringLiteral",
           "value": "hello",
         },
@@ -38,10 +146,46 @@ exports[`IfStatement.else 1`] = `
     ],
   },
   "elseCase": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 5,
+        "offset": 69,
+      },
+      "start": {
+        "column": 12,
+        "line": 3,
+        "offset": 41,
+      },
+    },
     "kind": "Block",
     "statements": [
       {
+        "@": {
+          "end": {
+            "column": 5,
+            "line": 5,
+            "offset": 68,
+          },
+          "start": {
+            "column": 7,
+            "line": 4,
+            "offset": 49,
+          },
+        },
         "expression": {
+          "@": {
+            "end": {
+              "column": 5,
+              "line": 5,
+              "offset": 68,
+            },
+            "start": {
+              "column": 14,
+              "line": 4,
+              "offset": 56,
+            },
+          },
           "kind": "StringLiteral",
           "value": "world",
         },
@@ -50,6 +194,18 @@ exports[`IfStatement.else 1`] = `
     ],
   },
   "guard": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "start": {
+        "column": 5,
+        "line": 1,
+        "offset": 4,
+      },
+    },
     "kind": "NumberLiteral",
     "value": 3,
   },
@@ -59,11 +215,59 @@ exports[`IfStatement.else 1`] = `
 
 exports[`IfStatement.elseif 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 6,
+      "line": 7,
+      "offset": 106,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "block": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 3,
+        "offset": 35,
+      },
+      "start": {
+        "column": 8,
+        "line": 1,
+        "offset": 7,
+      },
+    },
     "kind": "Block",
     "statements": [
       {
+        "@": {
+          "end": {
+            "column": 5,
+            "line": 3,
+            "offset": 34,
+          },
+          "start": {
+            "column": 7,
+            "line": 2,
+            "offset": 15,
+          },
+        },
         "expression": {
+          "@": {
+            "end": {
+              "column": 5,
+              "line": 3,
+              "offset": 34,
+            },
+            "start": {
+              "column": 14,
+              "line": 2,
+              "offset": 22,
+            },
+          },
           "kind": "StringLiteral",
           "value": "three",
         },
@@ -72,11 +276,59 @@ exports[`IfStatement.elseif 1`] = `
     ],
   },
   "elseCase": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 7,
+        "offset": 106,
+      },
+      "start": {
+        "column": 12,
+        "line": 3,
+        "offset": 41,
+      },
+    },
     "block": {
+      "@": {
+        "end": {
+          "column": 6,
+          "line": 5,
+          "offset": 74,
+        },
+        "start": {
+          "column": 19,
+          "line": 3,
+          "offset": 48,
+        },
+      },
       "kind": "Block",
       "statements": [
         {
+          "@": {
+            "end": {
+              "column": 5,
+              "line": 5,
+              "offset": 73,
+            },
+            "start": {
+              "column": 7,
+              "line": 4,
+              "offset": 56,
+            },
+          },
           "expression": {
+            "@": {
+              "end": {
+                "column": 5,
+                "line": 5,
+                "offset": 73,
+              },
+              "start": {
+                "column": 14,
+                "line": 4,
+                "offset": 63,
+              },
+            },
             "kind": "StringLiteral",
             "value": "two",
           },
@@ -85,10 +337,46 @@ exports[`IfStatement.elseif 1`] = `
       ],
     },
     "elseCase": {
+      "@": {
+        "end": {
+          "column": 6,
+          "line": 7,
+          "offset": 106,
+        },
+        "start": {
+          "column": 12,
+          "line": 5,
+          "offset": 80,
+        },
+      },
       "kind": "Block",
       "statements": [
         {
+          "@": {
+            "end": {
+              "column": 5,
+              "line": 7,
+              "offset": 105,
+            },
+            "start": {
+              "column": 7,
+              "line": 6,
+              "offset": 88,
+            },
+          },
           "expression": {
+            "@": {
+              "end": {
+                "column": 5,
+                "line": 7,
+                "offset": 105,
+              },
+              "start": {
+                "column": 14,
+                "line": 6,
+                "offset": 95,
+              },
+            },
             "kind": "StringLiteral",
             "value": "one",
           },
@@ -97,12 +385,36 @@ exports[`IfStatement.elseif 1`] = `
       ],
     },
     "guard": {
+      "@": {
+        "end": {
+          "column": 17,
+          "line": 3,
+          "offset": 46,
+        },
+        "start": {
+          "column": 16,
+          "line": 3,
+          "offset": 45,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 2,
     },
     "kind": "IfStatement",
   },
   "guard": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "start": {
+        "column": 5,
+        "line": 1,
+        "offset": 4,
+      },
+    },
     "kind": "NumberLiteral",
     "value": 3,
   },

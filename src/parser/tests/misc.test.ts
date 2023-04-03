@@ -40,13 +40,49 @@ test("NestedTypeIdentifier", () => {
   const result = Lang.NestedTypeIdentifier.tryParse("Card.King");
   expect(result).toMatchInlineSnapshot(`
 {
+  "@": {
+    "end": {
+      "column": 10,
+      "line": 1,
+      "offset": 9,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "kind": "NestedTypeIdentifier",
   "path": [
     {
+      "@": {
+        "end": {
+          "column": 5,
+          "line": 1,
+          "offset": 4,
+        },
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
       "kind": "TypeIdentifier",
       "value": "Card",
     },
     {
+      "@": {
+        "end": {
+          "column": 10,
+          "line": 1,
+          "offset": 9,
+        },
+        "start": {
+          "column": 6,
+          "line": 1,
+          "offset": 5,
+        },
+      },
       "kind": "TypeIdentifier",
       "value": "King",
     },

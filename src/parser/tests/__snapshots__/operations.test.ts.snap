@@ -2,20 +2,80 @@
 
 exports[`BinaryOperation 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 6,
+      "line": 1,
+      "offset": 5,
+    },
+    "start": {
+      "column": 2,
+      "line": 1,
+      "offset": 1,
+    },
+  },
   "kind": "BinaryOperation",
   "left": {
+    "@": {
+      "end": {
+        "column": 2,
+        "line": 1,
+        "offset": 1,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "kind": "NumberLiteral",
     "value": 1,
   },
   "operator": "^",
   "right": {
+    "@": {
+      "end": {
+        "column": 6,
+        "line": 1,
+        "offset": 5,
+      },
+      "start": {
+        "column": 4,
+        "line": 1,
+        "offset": 3,
+      },
+    },
     "kind": "BinaryOperation",
     "left": {
+      "@": {
+        "end": {
+          "column": 4,
+          "line": 1,
+          "offset": 3,
+        },
+        "start": {
+          "column": 3,
+          "line": 1,
+          "offset": 2,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 2,
     },
     "operator": "^",
     "right": {
+      "@": {
+        "end": {
+          "column": 6,
+          "line": 1,
+          "offset": 5,
+        },
+        "start": {
+          "column": 5,
+          "line": 1,
+          "offset": 4,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 3,
     },
@@ -25,18 +85,78 @@ exports[`BinaryOperation 1`] = `
 
 exports[`BinaryOperation 2`] = `
 {
+  "@": {
+    "end": {
+      "column": 14,
+      "line": 1,
+      "offset": 13,
+    },
+    "start": {
+      "column": 9,
+      "line": 1,
+      "offset": 8,
+    },
+  },
   "kind": "BinaryOperation",
   "left": {
+    "@": {
+      "end": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "kind": "PrefixUnaryOperation",
     "operator": "-",
     "value": {
+      "@": {
+        "end": {
+          "column": 8,
+          "line": 1,
+          "offset": 7,
+        },
+        "start": {
+          "column": 3,
+          "line": 1,
+          "offset": 2,
+        },
+      },
       "kind": "BinaryOperation",
       "left": {
+        "@": {
+          "end": {
+            "column": 4,
+            "line": 1,
+            "offset": 3,
+          },
+          "start": {
+            "column": 3,
+            "line": 1,
+            "offset": 2,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 3,
       },
       "operator": "+",
       "right": {
+        "@": {
+          "end": {
+            "column": 8,
+            "line": 1,
+            "offset": 7,
+          },
+          "start": {
+            "column": 7,
+            "line": 1,
+            "offset": 6,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 3,
       },
@@ -44,16 +164,64 @@ exports[`BinaryOperation 2`] = `
   },
   "operator": "^",
   "right": {
+    "@": {
+      "end": {
+        "column": 14,
+        "line": 1,
+        "offset": 13,
+      },
+      "start": {
+        "column": 11,
+        "line": 1,
+        "offset": 10,
+      },
+    },
     "kind": "BinaryOperation",
     "left": {
+      "@": {
+        "end": {
+          "column": 11,
+          "line": 1,
+          "offset": 10,
+        },
+        "start": {
+          "column": 10,
+          "line": 1,
+          "offset": 9,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 3,
     },
     "operator": "^",
     "right": {
+      "@": {
+        "end": {
+          "column": 14,
+          "line": 1,
+          "offset": 13,
+        },
+        "start": {
+          "column": 12,
+          "line": 1,
+          "offset": 11,
+        },
+      },
       "kind": "SuffixUnaryOperation",
       "operator": "!",
       "value": {
+        "@": {
+          "end": {
+            "column": 13,
+            "line": 1,
+            "offset": 12,
+          },
+          "start": {
+            "column": 12,
+            "line": 1,
+            "offset": 11,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 2,
       },
@@ -64,18 +232,78 @@ exports[`BinaryOperation 2`] = `
 
 exports[`BinaryOperation 3`] = `
 {
+  "@": {
+    "end": {
+      "column": 16,
+      "line": 1,
+      "offset": 15,
+    },
+    "start": {
+      "column": 11,
+      "line": 1,
+      "offset": 10,
+    },
+  },
   "kind": "BinaryOperation",
   "left": {
+    "@": {
+      "end": {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+      "start": {
+        "column": 2,
+        "line": 1,
+        "offset": 1,
+      },
+    },
     "kind": "PrefixUnaryOperation",
     "operator": "-",
     "value": {
+      "@": {
+        "end": {
+          "column": 9,
+          "line": 1,
+          "offset": 8,
+        },
+        "start": {
+          "column": 4,
+          "line": 1,
+          "offset": 3,
+        },
+      },
       "kind": "BinaryOperation",
       "left": {
+        "@": {
+          "end": {
+            "column": 5,
+            "line": 1,
+            "offset": 4,
+          },
+          "start": {
+            "column": 4,
+            "line": 1,
+            "offset": 3,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 3,
       },
       "operator": "+",
       "right": {
+        "@": {
+          "end": {
+            "column": 9,
+            "line": 1,
+            "offset": 8,
+          },
+          "start": {
+            "column": 8,
+            "line": 1,
+            "offset": 7,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 3,
       },
@@ -83,16 +311,64 @@ exports[`BinaryOperation 3`] = `
   },
   "operator": "^",
   "right": {
+    "@": {
+      "end": {
+        "column": 16,
+        "line": 1,
+        "offset": 15,
+      },
+      "start": {
+        "column": 13,
+        "line": 1,
+        "offset": 12,
+      },
+    },
     "kind": "BinaryOperation",
     "left": {
+      "@": {
+        "end": {
+          "column": 13,
+          "line": 1,
+          "offset": 12,
+        },
+        "start": {
+          "column": 12,
+          "line": 1,
+          "offset": 11,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 3,
     },
     "operator": "^",
     "right": {
+      "@": {
+        "end": {
+          "column": 16,
+          "line": 1,
+          "offset": 15,
+        },
+        "start": {
+          "column": 14,
+          "line": 1,
+          "offset": 13,
+        },
+      },
       "kind": "SuffixUnaryOperation",
       "operator": "!",
       "value": {
+        "@": {
+          "end": {
+            "column": 15,
+            "line": 1,
+            "offset": 14,
+          },
+          "start": {
+            "column": 14,
+            "line": 1,
+            "offset": 13,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 2,
       },
@@ -103,21 +379,81 @@ exports[`BinaryOperation 3`] = `
 
 exports[`BinaryOperation 4`] = `
 {
+  "@": {
+    "end": {
+      "column": 12,
+      "line": 1,
+      "offset": 11,
+    },
+    "start": {
+      "column": 2,
+      "line": 1,
+      "offset": 1,
+    },
+  },
   "kind": "BinaryOperation",
   "left": {
+    "@": {
+      "end": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+      "start": {
+        "column": 2,
+        "line": 1,
+        "offset": 1,
+      },
+    },
     "kind": "BinaryOperation",
     "left": {
+      "@": {
+        "end": {
+          "column": 3,
+          "line": 1,
+          "offset": 2,
+        },
+        "start": {
+          "column": 2,
+          "line": 1,
+          "offset": 1,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 5,
     },
     "operator": "+",
     "right": {
+      "@": {
+        "end": {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+        "start": {
+          "column": 6,
+          "line": 1,
+          "offset": 5,
+        },
+      },
       "kind": "NumberLiteral",
       "value": 5,
     },
   },
   "operator": "+",
   "right": {
+    "@": {
+      "end": {
+        "column": 12,
+        "line": 1,
+        "offset": 11,
+      },
+      "start": {
+        "column": 11,
+        "line": 1,
+        "offset": 10,
+      },
+    },
     "kind": "NumberLiteral",
     "value": 3,
   },
@@ -126,9 +462,21 @@ exports[`BinaryOperation 4`] = `
 
 exports[`BinaryOperation.identifier 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 10,
+      "line": 1,
+      "offset": 9,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "kind": "BinaryOperation",
   "left": {
-    "_meta": {
+    "@": {
       "end": {
         "column": 6,
         "line": 1,
@@ -145,6 +493,18 @@ exports[`BinaryOperation.identifier 1`] = `
   },
   "operator": "+",
   "right": {
+    "@": {
+      "end": {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+      "start": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
     "kind": "NumberLiteral",
     "value": 3,
   },
@@ -153,15 +513,63 @@ exports[`BinaryOperation.identifier 1`] = `
 
 exports[`UnaryOperation 1`] = `
 {
+  "@": {
+    "end": {
+      "column": 5,
+      "line": 1,
+      "offset": 4,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "kind": "SuffixUnaryOperation",
   "operator": "!",
   "value": {
+    "@": {
+      "end": {
+        "column": 4,
+        "line": 1,
+        "offset": 3,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
     "kind": "SuffixUnaryOperation",
     "operator": "!",
     "value": {
+      "@": {
+        "end": {
+          "column": 3,
+          "line": 1,
+          "offset": 2,
+        },
+        "start": {
+          "column": 1,
+          "line": 1,
+          "offset": 0,
+        },
+      },
       "kind": "SuffixUnaryOperation",
       "operator": "!",
       "value": {
+        "@": {
+          "end": {
+            "column": 2,
+            "line": 1,
+            "offset": 1,
+          },
+          "start": {
+            "column": 1,
+            "line": 1,
+            "offset": 0,
+          },
+        },
         "kind": "NumberLiteral",
         "value": 1,
       },
@@ -172,9 +580,33 @@ exports[`UnaryOperation 1`] = `
 
 exports[`UnaryOperation 2`] = `
 {
+  "@": {
+    "end": {
+      "column": 3,
+      "line": 1,
+      "offset": 2,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
   "kind": "PrefixUnaryOperation",
   "operator": "-",
   "value": {
+    "@": {
+      "end": {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+      "start": {
+        "column": 2,
+        "line": 1,
+        "offset": 1,
+      },
+    },
     "kind": "NumberLiteral",
     "value": 1,
   },
