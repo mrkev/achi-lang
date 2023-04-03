@@ -10,7 +10,11 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
     "allotment": "^1.18.1",
+    "eslint": "^8.37.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "monaco-editor": "^0.36.1",
     "parsimmon": "^1.18.1",
     "react": "^18.2.0",

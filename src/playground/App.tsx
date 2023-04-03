@@ -1,25 +1,72 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
-import { editor } from "monaco-editor";
 import { System } from "../interpreter/runtime/System";
 import { interpret } from "../interpreter/interpreter";
 import { tryParse } from "../parser/parser";
 import { compileProgram, printTSStatements } from "../compiler/compiler";
 import { useLocalStorage } from "usehooks-ts";
 import { registerLangForMonaco } from "../playground/registerLangForMonaco";
-import { useEditor, useKeyboardShortcuts } from "./uiHooks";
+import { useKeyboardShortcuts } from "./uiHooks";
+import { useEditor } from "./useEditor";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
+import { editor, Position } from "monaco-editor";
+import * as monaco from "monaco-editor";
+import React from "react";
+import { DEFAULT_SCRIPT } from "./constants";
 
-const DEFAULT_SCRIPT =
-  `
-class Point(x: number, y: number);
-const one = 1;
-const point = Point(x: one, y: 2);
-#log point
-`.trim() + "\n";
+const COMPACT_AST = true;
 
-// TODO: can return from top-level, print that?
+function getJSONObjectAtPosition(
+  position: Position,
+  editor: editor.IStandaloneCodeEditor
+): Error | string {
+  const model = editor.getModel();
+  if (!model) {
+    return new Error("no model");
+  }
+  const { range: prev } =
+    model.findPreviousMatch("{", position, false, false, null, false) ?? {};
+
+  if (!prev) {
+    return new Error("no prev");
+  }
+
+  const lastLine = model.getLineCount();
+  const lastColumn = model.getLineMaxColumn(lastLine);
+
+  const str = model.getValueInRange(
+    new monaco.Range(
+      prev.startLineNumber,
+      prev.startColumn,
+      lastLine,
+      lastColumn
+    )
+  );
+
+  let openSquareBrackets = 0;
+  let openCurlyBraces = 0;
+  let endIndex = 0;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === "[") {
+      openSquareBrackets++;
+    } else if (str[i] === "{") {
+      openCurlyBraces++;
+    } else if (str[i] === "]") {
+      openSquareBrackets--;
+    } else if (str[i] === "}") {
+      openCurlyBraces--;
+    }
+
+    if (openSquareBrackets === 0 && openCurlyBraces === 0) {
+      endIndex = i;
+      break;
+    }
+  }
+
+  return str.substring(0, endIndex + 1);
+}
 
 const options: editor.IStandaloneEditorConstructionOptions = {
   fontSize: 18,
@@ -32,62 +79,115 @@ const options: editor.IStandaloneEditorConstructionOptions = {
 type Feature = "compile" | "typecheck" | "interpret" | "ast";
 
 export default function App() {
-  const [initialScript, setInitialScript] = useLocalStorage(
-    "script",
-    DEFAULT_SCRIPT
-  );
+  const [script, setScript] = useLocalStorage("script", DEFAULT_SCRIPT);
   const [scripts, setScripts] = useLocalStorage<string[]>("scripts", []);
   const [log, setLog] = useState<(Error | string)[]>([]);
+  const [decoratorRange, setDecoratorRange] = useState<null | monaco.Range>(
+    null
+  );
 
   // TODO: make linked set its own package and use it here
-  const [featureArr, setFeatures] = useLocalStorage<Array<Feature>>(
-    "features",
-    ["compile", "typecheck", "interpret", "ast"]
-  );
+  const [featureArr, setFeatures] = useLocalStorage<Feature[]>("features", [
+    "compile",
+    "typecheck",
+    "interpret",
+    "ast",
+  ]);
 
   const features = new Set(featureArr);
 
-  const [tsEditor, tsEditorRef] = useEditor({
+  const [tsEditor, tsEditorObj] = useEditor({
     language: "typescript",
     height: "50vh",
     theme: "vs-dark",
     options,
   });
 
-  const [astEditor, astEditorRef] = useEditor({
+  const [astEditor, astEditorObj] = useEditor({
     language: "json",
     theme: "vs-dark",
     height: "50vh",
   });
 
-  const [scriptEditor, scriptEditorRef] = useEditor({
-    language: "achi",
-    theme: "vs-dark",
-    options: options,
-    height: "50vh",
-    defaultValue: initialScript,
-    // try "same", "indent" or "none"
-    // wrappingIndent: "indent",
-    beforeMount: registerLangForMonaco,
-  });
+  const [scriptEditor, scriptEditorObj] = useEditor(
+    {
+      language: "achi",
+      theme: "vs-dark",
+      options: options,
+      height: "50vh",
+      defaultValue: script,
+      // try "same", "indent" or "none"
+      // wrappingIndent: "indent",
+      beforeMount: registerLangForMonaco,
+    },
+    decoratorRange
+  );
+
+  useEffect(() => {
+    if (!astEditorObj) {
+      return;
+    }
+
+    const disposable = astEditorObj.onDidChangeCursorPosition(async (e) => {
+      const editor = astEditorObj;
+      const model = editor.getModel();
+      setDecoratorRange(null);
+      if (!model) {
+        return null;
+      }
+
+      const value = getJSONObjectAtPosition(e.position, editor);
+
+      try {
+        if (value instanceof Error) {
+          throw value;
+        }
+
+        const parsed = JSON.parse(value);
+        const { kind, _meta: meta } = parsed;
+        if (!kind || !meta) {
+          return;
+        }
+
+        setDecoratorRange(
+          new monaco.Range(
+            meta.start.line,
+            meta.start.column,
+            meta.end.line,
+            meta.end.column
+          )
+        );
+
+        console.log(`${kind}@[${meta.start.line}:${meta.start.column}]`);
+      } catch (e) {
+        console.groupCollapsed("cant parse");
+        console.log("value", value);
+        console.error(e);
+        console.groupEnd();
+      }
+    });
+
+    return () => {
+      disposable.dispose();
+    };
+  }, [astEditorObj]);
 
   useKeyboardShortcuts(doEvaluate);
 
   function doEvaluate() {
     const system = new System();
+    const editor = scriptEditorObj;
 
     try {
-      const editor = scriptEditorRef.current;
       if (!editor) {
         throw new Error("no editor");
       }
 
       const script = editor.getValue();
-      setInitialScript(script);
+      setScript(script);
 
       const ast = tryParse(script);
-      console.log("HERE");
-      astEditorRef.current?.setValue(JSON.stringify(ast, null, 2));
+      astEditorObj?.setValue(JSON.stringify(ast, COMPACT_AST ? null : null, 2));
 
       if (features.has("compile")) {
         const tsAst = compileProgram(ast);
@@ -95,7 +195,7 @@ export default function App() {
           tsAst instanceof Error
             ? "# Compiler error\n" + tsAst.message + "\n" + tsAst.stack
             : printTSStatements(tsAst);
-        tsEditorRef.current?.setValue(printed);
+        tsEditorObj?.setValue(printed);
       }
 
       if (features.has("typecheck")) {
@@ -109,12 +209,12 @@ export default function App() {
       }
       console.error(e);
     }
-    console.log("done.");
+
     setLog(system.console._log);
   }
 
   const doSave = () => {
-    const editor = scriptEditorRef.current;
+    const editor = scriptEditorObj;
     if (!editor) {
       throw new Error("no editor");
     }
@@ -129,7 +229,7 @@ export default function App() {
       <pre>
         {log.map((msg, i) => {
           return msg instanceof Error ? (
-            <details style={{ color: "red" }} key={i}>
+            <details style={{ color: "red" }} key={`e${i}`}>
               <summary>{msg.message}</summary>
               {msg.stack}
             </details>
@@ -151,14 +251,14 @@ export default function App() {
           <details>
             <summary>configure</summary>
             {(["compile", "typecheck", "interpret", "ast"] as const).map(
-              (feature) => {
+              (feature, i) => {
                 const isOn = features.has(feature);
                 return (
-                  <>
+                  <React.Fragment key={i}>
                     <input
                       type="checkbox"
                       checked={isOn}
-                      onChange={(e) => {
+                      onChange={() => {
                         if (isOn) {
                           features.delete(feature);
                         } else {
@@ -169,7 +269,7 @@ export default function App() {
                     />
                     <label>{feature}</label>
                     <br />
-                  </>
+                  </React.Fragment>
                 );
               }
             )}
@@ -187,7 +287,7 @@ export default function App() {
                 <li key={i}>
                   <button
                     onClick={() => {
-                      scriptEditorRef.current?.setValue(script);
+                      scriptEditorObj?.setValue(script);
                     }}
                   >
                     {script.split("\n")[0]}
