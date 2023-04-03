@@ -290,8 +290,8 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       Parsimmon.seqMap(
         Parsimmon.string("["),
         r._,
-        r.Expression.sepBy(r._comma),
-        Parsimmon.string("]"),
+        r.Expression.sepBy(r._comma.trim(r._)),
+        Parsimmon.string("]").trim(r._),
         function (_0, _1, expressions, _2) {
           return {
             kind: "ListLiteral",

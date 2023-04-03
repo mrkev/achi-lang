@@ -89,15 +89,24 @@ export function stringOfValue(value: Value): string {
   return String(printableOfValue(value));
 }
 
-export function printableOfValue(value: Value) {
+type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
+
+export function printableOfValue(
+  value: Value
+): ValueOrArray<number | string | boolean | null> {
   const { kind } = value;
   switch (kind) {
     case "number":
     case "string":
     case "boolean": {
-      // console.log(value.value, "to string", String(value.value));
+      // console.log(value.value, "tso string", String(value.value));
       return value.value;
     }
+
+    case "ListLiteralInstance": {
+      return value.value.map((val) => printableOfValue(val));
+    }
+
     case "NamedRecordInstance": {
       let str = value.value.konstructor.classname + " {";
       const entries = [...value.value.recordLiteral.props.entries()];

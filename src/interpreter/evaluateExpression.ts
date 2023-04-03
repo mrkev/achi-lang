@@ -1,6 +1,7 @@
 import { LangType } from "../parser/parser";
 import {
   boolean,
+  list,
   namedRecordInstance,
   number,
   recordInstance,
@@ -96,6 +97,17 @@ export function evaluateExpression(
       return boolean(expression.value);
     }
 
+    case "MapLiteral": {
+      throw new Error("Not implemented, MapLiteral");
+    }
+
+    case "ListLiteral": {
+      const values = expression.expressions.map((expr) =>
+        evaluateExpression(expr, context, system)
+      );
+      return list(values);
+    }
+
     case "RecordLiteral": {
       const props = new Map<string, Value>();
       for (const def of expression.definitions) {
@@ -146,14 +158,6 @@ export function evaluateExpression(
       const value = evaluateExpression(expression.expression, context, system);
       const result = evaluateMatch(value, expression.block, context, system);
       return result;
-    }
-
-    case "MapLiteral": {
-      throw new Error("Not implemented, MapLiteral");
-    }
-
-    case "ListLiteral": {
-      throw new Error("Not implemented, ListLiteral");
     }
 
     case "AnonymousFunctionLiteral": {

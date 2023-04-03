@@ -3,7 +3,7 @@ import { useEffect } from "react";
 export function useKeyboardShortcuts(doEvaluate: () => void) {
   useEffect(() => {
     const onKeyDown = function (e: KeyboardEvent) {
-      // Cmd+S
+      // Cmd+S, todo save script?
       if (e.key === "s" && e.metaKey) {
         e.preventDefault();
         doEvaluate();

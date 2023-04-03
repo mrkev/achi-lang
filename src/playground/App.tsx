@@ -6,7 +6,7 @@ import { tryParse } from "../parser/parser";
 import { compileProgram, printTSStatements } from "../compiler/compiler";
 import { useLocalStorage } from "usehooks-ts";
 import { registerLangForMonaco } from "../playground/registerLangForMonaco";
-import { useKeyboardShortcuts } from "./uiHooks";
+import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 import { useEditor } from "./useEditor";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
@@ -216,6 +216,7 @@ export default function App() {
 
     if (openScript == null) {
       setSavedScripts(savedScripts.concat([script]));
+      setOpenScript(savedScripts.length);
     } else {
       const newScripts = [...savedScripts];
       newScripts.splice(openScript, 1, script);

@@ -24,6 +24,8 @@ export type Value =
   /*
    * Data Structures
    */
+  //
+  | { kind: "ListLiteralInstance"; value: Value[] }
   // (x: 3, y: 2)
   | { kind: "RecordInstance"; value: RecordInstance }
   // Point(x: 3, y: 2)
@@ -99,6 +101,12 @@ function nil(value: null): Readonly<{ kind: "nil"; value: null }> {
   return { kind: "nil", value } as const;
 }
 
+function list(
+  value: Value[]
+): Readonly<{ kind: "ListLiteralInstance"; value: Value[] }> {
+  return { kind: "ListLiteralInstance", value: value };
+}
+
 // TODO: kind: "NamedRecordInstance" (and others) lowercase like primitives?
 function namedRecordInstance(
   value: NamedRecordInstance
@@ -114,6 +122,7 @@ function recordInstance(
 }
 
 export { number, string, boolean, nil };
+export { list };
 export { namedRecordInstance, recordInstance };
 
 // // function printPoint matches (point: Point) { ... }
