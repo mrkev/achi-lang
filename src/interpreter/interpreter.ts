@@ -47,7 +47,7 @@ export function interpret(
       system.console.fail(
         new Error("Unknown error type during interpretation")
       );
-      console.error("Unknown error type during interpretation");
+      console.error(e);
     }
     const quietConsoleErr = options?.quietConsoleError === true;
     if (!quietConsoleErr) {

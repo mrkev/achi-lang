@@ -35,7 +35,7 @@ export function check(
     } else if (typeof e === "string") {
       system.console.fail(new Error(e));
     } else {
-      console.log("Unknown error type during interpretation");
+      console.log("Unknown error type during type checking");
     }
     console.error(e);
   }

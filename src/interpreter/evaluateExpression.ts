@@ -243,7 +243,6 @@ function callFunction(
 
       context.stack.pop();
       context.valueScope.pop();
-
       if (result == null) {
         // TODO: do I really want functions to return an implicit null?
         return nil(result);

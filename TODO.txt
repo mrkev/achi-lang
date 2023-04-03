@@ -1,1 +1,6 @@
 // TODO: can return from top-level, print that?
+
+
+- arr[0] = 3;
+- for..of
+- for..let

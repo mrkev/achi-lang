@@ -18,13 +18,12 @@ test("match.1", () => {
   ${COMMON_DEFS}
   const result = match (four) {
     case Card.King(): {
-      return "king"
+      #log "king"
     };
     case Card.Number(value: value): {
-      return "number card"
+      #log "number card"
     }
   };
-  #log result 
   `);
   expect(logs).toEqual(["number card"]);
 });
@@ -34,13 +33,12 @@ test("match.2", () => {
   ${COMMON_DEFS}
   const result = match (king) {
     case Card.King(): {
-      return "king"
+      #log "king"
     };
     case Card.Number(value: value): {
-      return "number card"
+      #log "number card"
     }
   };
-  #log result 
   `);
   expect(logs).toEqual(["king"]);
 });
@@ -50,13 +48,12 @@ test("match.binding", () => {
   ${COMMON_DEFS}
   const result = match (four) {
     case Card.King(): {
-      return "king"
+      #log "king"
     };
     case Card.Number(value: value): {
-      return value
+      #log value
     }
   };
-  #log result 
   `);
   expect(logs).toEqual(["4"]);
 });
@@ -66,13 +63,12 @@ test("match.literals", () => {
   ${COMMON_DEFS}
   const result = match (litTrue) {
     case false: {
-      return "false"
+      #log "false"
     };
     case true: {
-      return "true"
+      #log "true"
     };
   };
-  #log result 
   `);
   expect(logs).toEqual(["true"]);
 });

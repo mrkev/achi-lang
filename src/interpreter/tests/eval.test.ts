@@ -1,4 +1,4 @@
-import { logsFor } from "./logsFor";
+import { logsFor, fatalFor } from "./logsFor";
 
 test("simple.1", () => {
   const logs = logsFor(`#log "hi"`);
@@ -15,8 +15,7 @@ test("if.true", () => {
 });
 
 test("error.nice", () => {
-  const logs = logsFor(`
-
+  const logs = fatalFor(`
   const one = y;
   #log one
   `);
