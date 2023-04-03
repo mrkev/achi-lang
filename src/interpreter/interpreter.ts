@@ -12,7 +12,8 @@ import {
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import { TypeMismatchError } from "../checker/checker";
-import { ScriptError, Value } from "./value";
+import { Value } from "./value";
+import { ScriptError } from "./ScriptError";
 
 export function interpret(
   script: string | LangType["Program"],

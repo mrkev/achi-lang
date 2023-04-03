@@ -15,7 +15,7 @@ import * as monaco from "monaco-editor";
 import React from "react";
 import { DEFAULT_SCRIPT } from "./constants";
 import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
-import { ScriptError } from "../interpreter/value";
+import { ScriptError } from "../interpreter/ScriptError";
 
 const COMPACT_AST = true;
 
@@ -33,7 +33,8 @@ export default function App() {
   const [script, setScript] = useLocalStorage("script", DEFAULT_SCRIPT);
   const [scripts, setScripts] = useLocalStorage<string[]>("scripts", []);
   const [log, setLog] = useState<(Error | string)[]>([]);
-  const [fatalError, setFatalError] = useState<Error | null>(null);
+  const [fatalScriptError, setFatalScriptError] = useState<Error | null>(null);
+  const [systemError, setSystemError] = useState<Error | null>(null);
 
   const [decoratorRange, setDecoratorRange] = useState<null | monaco.Range>(
     null
@@ -145,6 +146,8 @@ export default function App() {
       const script = editor.getValue();
       setScript(script);
       setDecoratorRange(null);
+      setFatalScriptError(null);
+      setSystemError(null);
 
       const ast = tryParse(script);
       const replacer = (key: string, value: any) => {
@@ -177,20 +180,16 @@ export default function App() {
 
       interpret(script, system);
     } catch (e) {
-      if (e instanceof ScriptError) {
-        system.console.fail(e);
-        console.log("fatal", system.console._fatalError);
-      } else if (e instanceof Error) {
-        system.console.fail(e);
+      if (e instanceof Error) {
+        setSystemError(e);
       } else if (typeof e === "string") {
-        system.console.fail(new Error(e));
+        setSystemError(new Error(e));
       } else {
         console.error(e);
       }
     }
 
-    setFatalError(system.console._fatalError);
-
+    setFatalScriptError(system.console._fatalError);
     setLog(system.console._log);
   }, [astEditorObj, features, scriptEditorObj, setScript, tsEditorObj]);
 
@@ -206,8 +205,8 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (fatalError instanceof ScriptError && fatalError.pos) {
-      const { pos } = fatalError;
+    if (fatalScriptError instanceof ScriptError && fatalScriptError.pos) {
+      const { pos } = fatalScriptError;
       setDecoratorRange(
         new monaco.Range(
           pos.start.line,
@@ -217,9 +216,7 @@ export default function App() {
         )
       );
     }
-  }, [fatalError]);
-
-  console.log((fatalError as any).pos);
+  }, [fatalScriptError]);
 
   const evaluationBox = (
     <div style={{ width: "100%", flexShrink: 0, overflow: "scroll" }}>
@@ -227,10 +224,16 @@ export default function App() {
       <button onClick={doSave}>Save</button>
 
       <pre>
-        {fatalError && (
+        {systemError && (
           <details style={{ color: "red" }}>
-            <summary>FATAL: {fatalError.message}</summary>
-            {fatalError.stack}
+            <summary>SYSTEM: {systemError.message}</summary>
+            {systemError.stack}
+          </details>
+        )}
+        {fatalScriptError && (
+          <details style={{ color: "red" }}>
+            <summary>SCRIPT: {fatalScriptError.message}</summary>
+            {fatalScriptError.stack}
           </details>
         )}
         {log.map((msg, i) => {

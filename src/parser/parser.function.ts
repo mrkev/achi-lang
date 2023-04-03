@@ -1,6 +1,7 @@
 import * as Parsimmon from "parsimmon";
-import { LangType, Meta } from "./parser";
+import { LangType } from "./parser";
 import { sublang } from "./sublang";
+import { Meta } from "../parser/Node";
 
 export type LangType_Function = {
   // printPoint(x: 3, y: 4)

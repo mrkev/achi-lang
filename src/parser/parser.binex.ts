@@ -1,12 +1,13 @@
 import * as Parsimmon from "parsimmon";
 import { LangType } from "./parser";
+import { Node } from "./Node";
 
 type PrefixUnaryOperator = "-" | "!";
-export type PrefixUnaryOperation = {
+export type PrefixUnaryOperation = Node<{
   kind: "PrefixUnaryOperation";
   operator: PrefixUnaryOperator;
   value: NEXT_PARSER;
-};
+}>;
 
 type SuffixUnaryOperator = "!";
 export type SuffixUnaryOperation = {
@@ -33,6 +34,7 @@ type BinaryOperator =
   | "<="
   | "=="
   | "!=";
+
 export type BinaryOperation = {
   kind: "BinaryOperation";
   operator: BinaryOperator;
@@ -75,13 +77,16 @@ function PREFIX(
 ): Parsimmon.Parser<NEXT_PARSER> {
   const parser = Parsimmon.lazy<NEXT_PARSER>(() => {
     const res: Parsimmon.Parser<NEXT_PARSER> = Parsimmon.seqMap(
+      Parsimmon.index,
       operatorsParser,
       parser,
-      (operator, value) =>
+      Parsimmon.index,
+      (start, operator, value, end) =>
         ({
           kind: "PrefixUnaryOperation",
           operator,
           value,
+          "@": { start, end },
         } as const)
     ).or(nextParser);
     return res;

@@ -3,28 +3,7 @@ import { ExhaustiveParsers } from "./sublang";
 import { LangType_BinOp, LangDef_BinOp } from "./parser.operations";
 import { LangDef_Function, LangType_Function } from "./parser.function";
 import { LangType_Match, LangDef_Match } from "./parser.match";
-
-export type Meta = {
-  start: Parsimmon.Index;
-  end: Parsimmon.Index;
-};
-
-type Node<
-  T extends {
-    [rest: string]: any;
-    kind: string;
-  }
-> = Readonly<
-  T & {
-    "@": Meta;
-  }
->;
-
-// type Foo = Node<{
-//   kind: "Foo";
-//   x: number;
-//   that: string;
-// }>;
+import { Node, withAt } from "./Node";
 
 export type LangType = LangType_BinOp &
   LangType_Match &
@@ -37,31 +16,31 @@ export type LangType = LangType_BinOp &
     blockComment: string;
 
     // Expressions
-    ValueIdentifier: { kind: "ValueIdentifier"; value: string; "@": Meta };
-    TypeIdentifier: { kind: "TypeIdentifier"; value: string; "@": Meta };
-    NumberLiteral: { kind: "NumberLiteral"; value: number; "@": Meta };
-    StringLiteral: { kind: "StringLiteral"; value: string };
-    BooleanLiteral: { kind: "BooleanLiteral"; value: boolean };
+    ValueIdentifier: Node<{ kind: "ValueIdentifier"; value: string }>;
+    TypeIdentifier: Node<{ kind: "TypeIdentifier"; value: string }>;
+    NumberLiteral: Node<{ kind: "NumberLiteral"; value: number }>;
+    StringLiteral: Node<{ kind: "StringLiteral"; value: string }>;
+    BooleanLiteral: Node<{ kind: "BooleanLiteral"; value: boolean }>;
 
     // Card.Number
-    NestedTypeIdentifier: {
+    NestedTypeIdentifier: Node<{
       kind: "NestedTypeIdentifier";
       path: Array<LangType["TypeIdentifier"]>;
-    };
+    }>;
 
     // return 3
-    ReturnStatement: {
+    ReturnStatement: Node<{
       kind: "ReturnStatement";
       expression: LangType["Expression"];
-    };
+    }>;
 
     // if (x < 3) {}
-    IfStatement: {
+    IfStatement: Node<{
       kind: "IfStatement";
       guard: LangType["Expression"];
       block: LangType["Block"];
       elseCase: LangType["Block"] | LangType["IfStatement"] | null;
-    };
+    }>;
 
     Expression:
       | LangType["BooleanLiteral"]
@@ -79,11 +58,11 @@ export type LangType = LangType_BinOp &
       | LangType["OperationExpression"];
     // | BinaryExpression;
 
-    ConstantDefinition: {
+    ConstantDefinition: Node<{
       kind: "ConstantDefinition";
       identifier: LangType["ValueIdentifier"];
       expression: LangType["Expression"];
-    };
+    }>;
 
     // Records
 
@@ -108,11 +87,11 @@ export type LangType = LangType_BinOp &
     };
 
     // Point(x: 5, y: 3)
-    NamedRecordLiteral: {
+    NamedRecordLiteral: Node<{
       kind: "NamedRecordLiteral";
       identifier: LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"];
       recordLiteral: LangType["RecordLiteral"];
-    };
+    }>;
 
     //* (x: 5, y: 5)
     RecordLiteral: {
@@ -241,22 +220,26 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // Regexp based parsers should generally be named for better error reporting.
   StringLiteral: () =>
-    token(Parsimmon.regexp(/"((?:\\.|.)*?)"/, 1))
-      .map(interpretEscapes)
-      .map(
-        (str) =>
-          ({
-            kind: "StringLiteral",
-            value: str,
-          } as const)
-      )
-      .desc("string"),
+    withAt(
+      token(Parsimmon.regexp(/"((?:\\.|.)*?)"/, 1))
+        .map(interpretEscapes)
+        .map(
+          (str) =>
+            ({
+              kind: "StringLiteral",
+              value: str,
+            } as const)
+        )
+        .desc("string")
+    ),
 
   BooleanLiteral: () => {
-    return Parsimmon.regexp(/true|false/).map((str) => ({
-      kind: "BooleanLiteral",
-      value: str === "true",
-    }));
+    return withAt(
+      Parsimmon.regexp(/true|false/).map((str) => ({
+        kind: "BooleanLiteral",
+        value: str === "true",
+      }))
+    );
   },
 
   ...LangDef_BinOp,
@@ -274,13 +257,13 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // TODO: test
   NestedTypeIdentifier: (r) => {
-    return Parsimmon.sepBy1(r.TypeIdentifier, Parsimmon.string(".")).map(
-      (path) => {
+    return withAt(
+      Parsimmon.sepBy1(r.TypeIdentifier, Parsimmon.string(".")).map((path) => {
         return {
           kind: "NestedTypeIdentifier",
           path,
         };
-      }
+      })
     );
   },
 
@@ -400,16 +383,18 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // return 5
   ReturnStatement: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("return"),
-      r.__,
-      r.Expression,
-      (_0, _1, expression) => {
-        return {
-          kind: "ReturnStatement",
-          expression,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("return"),
+        r.__,
+        r.Expression,
+        (_0, _1, expression) => {
+          return {
+            kind: "ReturnStatement",
+            expression,
+          };
+        }
+      )
     );
   },
 
@@ -425,25 +410,27 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       }
     );
 
-    return Parsimmon.seqMap(
-      Parsimmon.string("if"),
-      r._,
-      Parsimmon.string("("),
-      r._,
-      r.Expression,
-      r._,
-      Parsimmon.string(")"),
-      r._,
-      r.Block,
-      elseCase.atMost(1),
-      (_0, _1, _2, _3, expression, _5, _6, _7, block, alt) => {
-        return {
-          kind: "IfStatement",
-          guard: expression,
-          block,
-          elseCase: alt.length > 0 ? alt[0] : null,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("if"),
+        r._,
+        Parsimmon.string("("),
+        r._,
+        r.Expression,
+        r._,
+        Parsimmon.string(")"),
+        r._,
+        r.Block,
+        elseCase.atMost(1),
+        (_0, _1, _2, _3, expression, _5, _6, _7, block, alt) => {
+          return {
+            kind: "IfStatement",
+            guard: expression,
+            block,
+            elseCase: alt.length > 0 ? alt[0] : null,
+          };
+        }
+      )
     );
   },
 
@@ -481,42 +468,43 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // const x = 3
   ConstantDefinition: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.string("const"),
-      r.__,
-      r.ValueIdentifier,
-      // TODO
-      // r.TypeTag,
-      r._,
-      Parsimmon.string("="),
-      r._,
-      r.Expression,
-      function (_0, _1, identifier, _2, _3, _4, expression) {
-        return {
-          kind: "ConstantDefinition",
-          identifier,
-          expression,
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("const"),
+        r.__,
+        r.ValueIdentifier,
+        // TODO
+        // r.TypeTag,
+        r._,
+        Parsimmon.string("="),
+        r._,
+        r.Expression,
+        function (_0, _1, identifier, _2, _3, _4, expression) {
+          return {
+            kind: "ConstantDefinition",
+            identifier,
+            expression,
+          };
+        }
+      )
     );
   },
 
   ...LangDef_Function,
 
   Block: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.index,
-      Parsimmon.string("{"),
-      r.StatementList,
-      Parsimmon.string("}"),
-      Parsimmon.index,
-      function (start, _1, statements, _2, end) {
-        return {
-          kind: "Block",
-          statements: statements.statements,
-          "@": { start, end },
-        };
-      }
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("{"),
+        r.StatementList,
+        Parsimmon.string("}"),
+        function (_1, statements, _2) {
+          return {
+            kind: "Block",
+            statements: statements.statements,
+          };
+        }
+      )
     );
   },
 
@@ -556,6 +544,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //* Point(x: 5, y: 5)
   NamedRecordLiteral: (r) => {
     return Parsimmon.seqMap(
+      Parsimmon.index,
       Parsimmon.alt<
         LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"]
       >(
@@ -563,11 +552,13 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         r.NestedTypeIdentifier
       ),
       r.RecordLiteral,
-      function (identifier, recordLiteral) {
+      Parsimmon.index,
+      function (start, identifier, recordLiteral, end) {
         return {
           kind: "NamedRecordLiteral",
           identifier,
           recordLiteral,
+          "@": { start, end },
         };
       }
     );

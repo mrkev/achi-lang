@@ -1,4 +1,5 @@
-import { LangType, Meta } from "../parser/parser";
+import { LangType } from "../parser/parser";
+import { ScriptError } from "./ScriptError";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import {
@@ -7,14 +8,6 @@ import {
   NamedRecordKlass,
   RecordInstance,
 } from "./runtime/runtime.records";
-
-export class ScriptError extends Error {
-  readonly pos: Meta | null;
-  constructor(message: string, pos?: Meta, options?: any) {
-    super(message, options);
-    this.pos = pos ?? null;
-  }
-}
 
 export type Value =
   /*
