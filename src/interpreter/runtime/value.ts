@@ -1,44 +1,73 @@
-import { LangType } from "../parser/parser";
-import { ScriptError } from "./interpreterErrors";
-import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
-import { MatchFunctionInstance } from "./runtime/runtime.match";
+import { LangType } from "../../parser/parser";
+import { ScriptError } from "../interpreterErrors";
+import { AnonymousFunctionInstance } from "./runtime.functions";
+import { MatchFunctionInstance } from "./runtime.match";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordInstance,
   NamedRecordKlass,
-  RecordInstance,
-} from "./runtime/runtime.records";
+} from "./runtime.records";
+
+// 3
+export type Number = Readonly<{
+  kind: "number";
+  value: number;
+  src: LangType["Expression"] | null;
+}>;
+
+// "hello"
+export type String = Readonly<{ kind: "string"; value: string }>;
+
+// false
+export type Boolean = Readonly<{ kind: "boolean"; value: boolean }>;
+
+// null
+export type Nil = Readonly<{ kind: "nil"; value: null }>;
+
+// [1, 2, 3]
+export type ListInstance = {
+  kind: "ListInstance";
+  value: Value[];
+};
+
+// ie, (x: 3, y: 4)
+export type RecordInstance = Readonly<{
+  kind: "RecordInstance";
+  src: LangType["RecordLiteral"];
+  props: Map<string, Value>;
+}>;
 
 export type Value =
   /*
    * Primitives
    */
-  // 3
-  | { kind: "number"; value: number; src: LangType["Expression"] | null }
-  // "hello"
-  | { kind: "string"; value: string }
-  // false
-  | { kind: "boolean"; value: boolean }
-  // null
-  | { kind: "nil"; value: null }
+  | Number // 3
+  | String // "hello"
+  | Boolean // false
+  | Nil // null
   /*
-   * Data Structures
+   * Simple Data Structures
    */
-  //
-  | { kind: "ListLiteralInstance"; value: Value[] }
-  // (x: 3, y: 2)
-  | { kind: "RecordInstance"; value: RecordInstance }
+  | ListInstance // [1, 2, 3]
+  | RecordInstance // (x: 3, y: 2)
+  /*
+   * Complex Instances
+   */
   // Point(x: 3, y: 2)
   | { kind: "NamedRecordInstance"; value: NamedRecordInstance }
   // class Point(x: number, y: number)
   | { kind: "NamedRecordKlass"; value: NamedRecordKlass }
-  // function printPoint matches (point: Point) { ... }
-  | { kind: "MatchFunctionInstance"; value: MatchFunctionInstance }
   // classes Cards { ... }
   | {
       kind: "NamedRecordDefinitionGroupInstance";
       value: NamedRecordDefinitionGroupInstance;
     }
+  /*
+   * Functions
+   */
+  // function printPoint matches (point: Point) { ... }
+  | { kind: "MatchFunctionInstance"; value: MatchFunctionInstance }
+  // (point: Point) => {...}
   | {
       kind: "AnonymousFunctionInstance";
       value: AnonymousFunctionInstance;
@@ -46,7 +75,7 @@ export type Value =
 
 // Validators
 
-function expectNumber(value: Value): { kind: "number"; value: number } {
+function expectNumber(value: Value): Number {
   if (value.kind === "number") {
     return value;
   } else {
@@ -54,58 +83,56 @@ function expectNumber(value: Value): { kind: "number"; value: number } {
   }
 }
 
-function expectString(value: Value): { kind: "string"; value: string } {
+function expectString(value: Value): String {
   if (value.kind === "string") {
     return value;
   } else {
     const src = (value as any).src ?? {};
     const pos = src.pos;
-    console.log("HELLO");
     throw new ScriptError(`STRING EXPECTED`, pos);
   }
 }
 
-function expectBoolean(value: Value): { kind: "boolean"; value: boolean } {
+function expectBoolean(value: Value): Boolean {
   if (value.kind === "boolean") {
     return value;
   } else {
     throw new Error("BOOLEAN EXPECTED");
   }
 }
+
 export { expectNumber, expectString, expectBoolean };
 
 // Constructors
 
-function number(
-  value: number,
-  src?: LangType["Expression"]
-): Readonly<{
-  kind: "number";
-  value: number;
-  src: LangType["Expression"] | null;
-}> {
+function number(value: number, src?: LangType["Expression"]): Number {
   return { kind: "number", value, src: src ?? null } as const;
 }
 
-function string(value: string): Readonly<{ kind: "string"; value: string }> {
+function string(value: string): String {
   return { kind: "string", value } as const;
 }
 
-function boolean(
-  value: boolean
-): Readonly<{ kind: "boolean"; value: boolean }> {
+function boolean(value: boolean): Boolean {
   return { kind: "boolean", value } as const;
 }
 
-function nil(value: null): Readonly<{ kind: "nil"; value: null }> {
+function nil(value: null): Nil {
   return { kind: "nil", value } as const;
 }
 
-function list(
-  value: Value[]
-): Readonly<{ kind: "ListLiteralInstance"; value: Value[] }> {
-  return { kind: "ListLiteralInstance", value: value };
+function list(value: Value[]): ListInstance {
+  return { kind: "ListInstance", value: value } as const;
 }
+
+function record(
+  src: LangType["RecordLiteral"],
+  props: Map<string, Value>
+): RecordInstance {
+  return { kind: "RecordInstance", src, props } as const;
+}
+
+export { number, string, boolean, nil, list };
 
 // TODO: kind: "NamedRecordInstance" (and others) lowercase like primitives?
 function namedRecordInstance(
@@ -114,16 +141,7 @@ function namedRecordInstance(
   return { kind: "NamedRecordInstance", value } as const;
 }
 
-// TODO: kind: "RecordInstance" (and others) lowercase like primitives?
-function recordInstance(
-  value: RecordInstance
-): Readonly<{ kind: "RecordInstance"; value: RecordInstance }> {
-  return { kind: "RecordInstance", value } as const;
-}
-
-export { number, string, boolean, nil };
-export { list };
-export { namedRecordInstance, recordInstance };
+export { namedRecordInstance, record as recordInstance };
 
 // // function printPoint matches (point: Point) { ... }
 // function MatchFunctionInstance(value: MatchFunctionInstance): {

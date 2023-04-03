@@ -1,10 +1,10 @@
 import { LangType, tryParse } from "../parser/parser";
 import { Context } from "./Context";
 import { System } from "./runtime/System";
-import { exhaustive, nullthrows } from "./nullthrows";
+import { exhaustive } from "./nullthrows";
 import { evaluateStatements } from "./evaluateStatements";
 import { TypeMismatchError } from "../checker/checker";
-import { Value } from "./value";
+import { Value } from "./runtime/value";
 import { ScopeError, ScriptError } from "./interpreterErrors";
 
 // // Importing and exporting makes this easier, can define things in the lang itself
@@ -103,7 +103,7 @@ export function printableOfValue(
       return value.value;
     }
 
-    case "ListLiteralInstance": {
+    case "ListInstance": {
       return value.value.map((val) => printableOfValue(val));
     }
 
@@ -133,7 +133,7 @@ export function printableOfValue(
     case "RecordInstance": {
       // return "todo RecordLiteral";
       let str = "(\n";
-      for (const [key, val] of value.value.props.entries()) {
+      for (const [key, val] of value.props.entries()) {
         // add indendation
         const valStr = stringOfValue(val)
           .split("\n")
@@ -146,7 +146,7 @@ export function printableOfValue(
     }
 
     case "NamedRecordDefinitionGroupInstance": {
-      return `[classes: ${value.value.ast.identifier.value} (${value.value.ast.namedRecordDefinitions.length} classes)]`;
+      return `[classes: ${value.value.src.identifier.value} (${value.value.src.namedRecordDefinitions.length} classes)]`;
     }
 
     case "AnonymousFunctionInstance": {
@@ -162,22 +162,22 @@ export function printableOfValue(
   }
 }
 
-function resolveTypeIdentifier(
-  identifier: LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"],
-  context: Context
-) {
-  // TODO: implement
-  const { kind } = identifier;
-  switch (kind) {
-    case "TypeIdentifier": {
-      return identifier.value;
-    }
+// function resolveTypeIdentifier(
+//   identifier: LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"],
+//   context: Context
+// ) {
+//   // TODO: implement
+//   const { kind } = identifier;
+//   switch (kind) {
+//     case "TypeIdentifier": {
+//       return identifier.value;
+//     }
 
-    case "NestedTypeIdentifier": {
-      return nullthrows(
-        identifier.path[identifier.path.length - 1]?.value,
-        "parser error: parser should ensure NestedTypeIdentifier is never of length < 2"
-      );
-    }
-  }
-}
+//     case "NestedTypeIdentifier": {
+//       return nullthrows(
+//         identifier.path[identifier.path.length - 1]?.value,
+//         "parser error: parser should ensure NestedTypeIdentifier is never of length < 2"
+//       );
+//     }
+//   }
+// }

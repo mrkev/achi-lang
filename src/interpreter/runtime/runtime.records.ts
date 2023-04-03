@@ -1,7 +1,5 @@
 import type { LangType } from "../../parser/parser";
-import { Context } from "../Context";
-import { Value } from "../value";
-import { System } from "./System";
+import { RecordInstance } from "./value";
 
 /**
  * Represents the constructor for a named record, as it sits in memory
@@ -10,13 +8,13 @@ import { System } from "./System";
 export class NamedRecordKlass {
   readonly classname: string;
   readonly valueSpec: Map<string, string> = new Map(); // identifer => type
-  ast: LangType["NamedRecordDefinition"];
+  readonly src: LangType["NamedRecordDefinition"];
   constructor(
     ast: LangType["NamedRecordDefinition"],
     classname: string,
     valueSpec: Map<string, string>
   ) {
-    this.ast = ast;
+    this.src = ast;
     this.classname = classname;
     this.valueSpec = valueSpec;
   }
@@ -55,37 +53,28 @@ export class NamedRecordKlass {
 export class NamedRecordInstance {
   readonly konstructor: NamedRecordKlass;
   readonly recordLiteral: RecordInstance;
-  ast: LangType["NamedRecordLiteral"];
+  readonly src: LangType["NamedRecordLiteral"];
   constructor(
     ast: LangType["NamedRecordLiteral"],
     konstructor: NamedRecordKlass,
     recordLiteralInstance: RecordInstance
   ) {
-    this.ast = ast;
+    this.src = ast;
     this.konstructor = konstructor;
     this.recordLiteral = recordLiteralInstance;
   }
 }
 
-// ie, (x: 3, y: 4)
-export class RecordInstance {
-  ast: LangType["RecordLiteral"];
-  props: Map<string, Value>;
-  constructor(ast: LangType["RecordLiteral"], props: Map<string, Value>) {
-    this.ast = ast;
-    this.props = props;
-  }
-}
-
 // ie, classes Card { King(); Queen(); ...etc }
 export class NamedRecordDefinitionGroupInstance {
-  ast: LangType["NamedRecordDefinitionGroup"];
-  klasses: Map<string, NamedRecordKlass>;
+  readonly kind = "NamedRecordDefinitionGroupInstance";
+  readonly src: LangType["NamedRecordDefinitionGroup"];
+  readonly klasses: Map<string, NamedRecordKlass>;
   constructor(
     ast: LangType["NamedRecordDefinitionGroup"],
     klasses: Map<string, NamedRecordKlass>
   ) {
-    this.ast = ast;
+    this.src = ast;
     this.klasses = klasses;
   }
 }

@@ -1,4 +1,4 @@
-import { boolean, expectBoolean, Value } from "./value";
+import { boolean, expectBoolean, Value } from "./runtime/value";
 import { Context } from "./Context";
 import { System } from "./runtime/System";
 import {
@@ -7,7 +7,7 @@ import {
   SuffixUnaryOperation,
 } from "../parser/parser.binex";
 import { factorial } from "./runtime/utils";
-import { expectNumber, expectString, number, string } from "./value";
+import { expectNumber, expectString, number, string } from "./runtime/value";
 import { evaluateExpression } from "./evaluateExpression";
 import { exhaustive } from "./nullthrows";
 

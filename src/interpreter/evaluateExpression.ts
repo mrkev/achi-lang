@@ -4,10 +4,11 @@ import {
   list,
   namedRecordInstance,
   number,
+  RecordInstance,
   recordInstance,
   string,
   Value,
-} from "./value";
+} from "./runtime/value";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { Context } from "./Context";
 import { evaluateStatements, ReturnInterrupt } from "./evaluateStatements";
@@ -15,7 +16,6 @@ import { System } from "./runtime/System";
 import {
   NamedRecordInstance,
   NamedRecordKlass,
-  RecordInstance,
 } from "./runtime/runtime.records";
 import { evaluateMatch } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
@@ -24,14 +24,14 @@ import {
   evaluateSuffixUnaryExpression,
   evaluatePrefixUnaryExpression,
 } from "./evaluateOperation";
-import { nil } from "./value";
+import { nil } from "./runtime/value";
 import { ScopeError } from "./interpreterErrors";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
   context: Context,
   system: System
-): { kind: "RecordInstance"; value: RecordInstance };
+): RecordInstance;
 export function evaluateExpression(
   expression: LangType["Expression"],
   context: Context,
@@ -70,7 +70,7 @@ export function evaluateExpression(
       // TODO: typecheck
       // konstructor.valueSpec
 
-      const recordLiteral = evaluateExpression(
+      const recordInstance = evaluateExpression(
         expression.recordLiteral,
         context,
         system
@@ -79,7 +79,7 @@ export function evaluateExpression(
       const instance = new NamedRecordInstance(
         expression,
         namedRecordKlass,
-        recordLiteral.value
+        recordInstance
       );
 
       return namedRecordInstance(instance);
@@ -117,8 +117,8 @@ export function evaluateExpression(
         props.set(def.identifier.value, value);
       }
 
-      const instance = new RecordInstance(expression, props);
-      return recordInstance(instance);
+      const instance = recordInstance(expression, props);
+      return instance;
     }
 
     case "FunctionCall": {
@@ -204,7 +204,7 @@ function destructureWithRecordDefintion(
 
   const props =
     value.kind === "RecordInstance"
-      ? value.value.props
+      ? value.props
       : value.value.recordLiteral.props;
 
   for (const def of recordDef.definitions) {
@@ -221,11 +221,11 @@ function destructureWithRecordDefintion(
   }
 }
 
-// The type of destructuring for assignments, without types
-// const (a: foo, b) = thing;
-function destructureWithRecordLiteral() {
-  // empty
-}
+// // The type of destructuring for assignments, without types
+// // const (a: foo, b) = thing;
+// function destructureWithRecordLiteral() {
+//   // empty
+// }
 
 function callFunction(
   func: LangType["MatchFunction"] | LangType["AnonymousFunctionLiteral"],

@@ -1,7 +1,7 @@
 import { LangType } from "../../parser/parser";
 import { Context } from "../Context";
 import { evaluateStatements } from "../evaluateStatements";
-import { Value } from "../value";
+import { Value } from "./value";
 import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./System";
 import { aSubsetB } from "./utils";
@@ -91,10 +91,7 @@ function doMatch(
       }
 
       return doMatch(
-        {
-          kind: "RecordInstance",
-          value: valueToMatch.recordLiteral,
-        },
+        valueToMatch.recordLiteral,
         expression.recordLiteral,
         context
       );
@@ -106,7 +103,7 @@ function doMatch(
         return { isMatch: false };
       }
 
-      const instace = value.value;
+      const instace = value;
       const instanceKeys = [...instace.props.keys()];
       const literalKeys = expression.definitions.map(
         (def) => def.identifier.value

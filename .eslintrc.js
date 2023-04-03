@@ -19,6 +19,7 @@ module.exports = {
     "no-fallthrough": "warn",
     "no-empty-function": "off",
     "@typescript-eslint/no-empty-function": "warn",
+    "@typescript-eslint/ban-types": "off",
     "no-useless-escape": "off",
     indent: "off",
     quotes: "off",

@@ -10,7 +10,7 @@ import {
 } from "./runtime/runtime.records";
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import { stringOfType } from "./types";
-import { expectBoolean, Value } from "./value";
+import { expectBoolean, Value } from "./runtime/value";
 
 export class ReturnInterrupt {
   readonly value: Value;
