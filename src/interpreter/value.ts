@@ -1,5 +1,5 @@
 import { LangType } from "../parser/parser";
-import { ScriptError } from "./ScriptError";
+import { ScriptError } from "./interpreterErrors";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import {

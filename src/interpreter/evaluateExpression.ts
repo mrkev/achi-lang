@@ -8,7 +8,7 @@ import {
   Value,
 } from "./value";
 import { exhaustive, nullthrows } from "./nullthrows";
-import { Context, ScopeError } from "./Context";
+import { Context } from "./Context";
 import { evaluateStatements, ReturnInterrupt } from "./evaluateStatements";
 import { System } from "./runtime/System";
 import {
@@ -24,6 +24,7 @@ import {
   evaluatePrefixUnaryExpression,
 } from "./evaluateOperation";
 import { nil } from "./value";
+import { ScopeError } from "./interpreterErrors";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],

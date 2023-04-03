@@ -16,6 +16,7 @@ module.exports = {
   },
   plugins: ["react-hooks", "@typescript-eslint"],
   rules: {
+    "no-fallthrough": "warn",
     "no-empty-function": "off",
     "no-useless-escape": "off",
     indent: "off",

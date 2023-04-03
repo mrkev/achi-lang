@@ -1,9 +1,9 @@
 import * as Parsimmon from "parsimmon";
 
-export type Meta = {
+export type Meta = Readonly<{
   start: Parsimmon.Index;
   end: Parsimmon.Index;
-};
+}>;
 
 export type Node<
   T extends {

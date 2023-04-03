@@ -1,19 +1,16 @@
 import { LangType, tryParse } from "../parser/parser";
-import { Context, ScopeError } from "./Context";
+import { Context } from "./Context";
 import { System } from "./runtime/System";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { evaluateStatements } from "./evaluateStatements";
-import {
-  NamedRecordKlass,
-  RecordInstance,
-  NamedRecordDefinitionGroupInstance,
-  NamedRecordInstance,
-} from "./runtime/runtime.records";
-import { MatchFunctionInstance } from "./runtime/runtime.match";
-import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import { TypeMismatchError } from "../checker/checker";
 import { Value } from "./value";
-import { ScriptError } from "./ScriptError";
+import { ScopeError, ScriptError } from "./interpreterErrors";
+
+// // Importing and exporting makes this easier, can define things in the lang itself
+// function populateGlobalScope(context: Context) {
+//   context.valueScope.define('log', )
+// }
 
 export function interpret(
   script: string | LangType["Program"],
@@ -22,12 +19,17 @@ export function interpret(
   options?: {
     quietConsoleError?: boolean;
   }
-): void {
+): Context {
   try {
     const ast = typeof script === "string" ? tryParse(script) : script;
     context.valueScope.push();
+    // populateGlobalScope(context);
     evaluateStatements(ast.statements, context, system);
-    context.valueScope.pop();
+    // NOTE: we don't pop this top-level Scope, because we want to return the
+    // final context. When we implement `export const ...` we can pop it, since
+    // we will have saved exported values in a separate list and it's probably
+    // what we want
+    // context.valueScope.pop();
   } catch (e) {
     if (e instanceof ScopeError) {
       if (typeof script === "string") {
@@ -52,6 +54,7 @@ export function interpret(
       console.error(e);
     }
   }
+  return context;
 }
 
 export function niceError(
@@ -83,13 +86,17 @@ export function niceError(
 }
 
 export function stringOfValue(value: Value): string {
+  return String(printableOfValue(value));
+}
+
+export function printableOfValue(value: Value) {
   const { kind } = value;
   switch (kind) {
     case "number":
     case "string":
     case "boolean": {
       // console.log(value.value, "to string", String(value.value));
-      return String(value.value);
+      return value.value;
     }
     case "NamedRecordInstance": {
       let str = value.value.konstructor.classname + " {";
@@ -138,7 +145,7 @@ export function stringOfValue(value: Value): string {
     }
 
     case "nil": {
-      return "null";
+      return null;
     }
 
     default:

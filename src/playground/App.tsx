@@ -15,7 +15,8 @@ import * as monaco from "monaco-editor";
 import React from "react";
 import { DEFAULT_SCRIPT } from "./constants";
 import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
-import { ScriptError } from "../interpreter/ScriptError";
+import { ScriptError } from "../interpreter/interpreterErrors";
+import { Context, stringOfValueScope } from "../interpreter/Context";
 
 const COMPACT_AST = true;
 
@@ -35,6 +36,7 @@ export default function App() {
   const [log, setLog] = useState<(Error | string)[]>([]);
   const [fatalScriptError, setFatalScriptError] = useState<Error | null>(null);
   const [systemError, setSystemError] = useState<Error | null>(null);
+  const [finalContext, setFinalContext] = useState<Context | null>(null);
 
   const [decoratorRange, setDecoratorRange] = useState<null | monaco.Range>(
     null
@@ -50,7 +52,7 @@ export default function App() {
 
   const features = useMemo(() => new Set(featureArr), [featureArr]);
 
-  const [tsEditor, tsEditorObj] = useEditor({
+  const [_tsEditor, tsEditorObj] = useEditor({
     language: "typescript",
     height: "50vh",
     theme: "vs-dark",
@@ -179,7 +181,8 @@ export default function App() {
         // check(script, undefined, system);
       }
 
-      interpret(script, system);
+      const finalContext = interpret(script, system);
+      setFinalContext(finalContext);
     } catch (e) {
       if (e instanceof Error) {
         setSystemError(e);
@@ -219,10 +222,13 @@ export default function App() {
     }
   }, [fatalScriptError]);
 
+  const valueScope = finalContext?.valueScope;
   const evaluationBox = (
     <div style={{ width: "100%", flexShrink: 0, overflow: "scroll" }}>
       <button onClick={doEvaluate}>Evaluate</button>
       <button onClick={doSave}>Save</button>
+
+      {valueScope && <pre>{stringOfValueScope(valueScope)}</pre>}
 
       <pre>
         {systemError && (

@@ -1,4 +1,4 @@
-import { ScriptError } from "../ScriptError";
+import { ScriptError } from "../interpreterErrors";
 
 /**
  * System handles I/O, other APIs

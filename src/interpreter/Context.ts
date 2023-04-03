@@ -7,6 +7,7 @@ import { nullthrows } from "./nullthrows";
 import { LangType } from "../parser/parser";
 import Parsimmon from "parsimmon";
 import { Type } from "../checker/types";
+import { printableOfValue, stringOfValue } from "./interpreter";
 
 // Node => Type
 // string => Value
@@ -90,26 +91,26 @@ export class Context {
 class Scope<K, V> {
   // Note, we start with no scopes. We need to make sure we push
   // a sope before we try to define variables
-  private readonly stack: Map<K, V>[] = [];
+  readonly _stack: Map<K, V>[] = [];
 
   push() {
-    this.stack.push(new Map());
+    this._stack.push(new Map());
   }
 
   pop() {
-    if (this.stack.length === 0) {
+    if (this._stack.length === 0) {
       throw new Error("Can't pop from empty scope stack!");
     }
-    this.stack.pop();
+    this._stack.pop();
   }
 
   private peek() {
-    return this.stack[this.stack.length - 1];
+    return this._stack[this._stack.length - 1];
   }
 
   has(key: K): boolean {
-    for (let i = this.stack.length - 1; i > -1; i--) {
-      const current = this.stack[i];
+    for (let i = this._stack.length - 1; i > -1; i--) {
+      const current = this._stack[i];
       if (current.has(key)) {
         return true;
       }
@@ -149,8 +150,8 @@ class Scope<K, V> {
       throw new Error(`no stack element to get from`);
     }
 
-    for (let i = this.stack.length - 1; i > -1; i--) {
-      const current = this.stack[i];
+    for (let i = this._stack.length - 1; i > -1; i--) {
+      const current = this._stack[i];
       if (current.has(key)) {
         // const val = top.get(key);
         // if (val == null) {
@@ -171,20 +172,15 @@ class Scope<K, V> {
   }
 }
 
-export class ScopeError {
-  readonly identifier: LangType["ValueIdentifier"];
-  constructor(identifier: LangType["ValueIdentifier"]) {
-    this.identifier = identifier;
+export function stringOfValueScope(scope: Scope<string, Value>) {
+  let res = "";
+  for (const i in scope._stack) {
+    const map = scope._stack[i];
+    const mapRes: Record<string, any> = {};
+    for (const [key, value] of map.entries()) {
+      mapRes[key] = printableOfValue(value);
+    }
+    res += `(${i}): ${JSON.stringify(mapRes, null, 2)}\n`;
   }
-
-  print(): string {
-    const {
-      "@": { start },
-    } = this.identifier;
-    return `Identifier "${this.identifier.value}" not found (at ${start.line}:${start.column})`;
-  }
-
-  location(): Readonly<{ start: Parsimmon.Index; end: Parsimmon.Index }> {
-    return this.identifier["@"];
-  }
+  return res;
 }

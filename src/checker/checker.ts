@@ -1,10 +1,11 @@
 import Parsimmon, { string } from "parsimmon";
-import { Context, ScopeError } from "../interpreter/Context";
+import { Context } from "../interpreter/Context";
 import { niceError } from "../interpreter/interpreter";
 import { exhaustive, nullthrows } from "../interpreter/nullthrows";
 import { System } from "../interpreter/runtime/System";
 import { LangType, tryParse } from "../parser/parser";
 import { isSubtype, Type, printType, RecordType } from "./types";
+import { ScopeError } from "../interpreter/interpreterErrors";
 
 export function check(
   script: string | LangType["Program"],
@@ -396,11 +397,6 @@ function checkStatements(
     }
   }
 }
-
-function checkExpression(
-  expression: LangType["Expression"],
-  context: Context
-): void {}
 
 export class TypeMismatchError {
   expression: LangType["Expression"];
