@@ -6,18 +6,6 @@ import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./System";
 import { aSubsetB } from "./utils";
 
-// ie, function print matches Card
-export class MatchFunctionInstance {
-  ast: LangType["MatchFunction"];
-  get identifier(): string {
-    return this.ast.identifier.value;
-  }
-
-  constructor(ast: LangType["MatchFunction"]) {
-    this.ast = ast;
-  }
-}
-
 export function evaluateMatch(
   value: Value,
   cases: LangType["BlockOfCases"],
@@ -82,7 +70,7 @@ function doMatch(
         return { isMatch: false };
       }
 
-      const valueToMatch = value.value;
+      const valueToMatch = value;
       const patternKlass = context.getTypeOrThrow(expression.identifier);
 
       // todo: double check that this handles not matching on class groups in the way I want it to

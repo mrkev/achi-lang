@@ -7,10 +7,10 @@ import { stringOfValue } from "./interpreter";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordKlass,
-} from "./runtime/runtime.records";
-import { MatchFunctionInstance } from "./runtime/runtime.match";
+} from "./runtime/runtime.namedrecords";
 import { stringOfType } from "./types";
 import { expectBoolean, Value } from "./runtime/value";
+import { MatchFunctionInstance } from "./runtime/runtime.functions";
 
 export class ReturnInterrupt {
   readonly value: Value;
@@ -50,10 +50,7 @@ export function evaluateStatements(
           statement.namedRecordDefinition.identifier.value,
           klass
         );
-        context.valueScope.define(identifer.value, {
-          kind: "NamedRecordKlass",
-          value: klass,
-        });
+        context.valueScope.define(identifer.value, klass);
         break;
       }
 
@@ -74,16 +71,13 @@ export function evaluateStatements(
           klasses.set(namedRecordDefinition.identifier.value, klass);
         }
 
-        const group = new NamedRecordDefinitionGroupInstance(
+        const groupInstance = new NamedRecordDefinitionGroupInstance(
           statement,
           klasses
         );
 
-        context.types.set(identifer.value, group);
-        context.valueScope.define(identifer.value, {
-          kind: "NamedRecordDefinitionGroupInstance",
-          value: group,
-        });
+        context.types.set(identifer.value, groupInstance);
+        context.valueScope.define(identifer.value, groupInstance);
 
         break;
       }
@@ -163,10 +157,10 @@ export function evaluateStatements(
         }
 
         const matchFuncInstance = new MatchFunctionInstance(statement);
-        context.valueScope.define(statement.identifier.value, {
-          kind: "MatchFunctionInstance",
-          value: matchFuncInstance,
-        });
+        context.valueScope.define(
+          statement.identifier.value,
+          matchFuncInstance
+        );
         break;
       }
 

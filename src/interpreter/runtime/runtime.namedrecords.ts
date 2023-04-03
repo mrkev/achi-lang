@@ -1,11 +1,12 @@
 import type { LangType } from "../../parser/parser";
-import { RecordInstance } from "./value";
+import { RecordInstance, ValueI } from "./value";
 
 /**
  * Represents the constructor for a named record, as it sits in memory
  * ready to be instantiated.
  */
-export class NamedRecordKlass {
+export class NamedRecordKlass implements ValueI {
+  readonly kind = "NamedRecordKlass";
   readonly classname: string;
   readonly valueSpec: Map<string, string> = new Map(); // identifer => type
   readonly src: LangType["NamedRecordDefinition"];
@@ -50,7 +51,8 @@ export class NamedRecordKlass {
 }
 
 // ie, Point(x: 3, y: 3)
-export class NamedRecordInstance {
+export class NamedRecordInstance implements ValueI {
+  readonly kind = "NamedRecordInstance";
   readonly konstructor: NamedRecordKlass;
   readonly recordLiteral: RecordInstance;
   readonly src: LangType["NamedRecordLiteral"];
@@ -66,7 +68,7 @@ export class NamedRecordInstance {
 }
 
 // ie, classes Card { King(); Queen(); ...etc }
-export class NamedRecordDefinitionGroupInstance {
+export class NamedRecordDefinitionGroupInstance implements ValueI {
   readonly kind = "NamedRecordDefinitionGroupInstance";
   readonly src: LangType["NamedRecordDefinitionGroup"];
   readonly klasses: Map<string, NamedRecordKlass>;

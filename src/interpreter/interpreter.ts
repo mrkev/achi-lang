@@ -99,7 +99,6 @@ export function printableOfValue(
     case "number":
     case "string":
     case "boolean": {
-      // console.log(value.value, "tso string", String(value.value));
       return value.value;
     }
 
@@ -108,26 +107,26 @@ export function printableOfValue(
     }
 
     case "NamedRecordInstance": {
-      let str = value.value.konstructor.classname + " {";
-      const entries = [...value.value.recordLiteral.props.entries()];
+      let str = value.konstructor.classname + " {";
+      const entries = [...value.recordLiteral.props.entries()];
       if (entries.length > 0) {
         str += "\n";
       }
       for (const [key, val] of entries) {
         str += `  ${key}: ${stringOfValue(
           val
-        )} (${value.value.konstructor.valueSpec.get(key)})\n`;
+        )} (${value.konstructor.valueSpec.get(key)})\n`;
       }
       str += "}";
       return str;
     }
 
     case "MatchFunctionInstance": {
-      return `[Function: ${value.value.identifier}]`;
+      return `[Function: ${value.identifier}]`;
     }
 
     case "NamedRecordKlass": {
-      return `[Class: ${value.value.classname}]`;
+      return `[Class: ${value.classname}]`;
     }
 
     case "RecordInstance": {
@@ -146,7 +145,7 @@ export function printableOfValue(
     }
 
     case "NamedRecordDefinitionGroupInstance": {
-      return `[classes: ${value.value.src.identifier.value} (${value.value.src.namedRecordDefinitions.length} classes)]`;
+      return `[classes: ${value.src.identifier.value} (${value.src.namedRecordDefinitions.length} classes)]`;
     }
 
     case "AnonymousFunctionInstance": {

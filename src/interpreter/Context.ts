@@ -2,7 +2,7 @@ import { Value } from "./runtime/value";
 import {
   NamedRecordKlass,
   NamedRecordDefinitionGroupInstance,
-} from "./runtime/runtime.records";
+} from "./runtime/runtime.namedrecords";
 import { nullthrows } from "./nullthrows";
 import { LangType } from "../parser/parser";
 import Parsimmon from "parsimmon";

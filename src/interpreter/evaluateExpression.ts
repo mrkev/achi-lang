@@ -2,10 +2,9 @@ import { LangType } from "../parser/parser";
 import {
   boolean,
   list,
-  namedRecordInstance,
   number,
   RecordInstance,
-  recordInstance,
+  record,
   string,
   Value,
 } from "./runtime/value";
@@ -16,7 +15,7 @@ import { System } from "./runtime/System";
 import {
   NamedRecordInstance,
   NamedRecordKlass,
-} from "./runtime/runtime.records";
+} from "./runtime/runtime.namedrecords";
 import { evaluateMatch } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import {
@@ -82,7 +81,7 @@ export function evaluateExpression(
         recordInstance
       );
 
-      return namedRecordInstance(instance);
+      return instance;
     }
 
     case "NumberLiteral": {
@@ -117,7 +116,7 @@ export function evaluateExpression(
         props.set(def.identifier.value, value);
       }
 
-      const instance = recordInstance(expression, props);
+      const instance = record(expression, props);
       return instance;
     }
 
@@ -144,14 +143,9 @@ export function evaluateExpression(
         );
       }
       const argumentValue = evaluateExpression(argument, context, system);
-      funcInstance.value.ast.block;
+      funcInstance.src.block;
 
-      return callFunction(
-        funcInstance.value.ast,
-        argumentValue,
-        context,
-        system
-      );
+      return callFunction(funcInstance.src, argumentValue, context, system);
     }
 
     case "MatchExpression": {
@@ -162,7 +156,7 @@ export function evaluateExpression(
 
     case "AnonymousFunctionLiteral": {
       const func = new AnonymousFunctionInstance(expression);
-      return { kind: "AnonymousFunctionInstance", value: func };
+      return func;
     }
 
     // Operations
@@ -203,9 +197,7 @@ function destructureWithRecordDefintion(
   }
 
   const props =
-    value.kind === "RecordInstance"
-      ? value.props
-      : value.value.recordLiteral.props;
+    value.kind === "RecordInstance" ? value.props : value.recordLiteral.props;
 
   for (const def of recordDef.definitions) {
     const val = props.get(def.identifier.value);

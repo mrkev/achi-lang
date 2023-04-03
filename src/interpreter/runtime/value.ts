@@ -1,12 +1,18 @@
 import { LangType } from "../../parser/parser";
 import { ScriptError } from "../interpreterErrors";
-import { AnonymousFunctionInstance } from "./runtime.functions";
-import { MatchFunctionInstance } from "./runtime.match";
+import {
+  AnonymousFunctionInstance,
+  MatchFunctionInstance,
+} from "./runtime.functions";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordInstance,
   NamedRecordKlass,
-} from "./runtime.records";
+} from "./runtime.namedrecords";
+
+export interface ValueI {
+  kind: string;
+}
 
 // 3
 export type Number = Readonly<{
@@ -53,25 +59,14 @@ export type Value =
   /*
    * Complex Instances
    */
-  // Point(x: 3, y: 2)
-  | { kind: "NamedRecordInstance"; value: NamedRecordInstance }
-  // class Point(x: number, y: number)
-  | { kind: "NamedRecordKlass"; value: NamedRecordKlass }
-  // classes Cards { ... }
-  | {
-      kind: "NamedRecordDefinitionGroupInstance";
-      value: NamedRecordDefinitionGroupInstance;
-    }
+  | NamedRecordInstance // Point(x: 3, y: 2)
+  | NamedRecordKlass // class Point(x: number, y: number)
+  | NamedRecordDefinitionGroupInstance // classes Cards { ... }
   /*
    * Functions
    */
-  // function printPoint matches (point: Point) { ... }
-  | { kind: "MatchFunctionInstance"; value: MatchFunctionInstance }
-  // (point: Point) => {...}
-  | {
-      kind: "AnonymousFunctionInstance";
-      value: AnonymousFunctionInstance;
-    };
+  | MatchFunctionInstance // function printPoint matches (point: Point) { ... }
+  | AnonymousFunctionInstance; // (point: Point) => {...}
 
 // Validators
 
@@ -136,12 +131,14 @@ export { number, string, boolean, nil, list };
 
 // TODO: kind: "NamedRecordInstance" (and others) lowercase like primitives?
 function namedRecordInstance(
-  value: NamedRecordInstance
-): Readonly<{ kind: "NamedRecordInstance"; value: NamedRecordInstance }> {
-  return { kind: "NamedRecordInstance", value } as const;
+  ast: LangType["NamedRecordLiteral"],
+  konstructor: NamedRecordKlass,
+  recordLiteralInstance: RecordInstance
+): NamedRecordInstance {
+  return new NamedRecordInstance(ast, konstructor, recordLiteralInstance);
 }
 
-export { namedRecordInstance, record as recordInstance };
+export { namedRecordInstance, record };
 
 // // function printPoint matches (point: Point) { ... }
 // function MatchFunctionInstance(value: MatchFunctionInstance): {
