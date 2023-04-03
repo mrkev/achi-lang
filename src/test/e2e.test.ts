@@ -5,15 +5,18 @@ import { interpret } from "../interpreter/interpreter";
 import { System } from "../interpreter/runtime/System";
 
 function exec(script: string, ...extra: ("compile" | "typecheck")[]): string {
-  const features = new Set(extra);
+  const _features = new Set(extra);
   const system = new System();
   try {
     interpret(script, system, new Context(), { quietConsoleError: true });
   } catch (e) {
-    if (e instanceof Error || typeof e === "string") {
-      system.console.log(e);
+    if (e instanceof Error) {
+      system.console.fail(e);
+    } else if (typeof e === "string") {
+      system.console.fail(new Error(e));
+    } else {
+      console.error(e);
     }
-    console.error(e);
   }
   return system.console._log.join("\n");
 }

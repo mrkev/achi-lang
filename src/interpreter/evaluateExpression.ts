@@ -46,7 +46,7 @@ export function evaluateExpression(
     case "ValueIdentifier": {
       const foundValue = context.valueScope.get(
         expression.value,
-        `Identifier "${expression.value}" not found (at ${expression._meta.start.line}:${expression._meta.start.column})`
+        `Identifier "${expression.value}" not found (at ${expression["@"].start.line}:${expression["@"].start.column})`
       );
 
       if (foundValue instanceof ScopeError) {
@@ -84,7 +84,7 @@ export function evaluateExpression(
     }
 
     case "NumberLiteral": {
-      return number(expression.value);
+      return number(expression.value, expression);
     }
 
     case "StringLiteral": {
@@ -218,7 +218,9 @@ function destructureWithRecordDefintion(
 
 // The type of destructuring for assignments, without types
 // const (a: foo, b) = thing;
-function destructureWithRecordLiteral() {}
+function destructureWithRecordLiteral() {
+  // empty
+}
 
 function callFunction(
   func: LangType["MatchFunction"] | LangType["AnonymousFunctionLiteral"],

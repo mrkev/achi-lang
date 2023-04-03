@@ -4,10 +4,27 @@ import { LangType_BinOp, LangDef_BinOp } from "./parser.operations";
 import { LangDef_Function, LangType_Function } from "./parser.function";
 import { LangType_Match, LangDef_Match } from "./parser.match";
 
-type Meta = {
+export type Meta = {
   start: Parsimmon.Index;
   end: Parsimmon.Index;
 };
+
+type Node<
+  T extends {
+    [rest: string]: any;
+    kind: string;
+  }
+> = Readonly<
+  T & {
+    "@": Meta;
+  }
+>;
+
+// type Foo = Node<{
+//   kind: "Foo";
+//   x: number;
+//   that: string;
+// }>;
 
 export type LangType = LangType_BinOp &
   LangType_Match &
@@ -20,9 +37,9 @@ export type LangType = LangType_BinOp &
     blockComment: string;
 
     // Expressions
-    ValueIdentifier: { kind: "ValueIdentifier"; value: string; _meta: Meta };
-    TypeIdentifier: { kind: "TypeIdentifier"; value: string };
-    NumberLiteral: { kind: "NumberLiteral"; value: number };
+    ValueIdentifier: { kind: "ValueIdentifier"; value: string; "@": Meta };
+    TypeIdentifier: { kind: "TypeIdentifier"; value: string; "@": Meta };
+    NumberLiteral: { kind: "NumberLiteral"; value: number; "@": Meta };
     StringLiteral: { kind: "StringLiteral"; value: string };
     BooleanLiteral: { kind: "BooleanLiteral"; value: boolean };
 
@@ -104,10 +121,10 @@ export type LangType = LangType_BinOp &
     };
 
     //* (x: number, y: number)
-    RecordDefinition: {
+    RecordDefinition: Node<{
       kind: "RecordDefinition";
       definitions: Array<LangType["NamedDefinition"]>;
-    };
+    }>;
 
     // x: 5
     NamedLiteral: {
@@ -117,11 +134,11 @@ export type LangType = LangType_BinOp &
     };
 
     // x: number
-    NamedDefinition: {
+    NamedDefinition: Node<{
       kind: "NamedDefinition";
       identifier: LangType["ValueIdentifier"];
       typeTag: LangType["TypeTag"];
-    };
+    }>;
 
     TypeExpression:
       | LangType["NamedRecordDefinition"]
@@ -129,10 +146,10 @@ export type LangType = LangType_BinOp &
       | LangType["TypeIdentifier"];
 
     // :string
-    TypeTag: {
+    TypeTag: Node<{
       kind: "TypeTag";
       identifier: LangType["TypeIdentifier"];
-    };
+    }>;
 
     // #log value
     DEBUG_Log: {
@@ -163,7 +180,7 @@ export type LangType = LangType_BinOp &
       kind: "StatementList";
       statements: Array<LangType["Statement"]>;
     };
-    Block: { kind: "Block"; statements: Array<LangType["Statement"]> };
+    Block: Node<{ kind: "Block"; statements: Array<LangType["Statement"]> }>;
 
     ListLiteral: {
       kind: "ListLiteral";
@@ -203,7 +220,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   },
 
   // /* ... */
-  blockComment: (r) => {
+  blockComment: () => {
     return Parsimmon.regex(/\/\*[\s\S]*\*\//).desc("block comment");
   },
 
@@ -217,7 +234,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       (start, v, end) => ({
         kind: "NumberLiteral",
         value: Number(v),
-        // at: { start, end },
+        "@": { start, end },
       })
     );
   },
@@ -251,7 +268,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       .map(({ start, end, value }) => ({
         kind: "TypeIdentifier",
         value,
-        // at: { start, end },
+        "@": { start, end },
       }));
   },
 
@@ -276,7 +293,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       .map(({ start, end, value }) => ({
         kind: "ValueIdentifier",
         value: value,
-        _meta: { start, end },
+        "@": { start, end },
       }));
   },
 
@@ -487,17 +504,19 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   ...LangDef_Function,
 
   Block: (r) => {
-    return (
-      Parsimmon.string("{")
-        // TBD: sepBy1 and make a different parser for Unit?
-        .then(r.StatementList)
-        .skip(Parsimmon.string("}"))
-        .map(({ statements }) => {
-          return {
-            kind: "Block",
-            statements,
-          };
-        })
+    return Parsimmon.seqMap(
+      Parsimmon.index,
+      Parsimmon.string("{"),
+      r.StatementList,
+      Parsimmon.string("}"),
+      Parsimmon.index,
+      function (start, _1, statements, _2, end) {
+        return {
+          kind: "Block",
+          statements: statements.statements,
+          "@": { start, end },
+        };
+      }
     );
   },
 
@@ -626,16 +645,19 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   //* (x: number, y: number)
   RecordDefinition: (r) => {
     return Parsimmon.seqMap(
+      Parsimmon.index,
       Parsimmon.string("("),
       r._,
       // TBD: sepBy1 and make a different parser for Unit?
       Parsimmon.sepBy(r.NamedDefinition, r._comma),
       r._,
       Parsimmon.string(")"),
-      function (_0, _1, definitions, _2, _3) {
+      Parsimmon.index,
+      function (start, _0, _1, definitions, _2, _3, end) {
         return {
           kind: "RecordDefinition",
           definitions,
+          "@": { start, end },
         };
       }
     );
@@ -664,14 +686,17 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // x: number
   NamedDefinition: (r) => {
     return Parsimmon.seqMap(
+      Parsimmon.index,
       r.ValueIdentifier,
       r._,
       r.TypeTag,
-      (identifier, _3, typeTag) => {
+      Parsimmon.index,
+      (start, identifier, _3, typeTag, end) => {
         return {
           kind: "NamedDefinition",
           identifier,
           typeTag,
+          "@": { start, end },
         };
       }
     );
@@ -691,13 +716,16 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // :string
   TypeTag: (r) => {
     return Parsimmon.seqMap(
+      Parsimmon.index,
       Parsimmon.string(":"),
       r._,
       r.TypeIdentifier,
-      (_2, _3, identifier) => {
+      Parsimmon.index,
+      (start, _2, _3, identifier, end) => {
         return {
           kind: "TypeTag",
           identifier,
+          "@": { start, end },
         };
       }
     );
@@ -712,7 +740,7 @@ export function tryParse(str: string): LangType["Program"] {
 // From: https://github.com/jneen/parsimmon/blob/master/examples/json.js
 
 // Use the JSON standard's definition of whitespace rather than Parsimmon's.
-let whitespace = Parsimmon.regexp(/\s*/m);
+const whitespace = Parsimmon.regexp(/\s*/m);
 
 // JSON is pretty relaxed about whitespace, so let's make it easy to ignore
 // after most text.
@@ -730,11 +758,12 @@ function interpretEscapes(str: string) {
     t: "\t",
   };
   return str.replace(/\\(u[0-9a-fA-F]{4}|[^u])/, (_, escape: string) => {
-    let type = escape.charAt(0);
-    let hex = escape.slice(1);
+    const type = escape.charAt(0);
+    const hex = escape.slice(1);
     if (type === "u") {
       return String.fromCharCode(parseInt(hex, 16));
     }
+    // eslint-disable-next-line no-prototype-builtins
     if (escapes.hasOwnProperty(type)) {
       return (escapes as any)[type];
     }
@@ -742,18 +771,18 @@ function interpretEscapes(str: string) {
   });
 }
 
-function makeNode<U>(parser: Parsimmon.Parser<U>) {
-  return Parsimmon.seqMap(
-    Parsimmon.index,
-    parser,
-    Parsimmon.index,
-    function (start, value, end) {
-      return Object.freeze({
-        type: "myLanguage." + name,
-        value: value,
-        start: start,
-        end: end,
-      });
-    }
-  );
-}
+// function makeNode<U>(parser: Parsimmon.Parser<U>) {
+//   return Parsimmon.seqMap(
+//     Parsimmon.index,
+//     parser,
+//     Parsimmon.index,
+//     function (start, value, end) {
+//       return Object.freeze({
+//         type: "myLanguage." + name,
+//         value: value,
+//         start: start,
+//         end: end,
+//       });
+//     }
+//   );
+// }

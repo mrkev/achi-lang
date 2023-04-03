@@ -12,7 +12,7 @@ import {
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import { TypeMismatchError } from "../checker/checker";
-import { Value } from "./value";
+import { ScriptError, Value } from "./value";
 
 export function interpret(
   script: string | LangType["Program"],
@@ -34,10 +34,17 @@ export function interpret(
         console.log("nice");
         system.console.log(nice);
       }
-    } else if (e instanceof Error || typeof e === "string") {
-      system.console.log(e);
+    } else if (e instanceof ScriptError) {
+      system.console.fail(e);
+    } else if (e instanceof Error) {
+      system.console.fail(e);
+    } else if (typeof e === "string") {
+      system.console.fail(new Error(e));
     } else {
-      console.log("Unknown error type during interpretation");
+      system.console.fail(
+        new Error("Unknown error type during interpretation")
+      );
+      console.error("Unknown error type during interpretation");
     }
     const quietConsoleErr = options?.quietConsoleError === true;
     if (!quietConsoleErr) {

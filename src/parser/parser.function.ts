@@ -1,5 +1,5 @@
 import * as Parsimmon from "parsimmon";
-import { LangType } from "./parser";
+import { LangType, Meta } from "./parser";
 import { sublang } from "./sublang";
 
 export type LangType_Function = {
@@ -21,6 +21,7 @@ export type LangType_Function = {
     kind: "AnonymousFunctionLiteral";
     argument: LangType["RecordDefinition"];
     block: LangType["Block"];
+    "@": Meta;
   };
 };
 
@@ -46,16 +47,19 @@ export const LangDef_Function = sublang<LangType, LangType_Function>({
   // (foo: string) => {}
   AnonymousFunctionLiteral: (r) => {
     return Parsimmon.seqMap(
+      Parsimmon.index,
       r.RecordDefinition,
       r.__,
       Parsimmon.string("=>"),
       r.__,
       r.Block,
-      (argument, _1, _2, _3, block) => {
+      Parsimmon.index,
+      (start, argument, _1, _2, _3, block, end) => {
         return {
           kind: "AnonymousFunctionLiteral",
           argument,
           block,
+          "@": { start, end },
         };
       }
     );

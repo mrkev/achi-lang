@@ -16,6 +16,8 @@ module.exports = {
   },
   plugins: ["react-hooks", "@typescript-eslint"],
   rules: {
+    "no-empty-function": "off",
+    "no-useless-escape": "off",
     indent: "off",
     quotes: "off",
     // disable eslint version, enable @typescript-eslint version, ignore if var starts with "_"

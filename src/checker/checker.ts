@@ -29,8 +29,10 @@ export function check(
         const nice = niceError(script, e);
         system.console.log(nice);
       }
-    } else if (e instanceof Error || typeof e === "string") {
-      system.console.log(e);
+    } else if (e instanceof Error) {
+      system.console.fail(e);
+    } else if (typeof e === "string") {
+      system.console.fail(new Error(e));
     } else {
       console.log("Unknown error type during interpretation");
     }
@@ -66,8 +68,7 @@ function resolveStatementTypes(
       context.staticTypes.set(statement.identifier, expressionType);
       return;
     }
-    case "NamedRecordDefinitionStatement": {
-    }
+    case "NamedRecordDefinitionStatement":
     case "NamedRecordDefinitionGroup":
     case "DEBUG_LogType":
     case "ReturnStatement":

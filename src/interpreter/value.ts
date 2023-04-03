@@ -1,3 +1,4 @@
+import { LangType, Meta } from "../parser/parser";
 import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
 import { MatchFunctionInstance } from "./runtime/runtime.match";
 import {
@@ -7,12 +8,20 @@ import {
   RecordInstance,
 } from "./runtime/runtime.records";
 
+export class ScriptError extends Error {
+  readonly pos: Meta | null;
+  constructor(message: string, pos?: Meta, options?: any) {
+    super(message, options);
+    this.pos = pos ?? null;
+  }
+}
+
 export type Value =
   /*
    * Primitives
    */
   // 3
-  | { kind: "number"; value: number }
+  | { kind: "number"; value: number; src: LangType["Expression"] | null }
   // "hello"
   | { kind: "string"; value: string }
   // false
@@ -54,7 +63,10 @@ function expectString(value: Value): { kind: "string"; value: string } {
   if (value.kind === "string") {
     return value;
   } else {
-    throw new Error("NUMBER EXPECTED");
+    const src = (value as any).src ?? {};
+    const pos = src.pos;
+    console.log("HELLO");
+    throw new ScriptError(`STRING EXPECTED`, pos);
   }
 }
 
@@ -69,8 +81,15 @@ export { expectNumber, expectString, expectBoolean };
 
 // Constructors
 
-function number(value: number): Readonly<{ kind: "number"; value: number }> {
-  return { kind: "number", value } as const;
+function number(
+  value: number,
+  src?: LangType["Expression"]
+): Readonly<{
+  kind: "number";
+  value: number;
+  src: LangType["Expression"] | null;
+}> {
+  return { kind: "number", value, src: src ?? null } as const;
 }
 
 function string(value: string): Readonly<{ kind: "string"; value: string }> {

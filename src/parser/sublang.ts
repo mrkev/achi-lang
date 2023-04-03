@@ -33,9 +33,9 @@ export type ExhaustiveParsers<T extends ValueOf<LT_OnlyNodes>> = {
   >;
 };
 
-type test = ExhaustiveParsers<
-  LangType["Expression"] | LangType["OperationExpression"]
->;
+// type test = ExhaustiveParsers<
+//   LangType["Expression"] | LangType["OperationExpression"]
+// >;
 
 /** Sublang helpers, to split LangType into multiple files */
 

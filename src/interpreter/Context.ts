@@ -179,12 +179,12 @@ export class ScopeError {
 
   print(): string {
     const {
-      _meta: { start },
+      "@": { start },
     } = this.identifier;
     return `Identifier "${this.identifier.value}" not found (at ${start.line}:${start.column})`;
   }
 
   location(): Readonly<{ start: Parsimmon.Index; end: Parsimmon.Index }> {
-    return this.identifier._meta;
+    return this.identifier["@"];
   }
 }

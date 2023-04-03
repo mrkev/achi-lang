@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 import { System } from "../interpreter/runtime/System";
 import { interpret } from "../interpreter/interpreter";
@@ -10,63 +10,14 @@ import { useKeyboardShortcuts } from "./uiHooks";
 import { useEditor } from "./useEditor";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import { editor, Position } from "monaco-editor";
+import { editor } from "monaco-editor";
 import * as monaco from "monaco-editor";
 import React from "react";
 import { DEFAULT_SCRIPT } from "./constants";
+import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
+import { ScriptError } from "../interpreter/value";
 
 const COMPACT_AST = true;
-
-function getJSONObjectAtPosition(
-  position: Position,
-  editor: editor.IStandaloneCodeEditor
-): Error | string {
-  const model = editor.getModel();
-  if (!model) {
-    return new Error("no model");
-  }
-  const { range: prev } =
-    model.findPreviousMatch("{", position, false, false, null, false) ?? {};
-
-  if (!prev) {
-    return new Error("no prev");
-  }
-
-  const lastLine = model.getLineCount();
-  const lastColumn = model.getLineMaxColumn(lastLine);
-
-  const str = model.getValueInRange(
-    new monaco.Range(
-      prev.startLineNumber,
-      prev.startColumn,
-      lastLine,
-      lastColumn
-    )
-  );
-
-  let openSquareBrackets = 0;
-  let openCurlyBraces = 0;
-  let endIndex = 0;
-
-  for (let i = 0; i < str.length; i++) {
-    if (str[i] === "[") {
-      openSquareBrackets++;
-    } else if (str[i] === "{") {
-      openCurlyBraces++;
-    } else if (str[i] === "]") {
-      openSquareBrackets--;
-    } else if (str[i] === "}") {
-      openCurlyBraces--;
-    }
-
-    if (openSquareBrackets === 0 && openCurlyBraces === 0) {
-      endIndex = i;
-      break;
-    }
-  }
-
-  return str.substring(0, endIndex + 1);
-}
 
 const options: editor.IStandaloneEditorConstructionOptions = {
   fontSize: 18,
@@ -82,6 +33,8 @@ export default function App() {
   const [script, setScript] = useLocalStorage("script", DEFAULT_SCRIPT);
   const [scripts, setScripts] = useLocalStorage<string[]>("scripts", []);
   const [log, setLog] = useState<(Error | string)[]>([]);
+  const [fatalError, setFatalError] = useState<Error | null>(null);
+
   const [decoratorRange, setDecoratorRange] = useState<null | monaco.Range>(
     null
   );
@@ -94,7 +47,7 @@ export default function App() {
     "ast",
   ]);
 
-  const features = new Set(featureArr);
+  const features = useMemo(() => new Set(featureArr), [featureArr]);
 
   const [tsEditor, tsEditorObj] = useEditor({
     language: "typescript",
@@ -107,10 +60,14 @@ export default function App() {
     language: "json",
     theme: "vs-dark",
     height: "50vh",
+    options: {
+      folding: true,
+    },
   });
 
   const [scriptEditor, scriptEditorObj] = useEditor(
     {
+      onChange: () => setDecoratorRange(null),
       language: "achi",
       theme: "vs-dark",
       options: options,
@@ -144,21 +101,25 @@ export default function App() {
         }
 
         const parsed = JSON.parse(value);
-        const { kind, _meta: meta } = parsed;
-        if (!kind || !meta) {
+        const { kind, "@": pos } = parsed;
+        if (!kind || !pos) {
           return;
         }
 
-        setDecoratorRange(
-          new monaco.Range(
-            meta.start.line,
-            meta.start.column,
-            meta.end.line,
-            meta.end.column
-          )
-        );
-
-        console.log(`${kind}@[${meta.start.line}:${meta.start.column}]`);
+        if (typeof pos === "string") {
+          const [sl, sc, el, ec] = pos.split(":").map((s) => parseInt(s));
+          setDecoratorRange(new monaco.Range(sl, sc, el, ec));
+        } else {
+          setDecoratorRange(
+            new monaco.Range(
+              pos.start.line,
+              pos.start.column,
+              pos.end.line,
+              pos.end.column
+            )
+          );
+          console.log(`${kind}@[${pos.start.line}:${pos.start.column}]`);
+        }
       } catch (e) {
         console.groupCollapsed("cant parse");
         console.log("value", value);
@@ -172,22 +133,34 @@ export default function App() {
     };
   }, [astEditorObj]);
 
-  useKeyboardShortcuts(doEvaluate);
-
-  function doEvaluate() {
+  const doEvaluate = useCallback(() => {
     const system = new System();
     const editor = scriptEditorObj;
 
     try {
-      if (!editor) {
+      if (editor == null) {
         throw new Error("no editor");
       }
 
       const script = editor.getValue();
       setScript(script);
+      setDecoratorRange(null);
 
       const ast = tryParse(script);
-      astEditorObj?.setValue(JSON.stringify(ast, COMPACT_AST ? null : null, 2));
+      const replacer = (key: string, value: any) => {
+        if (key === "@") {
+          return `${value.start.line}:${value.start.column}:${value.end.line}:${value.end.column}`;
+        } else {
+          return value;
+        }
+      };
+      const strvalue = JSON.stringify(
+        ast,
+        COMPACT_AST ? replacer : undefined,
+        2
+      );
+
+      astEditorObj?.setValue(strvalue);
 
       if (features.has("compile")) {
         const tsAst = compileProgram(ast);
@@ -204,14 +177,24 @@ export default function App() {
 
       interpret(script, system);
     } catch (e) {
-      if (e instanceof Error || typeof e === "string") {
-        system.console.log(e);
+      if (e instanceof ScriptError) {
+        system.console.fail(e);
+        console.log("fatal", system.console._fatalError);
+      } else if (e instanceof Error) {
+        system.console.fail(e);
+      } else if (typeof e === "string") {
+        system.console.fail(new Error(e));
+      } else {
+        console.error(e);
       }
-      console.error(e);
     }
 
+    setFatalError(system.console._fatalError);
+
     setLog(system.console._log);
-  }
+  }, [astEditorObj, features, scriptEditorObj, setScript, tsEditorObj]);
+
+  useKeyboardShortcuts(doEvaluate);
 
   const doSave = () => {
     const editor = scriptEditorObj;
@@ -222,11 +205,34 @@ export default function App() {
     setScripts(scripts.concat([script]));
   };
 
+  useEffect(() => {
+    if (fatalError instanceof ScriptError && fatalError.pos) {
+      const { pos } = fatalError;
+      setDecoratorRange(
+        new monaco.Range(
+          pos.start.line,
+          pos.start.column,
+          pos.end.line,
+          pos.end.column
+        )
+      );
+    }
+  }, [fatalError]);
+
+  console.log((fatalError as any).pos);
+
   const evaluationBox = (
     <div style={{ width: "100%", flexShrink: 0, overflow: "scroll" }}>
       <button onClick={doEvaluate}>Evaluate</button>
       <button onClick={doSave}>Save</button>
+
       <pre>
+        {fatalError && (
+          <details style={{ color: "red" }}>
+            <summary>FATAL: {fatalError.message}</summary>
+            {fatalError.stack}
+          </details>
+        )}
         {log.map((msg, i) => {
           return msg instanceof Error ? (
             <details style={{ color: "red" }} key={`e${i}`}>

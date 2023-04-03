@@ -5,7 +5,6 @@ import { Value } from "../value";
 import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./System";
 import { aSubsetB } from "./utils";
-import { NamedRecordKlass, RecordInstance } from "./runtime.records";
 
 // ie, function print matches Card
 export class MatchFunctionInstance {
@@ -139,6 +138,7 @@ function doMatch(
       return { isMatch: true, bindings: bindings };
     }
 
+    // case "FunctionDefinition":
     case "MatchExpression":
     case "FunctionCall":
     case "ListLiteral":
@@ -146,7 +146,6 @@ function doMatch(
     case "PrefixUnaryOperation":
     case "SuffixUnaryOperation":
     case "BinaryOperation":
-    // case "FunctionDefinition":
     case "AnonymousFunctionLiteral": {
       throw new Error(
         `Can't pattern match using expression of type ${expression.kind}`

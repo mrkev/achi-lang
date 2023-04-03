@@ -1,3 +1,5 @@
+import { ScriptError } from "../value";
+
 /**
  * System handles I/O, other APIs
  */
@@ -7,13 +9,18 @@ export class System {
 
 class Console {
   _log: (string | Error)[] = [];
+  _fatalError: Error | ScriptError | null = null;
 
   clear() {
     this._log = [];
   }
 
-  log(...msgs: (string | Error)[]) {
+  log(...msgs: string[]) {
     this._log.push(...msgs);
+  }
+
+  fail(err: Error) {
+    this._fatalError = err;
   }
 
   getOut(): string {

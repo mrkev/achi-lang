@@ -14,5 +14,5 @@ export function useKeyboardShortcuts(doEvaluate: () => void) {
     () => {
       document.removeEventListener("keydown", onKeyDown, false);
     };
-  }, []);
+  }, [doEvaluate]);
 }
