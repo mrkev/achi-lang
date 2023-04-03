@@ -20,7 +20,7 @@ import { ScriptError } from "../interpreter/ScriptError";
 const COMPACT_AST = true;
 
 const options: editor.IStandaloneEditorConstructionOptions = {
-  fontSize: 18,
+  fontSize: 16,
   insertSpaces: true,
   tabSize: 2,
   detectIndentation: false,
@@ -60,8 +60,9 @@ export default function App() {
   const [astEditor, astEditorObj] = useEditor({
     language: "json",
     theme: "vs-dark",
-    height: "50vh",
+    height: "100%",
     options: {
+      readOnly: true,
       folding: true,
     },
   });
@@ -72,7 +73,7 @@ export default function App() {
       language: "achi",
       theme: "vs-dark",
       options: options,
-      height: "50vh",
+      height: "100%",
       defaultValue: script,
       // try "same", "indent" or "none"
       // wrappingIndent: "indent",
@@ -306,8 +307,15 @@ export default function App() {
             })}
           </ul>
         </Allotment.Pane>
+        <Allotment>
+          <Allotment vertical>
+            <Allotment.Pane>{scriptEditor}</Allotment.Pane>
+            <Allotment.Pane>{evaluationBox}</Allotment.Pane>
+          </Allotment>
+          <Allotment.Pane>{astEditor}</Allotment.Pane>
+        </Allotment>
 
-        <div
+        {/* <div
           style={{
             width: "100%",
             height: "100%",
@@ -319,8 +327,8 @@ export default function App() {
           {scriptEditor}
           {features.has("ast") ? astEditor : <div />}
           {evaluationBox}
-          {features.has("compile") ? tsEditor : <div />}
-        </div>
+          {features.has("compile") ? tsEditor : <div />} }
+        </div> */}
       </Allotment>
     </>
   );
