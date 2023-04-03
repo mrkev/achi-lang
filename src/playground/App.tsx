@@ -17,6 +17,9 @@ import { DEFAULT_SCRIPT } from "./constants";
 import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
 import { ScriptError } from "../interpreter/interpreterErrors";
 import { Context, stringOfValueScope } from "../interpreter/Context";
+import { Sidebar } from "./Sidebar";
+
+export type SetState<S> = React.Dispatch<React.SetStateAction<S>>;
 
 const COMPACT_AST = true;
 
@@ -28,11 +31,15 @@ const options: editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
 } as const;
 
-type Feature = "compile" | "typecheck" | "interpret" | "ast";
+export type Feature = "compile" | "typecheck" | "interpret" | "ast";
 
 export default function App() {
   const [script, setScript] = useLocalStorage("script", DEFAULT_SCRIPT);
-  const [scripts, setScripts] = useLocalStorage<string[]>("scripts", []);
+  const [savedScripts, setSavedScripts] = useLocalStorage<string[]>(
+    "scripts",
+    []
+  );
+  const [openScript, setOpenScript] = useState<null | number>(null);
   const [log, setLog] = useState<(Error | string)[]>([]);
   const [fatalScriptError, setFatalScriptError] = useState<Error | null>(null);
   const [systemError, setSystemError] = useState<Error | null>(null);
@@ -202,10 +209,18 @@ export default function App() {
   const doSave = () => {
     const editor = scriptEditorObj;
     if (!editor) {
-      throw new Error("no editor");
+      throw new Error("can't save, no editor");
     }
+
     const script = editor.getValue();
-    setScripts(scripts.concat([script]));
+
+    if (openScript == null) {
+      setSavedScripts(savedScripts.concat([script]));
+    } else {
+      const newScripts = [...savedScripts];
+      newScripts.splice(openScript, 1, script);
+      setSavedScripts(newScripts);
+    }
   };
 
   useEffect(() => {
@@ -264,54 +279,15 @@ export default function App() {
     <>
       <Allotment>
         <Allotment.Pane minSize={100} maxSize={200}>
-          <details>
-            <summary>configure</summary>
-            {(["compile", "typecheck", "interpret", "ast"] as const).map(
-              (feature, i) => {
-                const isOn = features.has(feature);
-                return (
-                  <React.Fragment key={i}>
-                    <input
-                      type="checkbox"
-                      checked={isOn}
-                      onChange={() => {
-                        if (isOn) {
-                          features.delete(feature);
-                        } else {
-                          features.add(feature);
-                        }
-                        setFeatures([...features.values()]);
-                      }}
-                    />
-                    <label>{feature}</label>
-                    <br />
-                  </React.Fragment>
-                );
-              }
-            )}
-          </details>
-
-          <hr />
-          <ul
-            style={{
-              listStyleType: "none",
-              padding: 0,
-            }}
-          >
-            {scripts.map((script, i) => {
-              return (
-                <li key={i}>
-                  <button
-                    onClick={() => {
-                      scriptEditorObj?.setValue(script);
-                    }}
-                  >
-                    {script.split("\n")[0]}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+          <Sidebar
+            features={features}
+            setFeatures={setFeatures}
+            scripts={savedScripts}
+            setScripts={setSavedScripts}
+            scriptEditorObj={scriptEditorObj}
+            openScript={openScript}
+            setOpenScript={setOpenScript}
+          />
         </Allotment.Pane>
         <Allotment>
           <Allotment vertical>
