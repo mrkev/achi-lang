@@ -5,9 +5,12 @@ import {
 } from "./runtime/runtime.namedrecords";
 import { nullthrows } from "./nullthrows";
 import { LangType } from "../parser/parser";
-import Parsimmon from "parsimmon";
 import { Type } from "../checker/types";
-import { printableOfValue, stringOfValue } from "./interpreter";
+import { printableOfValue } from "./interpreter";
+import {
+  AnonymousFunctionInstance,
+  MatchFunctionInstance,
+} from "./runtime/runtime.functions";
 
 // Node => Type
 // string => Value
@@ -25,9 +28,7 @@ export class Context {
   }
 
   // Currently unused
-  readonly stack: Array<
-    LangType["AnonymousFunctionLiteral"] | LangType["MatchFunction"]
-  > = [];
+  readonly stack: Array<AnonymousFunctionInstance | MatchFunctionInstance> = [];
 
   // Identifier "string" => Value
   // Operates at a block level
@@ -101,7 +102,9 @@ class Scope<K, V> {
     if (this._stack.length === 0) {
       throw new Error("Can't pop from empty scope stack!");
     }
+    console.log("this", this._stack.length);
     this._stack.pop();
+    console.log("this", this._stack.length);
   }
 
   private peek() {

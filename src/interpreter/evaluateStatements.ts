@@ -19,6 +19,32 @@ export class ReturnInterrupt {
   }
 }
 
+// - Pushes a scope
+// - If a statement `returns`, returns that value
+// - Always pops the scope before returning
+export function evaluateWithScope(
+  context: Context,
+  evaluate: () => void
+): Value | null {
+  context.valueScope.push();
+  let result = null;
+  try {
+    evaluate();
+  } catch (interrupt) {
+    if (interrupt instanceof ReturnInterrupt) {
+      result = interrupt.value;
+    } else {
+      throw interrupt;
+    }
+  }
+  context.valueScope.pop();
+  if (result == null) {
+    return null;
+  } else {
+    return result;
+  }
+}
+
 /**
  * Evaluates all statements sequentially, returning the
  * value of the first "ReturnStatement" found or void
@@ -86,20 +112,13 @@ export function evaluateStatements(
         const guardValue = evaluateExpression(statement.guard, context, system);
         const guardBool = expectBoolean(guardValue).value;
         if (guardBool) {
-          // TODO: scoping!
-          context.valueScope.push();
           evaluateStatements(statement.block.statements, context, system);
-          context.valueScope.pop();
         } else if (statement.elseCase == null) {
           // noop
         } else if (statement.elseCase.kind === "Block") {
-          context.valueScope.push();
           evaluateStatements(statement.elseCase.statements, context, system);
-          context.valueScope.pop();
         } else if (statement.elseCase.kind === "IfStatement") {
-          context.valueScope.push();
           evaluateStatements([statement.elseCase], context, system);
-          context.valueScope.pop();
         } else {
           throw exhaustive(statement.elseCase, "unhanlded if case");
         }

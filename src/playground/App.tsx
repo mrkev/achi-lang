@@ -240,7 +240,14 @@ export default function App() {
 
   const valueScope = finalContext?.valueScope;
   const evaluationBox = (
-    <div style={{ width: "100%", flexShrink: 0, overflow: "scroll" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        flexShrink: 0,
+        overflow: "scroll",
+      }}
+    >
       <button onClick={doEvaluate}>Evaluate</button>
       <button onClick={doSave}>Save</button>
 

@@ -10,14 +10,21 @@ import {
 } from "./runtime/value";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { Context } from "./Context";
-import { evaluateStatements, ReturnInterrupt } from "./evaluateStatements";
+import {
+  evaluateStatements,
+  evaluateWithScope,
+  ReturnInterrupt,
+} from "./evaluateStatements";
 import { System } from "./runtime/System";
 import {
   NamedRecordInstance,
   NamedRecordKlass,
 } from "./runtime/runtime.namedrecords";
 import { evaluateMatch } from "./runtime/runtime.match";
-import { AnonymousFunctionInstance } from "./runtime/runtime.functions";
+import {
+  AnonymousFunctionInstance,
+  MatchFunctionInstance,
+} from "./runtime/runtime.functions";
 import {
   evaluateBinaryExpression,
   evaluateSuffixUnaryExpression,
@@ -25,6 +32,7 @@ import {
 } from "./evaluateOperation";
 import { nil } from "./runtime/value";
 import { ScopeError } from "./interpreterErrors";
+import { stringOfValue } from "./interpreter";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -123,6 +131,16 @@ export function evaluateExpression(
     case "FunctionCall": {
       const { identifier, argument } = expression;
 
+      // built-in for now, str function converts a value to string
+      if (identifier.value === "str") {
+        const argumentValue = evaluateExpression(argument, context, system);
+        const v = argumentValue.props.get("v");
+        if (!v) {
+          throw new Error("error with built-in str");
+        }
+        return string(stringOfValue(v));
+      }
+
       const funcInstance = context.valueScope.get(
         identifier.value,
         `No definition for function ${identifier.value}`
@@ -143,9 +161,8 @@ export function evaluateExpression(
         );
       }
       const argumentValue = evaluateExpression(argument, context, system);
-      funcInstance.src.block;
 
-      return callFunction(funcInstance.src, argumentValue, context, system);
+      return callFunction(funcInstance, argumentValue, context, system);
     }
 
     case "MatchExpression": {
@@ -220,43 +237,37 @@ function destructureWithRecordDefintion(
 // }
 
 function callFunction(
-  func: LangType["MatchFunction"] | LangType["AnonymousFunctionLiteral"],
+  func: MatchFunctionInstance | AnonymousFunctionInstance,
   argument: Value,
   context: Context,
   system: System
 ): Value {
   switch (func.kind) {
-    case "AnonymousFunctionLiteral": {
+    case "AnonymousFunctionInstance": {
       context.stack.push(func);
-      context.valueScope.push();
-      destructureWithRecordDefintion(func.argument, argument, context);
-      let result = null;
-      try {
-        evaluateStatements(func.block.statements, context, system);
-      } catch (interrupt) {
-        if (interrupt instanceof ReturnInterrupt) {
-          result = interrupt.value;
-        } else {
-          throw interrupt;
-        }
-      }
+      console.log("called");
+
+      const returned = evaluateWithScope(context, () => {
+        destructureWithRecordDefintion(func.src.argument, argument, context);
+        evaluateStatements(func.src.block.statements, context, system);
+      });
 
       context.stack.pop();
-      context.valueScope.pop();
-      if (result == null) {
+
+      if (returned == null) {
         // TODO: do I really want functions to return an implicit null?
-        return nil(result);
+        return nil(returned);
       } else {
-        return result;
+        return returned;
       }
     }
 
-    case "MatchFunction": {
+    case "MatchFunctionInstance": {
       // TODO: test types
       // TODO: ensure pattern is exhaustive, so we don't have to worry about that here
       // TODO: just executing first case for now
 
-      for (const caseEntry of func.block.caseEntries) {
+      for (const caseEntry of func.src.block.caseEntries) {
         // caseEntry.guard
         context.valueScope.push();
         context.stack.push(func);

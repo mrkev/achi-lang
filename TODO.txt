@@ -4,3 +4,6 @@
 - arr[0] = 3;
 - for..of
 - for..let
+
+bugs
+- stack not popping (see final value for fibonacci func)

@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     "no-fallthrough": "warn",
     "no-empty-function": "off",
+    "no-constant-condition": "off",
     "@typescript-eslint/no-empty-function": "warn",
     "@typescript-eslint/ban-types": "off",
     "no-useless-escape": "off",
