@@ -7,6 +7,7 @@ import {
   record,
   string,
   Value,
+  valueOfJavascriptValue,
 } from "./runtime/value";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { Context } from "./Context";
@@ -33,6 +34,7 @@ import {
 import { nil } from "./runtime/value";
 import { ScopeError } from "./interpreterErrors";
 import { stringOfValue } from "./interpreter";
+import { expectString } from "./runtime/value";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -139,6 +141,17 @@ export function evaluateExpression(
           throw new Error("error with built-in str");
         }
         return string(stringOfValue(v));
+      }
+
+      // built-in for now, js function evaluates javascript
+      if (identifier.value === "js") {
+        const argumentValue = evaluateExpression(argument, context, system);
+        const v = argumentValue.props.get("v");
+        if (!v) {
+          throw new Error("error with built-in js");
+        }
+        const result = valueOfJavascriptValue(eval(expectString(v).value));
+        return result;
       }
 
       const funcInstance = context.valueScope.get(

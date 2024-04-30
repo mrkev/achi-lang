@@ -1,0 +1,79 @@
+
+----------------
+A language for javascript state:
+
+class Project (
+  private readonly id: string,  // -> since readonly, it's a primitive
+  name: string,
+  tracks: OrderedMap<string, Track>,
+) {
+  private constructor;
+
+  // called via: Project.of(...)
+  of(tracks: Track[]): Project {
+    const trackMap = OrderedMap.fromArray(tracks);
+    const result = new Project(id: nanoid(), tracks: trackMap);
+    return result;
+  }
+
+  // called either via: Project.save(project) or since first arg === type
+  // can be called via: project.save()
+  save(project: Project) {
+
+  }
+}
+
+class OrderedMap<K, V> (
+  map: Map<K, V>,
+  order: K[],
+)
+
+class Track (clips: Clip[])
+
+class Clip (
+  notes: Note[],
+)
+
+class Note (note: number, start: number, len: number)
+
+
+
+
+
+
+class Project extends Struct<...> {
+  constructor(
+    private id: string,
+    public  readonly name: SString,
+    public  readonly tracks: OrderedMap<string, Track>,
+  ) {
+
+    static of(args: { tracks: Track[], name: string }): Project;
+    static of(tracks: Track[], name: string): Project;
+    static of(arg1: Track[] | { tracks: Track[] }, arg2: string): Project {
+      
+      let tracks;
+      if (isLiteralObj(...) && hasTheKeysWeExpect(...)) {
+        tracks = arg1.tracks;
+        name = arg1
+      } else {
+        tracks = arg1;
+        name = arg2
+        ...
+      }
+
+      const trackMap = OrderedMap.fromArray(tracks);
+      const result = new Project(id: nanoid(), tracks: trackMap);
+      return result;
+    }
+
+    static save(project: Project) {
+
+    }
+
+    public save() {
+      return Project.save(this);
+    }
+
+  }
+}

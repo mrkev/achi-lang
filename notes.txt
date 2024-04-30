@@ -45,7 +45,6 @@ const tuple: (...items: number[]) = (a, b, c, d)
 const tuple: number() = (a, b, c, d)
 
 
-
 ----------------
 
 ## Descrption
@@ -58,6 +57,13 @@ Records (),  named data, unordered entries, static shape.
 Maps {},     named data, unordered entries, dynamic shape.
 Lists [],  unnamed data, ordered entries, dynamic shape.
 Tuples N/A unnamed data, ordered entries, static shape
+
+
+          named,         ordered,        static shape
+Records   x                              x
+Maps      x
+Tuples                   x               x
+Lists                    x
 
 unnamed + unordered doesn't make sense
 named + ordered sounds useful, but hard to define and edit mantaining consistency

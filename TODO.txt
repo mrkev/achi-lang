@@ -5,5 +5,7 @@
 - for..of
 - for..let
 
+- http://moscova.inria.fr/~maranget/papers/warn/index.html
+
 bugs
 - stack not popping (see final value for fibonacci func)

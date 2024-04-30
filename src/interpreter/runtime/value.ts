@@ -1,5 +1,6 @@
 import { LangType } from "../../parser/parser";
 import { ScriptError } from "../interpreterErrors";
+import { exhaustive } from "../nullthrows";
 import {
   AnonymousFunctionInstance,
   MatchFunctionInstance,
@@ -139,6 +140,26 @@ function namedRecordInstance(
 }
 
 export { namedRecordInstance, record };
+
+export function valueOfJavascriptValue(x: unknown) {
+  if (typeof x === "number") {
+    return number(x);
+  } else if (typeof x === "string") {
+    return string(x);
+  } else if (typeof x === "boolean") {
+    return boolean(x);
+  } else if (x == null) {
+    return nil(null);
+  } else if (Array.isArray(x)) {
+    throw new Error("ARRAY");
+  } else if (typeof x === "object") {
+    throw new Error("OBJ");
+  } else if (typeof x === "function") {
+    throw new Error("FUNCTION");
+  } else {
+    throw new Error("Javascript value " + String(x) + "can't be used");
+  }
+}
 
 // // function printPoint matches (point: Point) { ... }
 // function MatchFunctionInstance(value: MatchFunctionInstance): {

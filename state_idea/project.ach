@@ -1,0 +1,19 @@
+
+
+export class Project private (
+  private readonly id: string,
+  tracks: OrderedMap<string, Track>,
+) {
+  /** called via: Project.of(...) */
+  of(tracks: Track[]): Project {
+    const trackMap = OrderedMap.fromArray(tracks);
+    const result = new Project(id: nanoid(), tracks: trackMap);
+    return result;
+  }
+
+  // called either via: Project.save(project) or since first arg === type
+  // can be called via: project.save()
+  save(project: Project) {
+
+  }
+}
