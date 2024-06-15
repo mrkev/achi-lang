@@ -1,9 +1,9 @@
+import { TypeMismatchError } from "../checker/checker";
 import { LangType, tryParse } from "../parser/parser";
 import { Context } from "./Context";
-import { System } from "./runtime/System";
 import { evaluateStatements } from "./evaluateStatements";
-import { TypeMismatchError } from "../checker/checker";
 import { ScopeError, ScriptError } from "./interpreterErrors";
+import { System } from "./runtime/System";
 
 // // Importing and exporting makes this easier, can define things in the lang itself
 // function populateGlobalScope(context: Context) {
@@ -47,6 +47,7 @@ export function interpret(
       );
       console.error(e);
     }
+
     const quietConsoleErr = options?.quietConsoleError === true;
     if (!quietConsoleErr) {
       console.error(e);

@@ -1,17 +1,17 @@
 import { LangType } from "../../parser/parser";
 import { Context } from "../Context";
 import { evaluateStatements } from "../evaluateStatements";
-import { Value } from "./value";
 import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./System";
 import { aSubsetB } from "./utils";
+import { ValueType } from "./value";
 
 export function evaluateMatch(
-  value: Value,
+  value: ValueType["Value"],
   cases: LangType["BlockOfCases"],
   context: Context,
   system: System
-): Value {
+): ValueType["Value"] {
   for (const caseEntry of cases.caseEntries) {
     const guardExpression = caseEntry.guard;
     // TODO: bindings!!!
@@ -33,13 +33,13 @@ export function evaluateMatch(
 }
 
 function doMatch(
-  value: Value,
+  value: ValueType["Value"],
   expression: LangType["Expression"],
   context: Context
   // todo, new context instead of bindings array?
 ):
   | Readonly<{ isMatch: false }>
-  | Readonly<{ isMatch: true; bindings: Array<[string, Value]> }> {
+  | Readonly<{ isMatch: true; bindings: Array<[string, ValueType["Value"]]> }> {
   switch (expression.kind) {
     // an identifier matches with anything
     case "ValueIdentifier": {

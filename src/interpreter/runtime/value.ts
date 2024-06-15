@@ -33,50 +33,36 @@ export type Nil = Readonly<{ kind: "nil"; value: null }>;
 // [1, 2, 3]
 export type ListInstance = {
   kind: "ListInstance";
-  value: Value[];
+  value: ValueType["Value"][];
 };
 
 // ie, (x: 3, y: 4)
 export type RecordInstance = Readonly<{
   kind: "RecordInstance";
   src: LangType["RecordLiteral"];
-  props: Map<string, Value>;
+  props: Map<string, ValueType["Value"]>;
 }>;
 
-export type Value =
-  /*
-   * Primitives
-   */
-  | Number // 3
-  | String // "hello"
-  | Boolean // false
-  | Nil // null
-  /*
-   * Simple Data Structures
-   */
-  | ListInstance // [1, 2, 3]
-  | RecordInstance // (x: 3, y: 2)
-  /*
-   * Complex Instances
-   */
-  | NamedRecordInstance // Point(x: 3, y: 2)
-  | NamedRecordKlass // class Point(x: number, y: number)
-  | NamedRecordDefinitionGroupInstance // classes Cards { ... }
-  /*
-   * Functions
-   */
-  | MatchFunctionInstance // function printPoint matches (point: Point) { ... }
-  | AnonymousFunctionInstance; // (point: Point) => {...}
-
 export type ValueType = {
-  Value: Value;
+  Value:
+    | ValueType["Number"]
+    | ValueType["String"]
+    | ValueType["Boolean"]
+    | ValueType["Nil"]
+    | ValueType["ListInstance"]
+    | ValueType["RecordInstance"]
+    | ValueType["NamedRecordInstance"]
+    | ValueType["NamedRecordKlass"]
+    | ValueType["NamedRecordDefinitionGroupInstance"]
+    | ValueType["MatchFunctionInstance"]
+    | ValueType["AnonymousFunctionInstance"];
   /*
    * Primitives
    */
   Number: Number; // 3
   String: String; // "hello"
   Boolean: Boolean; // false
-  Nil: Nil; // null
+  Nil: Readonly<{ kind: "nil"; value: null }>; // null
   /*
    * Simple Data Structures
    */
@@ -97,7 +83,7 @@ export type ValueType = {
 
 // Validators
 
-function expectNumber(value: Value): Number {
+function expectNumber(value: ValueType["Value"]): Number {
   if (value.kind === "number") {
     return value;
   } else {
@@ -105,7 +91,7 @@ function expectNumber(value: Value): Number {
   }
 }
 
-function expectString(value: Value): String {
+function expectString(value: ValueType["Value"]): String {
   if (value.kind === "string") {
     return value;
   } else {
@@ -115,7 +101,7 @@ function expectString(value: Value): String {
   }
 }
 
-function expectBoolean(value: Value): Boolean {
+function expectBoolean(value: ValueType["Value"]): Boolean {
   if (value.kind === "boolean") {
     return value;
   } else {
@@ -143,13 +129,13 @@ function nil(value: null): Nil {
   return { kind: "nil", value } as const;
 }
 
-function list(value: Value[]): ListInstance {
+function list(value: ValueType["Value"][]): ListInstance {
   return { kind: "ListInstance", value: value } as const;
 }
 
 function record(
   src: LangType["RecordLiteral"],
-  props: Map<string, Value>
+  props: Map<string, ValueType["Value"]>
 ): RecordInstance {
   return { kind: "RecordInstance", src, props } as const;
 }

@@ -1,20 +1,20 @@
 import { LangType } from "../parser/parser";
-import { evaluateExpression } from "./evaluateExpression";
 import { Context } from "./Context";
-import { System } from "./runtime/System";
+import { evaluateExpression } from "./evaluateExpression";
 import { exhaustive } from "./nullthrows";
-import { stringOfValue } from "./stringOfValue";
+import { System } from "./runtime/System";
+import { MatchFunctionInstance } from "./runtime/runtime.functions";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordKlass,
 } from "./runtime/runtime.namedrecords";
+import { ValueType, expectBoolean } from "./runtime/value";
+import { stringOfValue } from "./stringOfValue";
 import { stringOfType } from "./types";
-import { expectBoolean, Value } from "./runtime/value";
-import { MatchFunctionInstance } from "./runtime/runtime.functions";
 
 export class ReturnInterrupt {
-  readonly value: Value;
-  constructor(value: Value) {
+  readonly value: ValueType["Value"];
+  constructor(value: ValueType["Value"]) {
     this.value = value;
   }
 }
@@ -25,7 +25,7 @@ export class ReturnInterrupt {
 export function evaluateWithScope(
   context: Context,
   evaluate: () => void
-): Value | null {
+): ValueType["Value"] | null {
   context.valueScope.push();
   let result = null;
   try {

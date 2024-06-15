@@ -1,14 +1,14 @@
 import { exhaustive } from "./nullthrows";
-import { Value } from "./runtime/value";
+import { ValueType } from "./runtime/value";
 
-export function stringOfValue(value: Value): string {
+export function stringOfValue(value: ValueType["Value"]): string {
   return String(printableOfValue(value));
 }
 
 type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
 
 export function printableOfValue(
-  value: Value
+  value: ValueType["Value"]
 ): ValueOrArray<number | string | boolean | null> {
   const { kind } = value;
   switch (kind) {

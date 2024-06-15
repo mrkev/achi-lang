@@ -1,16 +1,16 @@
-import { Value } from "./runtime/value";
-import {
-  NamedRecordKlass,
-  NamedRecordDefinitionGroupInstance,
-} from "./runtime/runtime.namedrecords";
-import { nullthrows } from "./nullthrows";
-import { LangType } from "../parser/parser";
 import { Type } from "../checker/types";
-import { printableOfValue } from "./stringOfValue";
+import { LangType } from "../parser/parser";
+import { nullthrows } from "./nullthrows";
 import {
   AnonymousFunctionInstance,
   MatchFunctionInstance,
 } from "./runtime/runtime.functions";
+import {
+  NamedRecordDefinitionGroupInstance,
+  NamedRecordKlass,
+} from "./runtime/runtime.namedrecords";
+import { ValueType } from "./runtime/value";
+import { printableOfValue } from "./stringOfValue";
 
 // Node => Type
 // string => Value
@@ -32,7 +32,7 @@ export class Context {
 
   // Identifier "string" => Value
   // Operates at a block level
-  readonly valueScope: Scope<string, Value> = new Scope();
+  readonly valueScope: Scope<string, ValueType["Value"]> = new Scope();
 
   // string -> OGIdentifier
   // OGIdentifier -> value
@@ -175,8 +175,8 @@ class Scope<K, V> {
   }
 }
 
-export function stringOfValueScope(scope: Scope<string, Value>) {
-  let res = "";
+export function stringOfValueScope(scope: Scope<string, ValueType["Value"]>) {
+  let res = "Value Scope: ";
   for (const i in scope._stack) {
     const map = scope._stack[i];
     const mapRes: Record<string, any> = {};

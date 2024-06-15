@@ -2,12 +2,13 @@
 ----------------
 A language for javascript state:
 
-class Project (
+can should constructor be made private?
+
+type Project (
   private readonly id: string,  // -> since readonly, it's a primitive
   name: string,
   tracks: OrderedMap<string, Track>,
 ) {
-  private constructor;
 
   // called via: Project.of(...)
   of(tracks: Track[]): Project {

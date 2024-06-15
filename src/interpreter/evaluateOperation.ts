@@ -1,22 +1,33 @@
-import { boolean, expectBoolean, Value } from "./runtime/value";
-import { Context } from "./Context";
-import { System } from "./runtime/System";
 import {
   BinaryOperation,
   PrefixUnaryOperation,
   SuffixUnaryOperation,
 } from "../parser/parser.binex";
-import { factorial } from "./runtime/utils";
-import { expectNumber, expectString, number, string } from "./runtime/value";
+import { Context } from "./Context";
 import { evaluateExpression } from "./evaluateExpression";
 import { exhaustive } from "./nullthrows";
+import { System } from "./runtime/System";
+import { factorial } from "./runtime/utils";
+import {
+  ValueType,
+  boolean,
+  expectBoolean,
+  expectNumber,
+  expectString,
+  number,
+  string,
+} from "./runtime/value";
 
 export function evaluatePrefixUnaryExpression(
   unex: PrefixUnaryOperation,
   context: Context,
   system: System
-): Value {
-  const value = evaluateExpression(unex.value, context, system) as Value;
+): ValueType["Value"] {
+  const value = evaluateExpression(
+    unex.value,
+    context,
+    system
+  ) as ValueType["Value"];
 
   switch (unex.operator) {
     case "-":
@@ -33,8 +44,12 @@ export function evaluateSuffixUnaryExpression(
   unex: SuffixUnaryOperation,
   context: Context,
   system: System
-): Value {
-  const value = evaluateExpression(unex.value, context, system) as Value;
+): ValueType["Value"] {
+  const value = evaluateExpression(
+    unex.value,
+    context,
+    system
+  ) as ValueType["Value"];
   switch (unex.operator) {
     case "!":
       return number(factorial(expectNumber(value).value));
@@ -48,9 +63,17 @@ export function evaluateBinaryExpression(
   binex: BinaryOperation,
   context: Context,
   system: System
-): Value {
-  const left = evaluateExpression(binex.left, context, system) as Value;
-  const right = evaluateExpression(binex.right, context, system) as Value;
+): ValueType["Value"] {
+  const left = evaluateExpression(
+    binex.left,
+    context,
+    system
+  ) as ValueType["Value"];
+  const right = evaluateExpression(
+    binex.right,
+    context,
+    system
+  ) as ValueType["Value"];
 
   switch (binex.operator) {
     case "*": {

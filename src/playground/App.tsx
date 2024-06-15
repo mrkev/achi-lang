@@ -1,23 +1,22 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import "./App.css";
-import { System } from "../interpreter/runtime/System";
-import { interpret } from "../interpreter/interpreter";
-import { tryParse } from "../parser/parser";
-import { compileProgram, printTSStatements } from "../compiler/compiler";
-import { useLocalStorage } from "usehooks-ts";
-import { registerLangForMonaco } from "../playground/registerLangForMonaco";
-import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
-import { useEditor } from "./useEditor";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import { editor } from "monaco-editor";
 import * as monaco from "monaco-editor";
-import React from "react";
+import { editor } from "monaco-editor";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocalStorage } from "usehooks-ts";
+import { compileProgram, printTSStatements } from "../compiler/compiler";
+import { Context, stringOfValueScope } from "../interpreter/Context";
+import { interpret } from "../interpreter/interpreter";
+import { ScriptError } from "../interpreter/interpreterErrors";
+import { System } from "../interpreter/runtime/System";
+import { tryParse } from "../parser/parser";
+import { registerLangForMonaco } from "../playground/registerLangForMonaco";
+import "./App.css";
+import { Sidebar } from "./Sidebar";
 import { DEFAULT_SCRIPT } from "./constants";
 import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
-import { ScriptError } from "../interpreter/interpreterErrors";
-import { Context, stringOfValueScope } from "../interpreter/Context";
-import { Sidebar } from "./Sidebar";
+import { useEditor } from "./useEditor";
+import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 
 export type SetState<S> = React.Dispatch<React.SetStateAction<S>>;
 
@@ -284,42 +283,25 @@ export default function App() {
   );
 
   return (
-    <>
+    <Allotment>
+      <Allotment.Pane minSize={100} maxSize={200}>
+        <Sidebar
+          features={features}
+          setFeatures={setFeatures}
+          scripts={savedScripts}
+          setScripts={setSavedScripts}
+          scriptEditorObj={scriptEditorObj}
+          openScript={openScript}
+          setOpenScript={setOpenScript}
+        />
+      </Allotment.Pane>
       <Allotment>
-        <Allotment.Pane minSize={100} maxSize={200}>
-          <Sidebar
-            features={features}
-            setFeatures={setFeatures}
-            scripts={savedScripts}
-            setScripts={setSavedScripts}
-            scriptEditorObj={scriptEditorObj}
-            openScript={openScript}
-            setOpenScript={setOpenScript}
-          />
-        </Allotment.Pane>
-        <Allotment>
-          <Allotment vertical>
-            <Allotment.Pane>{scriptEditor}</Allotment.Pane>
-            <Allotment.Pane>{evaluationBox}</Allotment.Pane>
-          </Allotment>
-          <Allotment.Pane>{astEditor}</Allotment.Pane>
+        <Allotment vertical>
+          <Allotment.Pane>{scriptEditor}</Allotment.Pane>
+          <Allotment.Pane>{evaluationBox}</Allotment.Pane>
         </Allotment>
-
-        {/* <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gridTemplateRows: "repeat(2, 1fr)",
-          }}
-        >
-          {scriptEditor}
-          {features.has("ast") ? astEditor : <div />}
-          {evaluationBox}
-          {features.has("compile") ? tsEditor : <div />} }
-        </div> */}
+        <Allotment.Pane>{astEditor}</Allotment.Pane>
       </Allotment>
-    </>
+    </Allotment>
   );
 }

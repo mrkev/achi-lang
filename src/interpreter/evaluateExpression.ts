@@ -24,7 +24,7 @@ import {
 } from "./runtime/runtime.namedrecords";
 import {
   RecordInstance,
-  Value,
+  ValueType,
   boolean,
   expectString,
   list,
@@ -45,12 +45,12 @@ export function evaluateExpression(
   expression: LangType["Expression"],
   context: Context,
   system: System
-): Value;
+): ValueType["Value"];
 export function evaluateExpression(
   expression: LangType["Expression"],
   context: Context,
   system: System
-): Value {
+): ValueType["Value"] {
   const { kind } = expression;
   switch (kind) {
     // foo
@@ -139,7 +139,7 @@ export function evaluateExpression(
     }
 
     case "RecordLiteral": {
-      const props = new Map<string, Value>();
+      const props = new Map<string, ValueType["Value"]>();
       for (const def of expression.definitions) {
         const childExpression = def.expression;
         const value = evaluateExpression(childExpression, context, system);
@@ -233,7 +233,7 @@ export function evaluateExpression(
 // const foo = (a: number, b: string) => {}
 function destructureWithRecordDefintion(
   recordDef: LangType["RecordDefinition"],
-  value: Value,
+  value: ValueType["Value"],
   context: Context
 ) {
   switch (value.kind) {
@@ -272,10 +272,10 @@ function destructureWithRecordDefintion(
 
 function callFunction(
   func: MatchFunctionInstance | AnonymousFunctionInstance,
-  argument: Value,
+  argument: ValueType["Value"],
   context: Context,
   system: System
-): Value {
+): ValueType["Value"] {
   switch (func.kind) {
     case "AnonymousFunctionInstance": {
       context.stack.push(func);
