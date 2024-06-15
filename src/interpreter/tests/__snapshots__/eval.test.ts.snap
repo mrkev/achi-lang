@@ -16,6 +16,10 @@ exports[`if.true 1`] = `
 ]
 `;
 
+exports[`props 1`] = `[]`;
+
+exports[`props 2`] = `[]`;
+
 exports[`simple.1 1`] = `
 [
   "hi",

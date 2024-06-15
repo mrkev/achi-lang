@@ -1,6 +1,5 @@
 import { LangType } from "../../parser/parser";
 import { ScriptError } from "../interpreterErrors";
-import { exhaustive } from "../nullthrows";
 import {
   AnonymousFunctionInstance,
   MatchFunctionInstance,
@@ -69,6 +68,33 @@ export type Value =
   | MatchFunctionInstance // function printPoint matches (point: Point) { ... }
   | AnonymousFunctionInstance; // (point: Point) => {...}
 
+export type ValueType = {
+  Value: Value;
+  /*
+   * Primitives
+   */
+  Number: Number; // 3
+  String: String; // "hello"
+  Boolean: Boolean; // false
+  Nil: Nil; // null
+  /*
+   * Simple Data Structures
+   */
+  ListInstance: ListInstance; // [1, 2, 3]
+  RecordInstance: RecordInstance; // (x: 3, y: 2)
+  /*
+   * Complex Instances
+   */
+  NamedRecordInstance: NamedRecordInstance; // Point(x: 3, y: 2)
+  NamedRecordKlass: NamedRecordKlass; // class Point(x: number, y: number)
+  NamedRecordDefinitionGroupInstance: NamedRecordDefinitionGroupInstance; // classes Cards { ... }
+  /*
+   * Functions
+   */
+  MatchFunctionInstance: MatchFunctionInstance; // function printPoint matches (point: Point) { ... }
+  AnonymousFunctionInstance: AnonymousFunctionInstance; // (point: Point) => {...}
+};
+
 // Validators
 
 function expectNumber(value: Value): Number {
@@ -97,7 +123,7 @@ function expectBoolean(value: Value): Boolean {
   }
 }
 
-export { expectNumber, expectString, expectBoolean };
+export { expectBoolean, expectNumber, expectString };
 
 // Constructors
 
@@ -128,7 +154,7 @@ function record(
   return { kind: "RecordInstance", src, props } as const;
 }
 
-export { number, string, boolean, nil, list };
+export { boolean, list, nil, number, string };
 
 // TODO: kind: "NamedRecordInstance" (and others) lowercase like primitives?
 function namedRecordInstance(

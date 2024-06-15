@@ -1,14 +1,17 @@
 import type { LangType } from "../../parser/parser";
 import { RecordInstance, ValueI } from "./value";
 
+type ValueType = string; //TODO
+
 /**
  * Represents the constructor for a named record, as it sits in memory
  * ready to be instantiated.
  */
 export class NamedRecordKlass implements ValueI {
   readonly kind = "NamedRecordKlass";
+
   readonly classname: string;
-  readonly valueSpec: Map<string, string> = new Map(); // identifer => type
+  readonly valueSpec: Map<string, ValueType> = new Map(); // identifer => type
   readonly src: LangType["NamedRecordDefinition"];
   constructor(
     ast: LangType["NamedRecordDefinition"],

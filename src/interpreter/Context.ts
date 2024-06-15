@@ -6,7 +6,7 @@ import {
 import { nullthrows } from "./nullthrows";
 import { LangType } from "../parser/parser";
 import { Type } from "../checker/types";
-import { printableOfValue } from "./interpreter";
+import { printableOfValue } from "./stringOfValue";
 import {
   AnonymousFunctionInstance,
   MatchFunctionInstance,

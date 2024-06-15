@@ -1,40 +1,40 @@
 import { LangType } from "../parser/parser";
-import {
-  boolean,
-  list,
-  number,
-  RecordInstance,
-  record,
-  string,
-  Value,
-  valueOfJavascriptValue,
-} from "./runtime/value";
-import { exhaustive, nullthrows } from "./nullthrows";
 import { Context } from "./Context";
 import {
+  evaluateBinaryExpression,
+  evaluatePrefixUnaryExpression,
+  evaluateSuffixUnaryExpression,
+} from "./evaluateOperation";
+import {
+  ReturnInterrupt,
   evaluateStatements,
   evaluateWithScope,
-  ReturnInterrupt,
 } from "./evaluateStatements";
+import { ScopeError } from "./interpreterErrors";
+import { exhaustive, nullthrows } from "./nullthrows";
 import { System } from "./runtime/System";
-import {
-  NamedRecordInstance,
-  NamedRecordKlass,
-} from "./runtime/runtime.namedrecords";
-import { evaluateMatch } from "./runtime/runtime.match";
 import {
   AnonymousFunctionInstance,
   MatchFunctionInstance,
 } from "./runtime/runtime.functions";
+import { evaluateMatch } from "./runtime/runtime.match";
 import {
-  evaluateBinaryExpression,
-  evaluateSuffixUnaryExpression,
-  evaluatePrefixUnaryExpression,
-} from "./evaluateOperation";
-import { nil } from "./runtime/value";
-import { ScopeError } from "./interpreterErrors";
-import { stringOfValue } from "./interpreter";
-import { expectString } from "./runtime/value";
+  NamedRecordInstance,
+  NamedRecordKlass,
+} from "./runtime/runtime.namedrecords";
+import {
+  RecordInstance,
+  Value,
+  boolean,
+  expectString,
+  list,
+  nil,
+  number,
+  record,
+  string,
+  valueOfJavascriptValue,
+} from "./runtime/value";
+import { stringOfValue } from "./stringOfValue";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -76,14 +76,35 @@ export function evaluateExpression(
         );
       }
 
-      // TODO: typecheck
-      // konstructor.valueSpec
-
       const recordInstance = evaluateExpression(
         expression.recordLiteral,
         context,
         system
       );
+
+      const recordProps = new Set(recordInstance.props.keys());
+
+      for (const [propKey, type] of namedRecordKlass.valueSpec) {
+        const value = recordInstance.props.get(propKey);
+        if (value == null) {
+          throw new Error(
+            `Type ${namedRecordKlass.classname} requires prop ${propKey}`
+          );
+        }
+        recordProps.delete(propKey);
+
+        console.log(propKey, type, recordInstance.props.get(propKey));
+
+        // TODO: typecheck
+      }
+
+      if (recordProps.size > 0) {
+        throw new Error(
+          `Type ${namedRecordKlass.classname} doesnt expect keys: ${Array.from(
+            recordProps
+          ).join(", ")}`
+        );
+      }
 
       const instance = new NamedRecordInstance(
         expression,

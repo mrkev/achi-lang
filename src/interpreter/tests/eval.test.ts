@@ -55,6 +55,20 @@ test("func.2", () => {
   expect(logs).toEqual(["hello world"]);
 });
 
+test("props", () => {
+  const logs = logsFor(`class Point(x: number, y: number);
+const a = Point(y: 3)`);
+  // TODO: THIS SHOUDL THROW BUT IS EMPTY ARRAY
+  expect(logs).toMatchSnapshot();
+});
+
+test("props", () => {
+  const logs = logsFor(`class Point(x: number, y: number);
+const a = Point(x: 2, y: 3, z: 4)`);
+  // TODO: THIS SHOULD THROW BUT IS EMPTY ARRAY
+  expect(logs).toMatchSnapshot();
+});
+
 // test("evaluateExpression.NamedRecordLiteral", () => {
 //   // const context = Context.create();
 //   // context.values().set("Point");

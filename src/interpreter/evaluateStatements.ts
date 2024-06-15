@@ -3,7 +3,7 @@ import { evaluateExpression } from "./evaluateExpression";
 import { Context } from "./Context";
 import { System } from "./runtime/System";
 import { exhaustive } from "./nullthrows";
-import { stringOfValue } from "./interpreter";
+import { stringOfValue } from "./stringOfValue";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordKlass,
