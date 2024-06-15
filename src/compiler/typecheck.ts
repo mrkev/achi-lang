@@ -33,7 +33,7 @@ export async function typecheck(
       resolveJsonModule: true,
       isolatedModules: true,
       noEmit: true,
-      module: ts.ModuleKind.ESNext,
+      module: ts.ModuleKind.NodeNext,
       moduleResolution: ts.ModuleResolutionKind.NodeNext,
     },
   });

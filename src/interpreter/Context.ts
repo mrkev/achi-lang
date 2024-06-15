@@ -102,9 +102,9 @@ class Scope<K, V> {
     if (this._stack.length === 0) {
       throw new Error("Can't pop from empty scope stack!");
     }
-    console.log("this", this._stack.length);
+    // console.log("this", this._stack.length);
     this._stack.pop();
-    console.log("this", this._stack.length);
+    // console.log("this", this._stack.length);
   }
 
   private peek() {
