@@ -14,35 +14,6 @@ export interface ValueI {
   kind: string;
 }
 
-// 3
-export type Number = Readonly<{
-  kind: "number";
-  value: number;
-  src: LangType["Expression"] | null;
-}>;
-
-// "hello"
-export type String = Readonly<{ kind: "string"; value: string }>;
-
-// false
-export type Boolean = Readonly<{ kind: "boolean"; value: boolean }>;
-
-// null
-export type Nil = Readonly<{ kind: "nil"; value: null }>;
-
-// [1, 2, 3]
-export type ListInstance = {
-  kind: "ListInstance";
-  value: ValueType["Value"][];
-};
-
-// ie, (x: 3, y: 4)
-export type RecordInstance = Readonly<{
-  kind: "RecordInstance";
-  src: LangType["RecordLiteral"];
-  props: Map<string, ValueType["Value"]>;
-}>;
-
 export type ValueType = {
   Value:
     | ValueType["Number"]
@@ -59,15 +30,26 @@ export type ValueType = {
   /*
    * Primitives
    */
-  Number: Number; // 3
-  String: String; // "hello"
-  Boolean: Boolean; // false
+  Number: Readonly<{
+    kind: "number";
+    value: number;
+    src: LangType["Expression"] | null;
+  }>; // 3
+  String: Readonly<{ kind: "string"; value: string }>; // "hello"
+  Boolean: Readonly<{ kind: "boolean"; value: boolean }>; // false
   Nil: Readonly<{ kind: "nil"; value: null }>; // null
   /*
    * Simple Data Structures
    */
-  ListInstance: ListInstance; // [1, 2, 3]
-  RecordInstance: RecordInstance; // (x: 3, y: 2)
+  ListInstance: Readonly<{
+    kind: "ListInstance";
+    value: ValueType["Value"][];
+  }>; // [1, 2, 3]
+  RecordInstance: Readonly<{
+    kind: "RecordInstance";
+    src: LangType["RecordLiteral"];
+    props: Map<string, ValueType["Value"]>;
+  }>; // (x: 3, y: 2)
   /*
    * Complex Instances
    */
@@ -83,7 +65,7 @@ export type ValueType = {
 
 // Validators
 
-function expectNumber(value: ValueType["Value"]): Number {
+function expectNumber(value: ValueType["Value"]): ValueType["Number"] {
   if (value.kind === "number") {
     return value;
   } else {
@@ -91,7 +73,7 @@ function expectNumber(value: ValueType["Value"]): Number {
   }
 }
 
-function expectString(value: ValueType["Value"]): String {
+function expectString(value: ValueType["Value"]): ValueType["String"] {
   if (value.kind === "string") {
     return value;
   } else {
@@ -101,7 +83,7 @@ function expectString(value: ValueType["Value"]): String {
   }
 }
 
-function expectBoolean(value: ValueType["Value"]): Boolean {
+function expectBoolean(value: ValueType["Value"]): ValueType["Boolean"] {
   if (value.kind === "boolean") {
     return value;
   } else {
@@ -113,30 +95,33 @@ export { expectBoolean, expectNumber, expectString };
 
 // Constructors
 
-function number(value: number, src?: LangType["Expression"]): Number {
+function number(
+  value: number,
+  src?: LangType["Expression"]
+): ValueType["Number"] {
   return { kind: "number", value, src: src ?? null } as const;
 }
 
-function string(value: string): String {
+function string(value: string): ValueType["String"] {
   return { kind: "string", value } as const;
 }
 
-function boolean(value: boolean): Boolean {
+function boolean(value: boolean): ValueType["Boolean"] {
   return { kind: "boolean", value } as const;
 }
 
-function nil(value: null): Nil {
+function nil(value: null): ValueType["Nil"] {
   return { kind: "nil", value } as const;
 }
 
-function list(value: ValueType["Value"][]): ListInstance {
+function list(value: ValueType["Value"][]): ValueType["ListInstance"] {
   return { kind: "ListInstance", value: value } as const;
 }
 
 function record(
   src: LangType["RecordLiteral"],
   props: Map<string, ValueType["Value"]>
-): RecordInstance {
+): ValueType["RecordInstance"] {
   return { kind: "RecordInstance", src, props } as const;
 }
 
@@ -146,7 +131,7 @@ export { boolean, list, nil, number, string };
 function namedRecordInstance(
   ast: LangType["NamedRecordLiteral"],
   konstructor: NamedRecordKlass,
-  recordLiteralInstance: RecordInstance
+  recordLiteralInstance: ValueType["RecordInstance"]
 ): NamedRecordInstance {
   return new NamedRecordInstance(ast, konstructor, recordLiteralInstance);
 }

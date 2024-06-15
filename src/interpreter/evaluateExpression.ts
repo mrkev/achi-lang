@@ -23,7 +23,6 @@ import {
   NamedRecordKlass,
 } from "./runtime/runtime.namedrecords";
 import {
-  RecordInstance,
   ValueType,
   boolean,
   expectString,
@@ -40,7 +39,7 @@ export function evaluateExpression(
   expression: LangType["RecordLiteral"],
   context: Context,
   system: System
-): RecordInstance;
+): ValueType["RecordInstance"];
 export function evaluateExpression(
   expression: LangType["Expression"],
   context: Context,

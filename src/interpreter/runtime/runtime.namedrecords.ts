@@ -1,7 +1,7 @@
 import type { LangType } from "../../parser/parser";
-import { RecordInstance, ValueI } from "./value";
+import { ValueI, ValueType } from "./value";
 
-type ValueType = string; //TODO
+type ValueID = string; //TODO
 
 /**
  * Represents the constructor for a named record, as it sits in memory
@@ -11,7 +11,7 @@ export class NamedRecordKlass implements ValueI {
   readonly kind = "NamedRecordKlass";
 
   readonly classname: string;
-  readonly valueSpec: Map<string, ValueType> = new Map(); // identifer => type
+  readonly valueSpec: Map<string, ValueID> = new Map(); // identifer => type
   readonly src: LangType["NamedRecordDefinition"];
   constructor(
     ast: LangType["NamedRecordDefinition"],
@@ -57,12 +57,12 @@ export class NamedRecordKlass implements ValueI {
 export class NamedRecordInstance implements ValueI {
   readonly kind = "NamedRecordInstance";
   readonly konstructor: NamedRecordKlass;
-  readonly recordLiteral: RecordInstance;
+  readonly recordLiteral: ValueType["RecordInstance"];
   readonly src: LangType["NamedRecordLiteral"];
   constructor(
     ast: LangType["NamedRecordLiteral"],
     konstructor: NamedRecordKlass,
-    recordLiteralInstance: RecordInstance
+    recordLiteralInstance: ValueType["RecordInstance"]
   ) {
     this.src = ast;
     this.konstructor = konstructor;
