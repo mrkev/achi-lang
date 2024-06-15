@@ -38,7 +38,7 @@ export function printableOfValue(
     }
 
     case "MatchFunctionInstance": {
-      return `[Function: ${value.identifier}]`;
+      return `[Function: ${value.ast.identifier.value}]`;
     }
 
     case "NamedRecordKlass": {

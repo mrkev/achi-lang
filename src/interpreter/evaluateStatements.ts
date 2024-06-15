@@ -3,12 +3,12 @@ import { Context } from "./Context";
 import { evaluateExpression } from "./evaluateExpression";
 import { exhaustive } from "./nullthrows";
 import { System } from "./runtime/System";
-import { MatchFunctionInstance } from "./runtime/runtime.functions";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordKlass,
 } from "./runtime/runtime.namedrecords";
-import { ValueType, expectBoolean } from "./runtime/value";
+import { ValueType, matchFunctionInstance } from "./runtime/value";
+import { expectBoolean } from "./runtime/value.validators";
 import { stringOfValue } from "./stringOfValue";
 import { stringOfType } from "./types";
 
@@ -175,7 +175,7 @@ export function evaluateStatements(
           );
         }
 
-        const matchFuncInstance = new MatchFunctionInstance(statement);
+        const matchFuncInstance = matchFunctionInstance(statement);
         context.valueScope.define(
           statement.identifier.value,
           matchFuncInstance

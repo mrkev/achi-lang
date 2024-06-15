@@ -2,10 +2,6 @@ import { Type } from "../checker/types";
 import { LangType } from "../parser/parser";
 import { nullthrows } from "./nullthrows";
 import {
-  AnonymousFunctionInstance,
-  MatchFunctionInstance,
-} from "./runtime/runtime.functions";
-import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordKlass,
 } from "./runtime/runtime.namedrecords";
@@ -28,7 +24,9 @@ export class Context {
   }
 
   // Currently unused
-  readonly stack: Array<AnonymousFunctionInstance | MatchFunctionInstance> = [];
+  readonly stack: Array<
+    ValueType["AnonymousFunctionInstance"] | ValueType["MatchFunctionInstance"]
+  > = [];
 
   // Identifier "string" => Value
   // Operates at a block level

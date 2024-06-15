@@ -13,10 +13,6 @@ import {
 import { ScopeError } from "./interpreterErrors";
 import { exhaustive, nullthrows } from "./nullthrows";
 import { System } from "./runtime/System";
-import {
-  AnonymousFunctionInstance,
-  MatchFunctionInstance,
-} from "./runtime/runtime.functions";
 import { evaluateMatch } from "./runtime/runtime.match";
 import {
   NamedRecordInstance,
@@ -24,8 +20,8 @@ import {
 } from "./runtime/runtime.namedrecords";
 import {
   ValueType,
+  anonymousFunctionInstance,
   boolean,
-  expectString,
   list,
   nil,
   number,
@@ -33,6 +29,7 @@ import {
   string,
   valueOfJavascriptValue,
 } from "./runtime/value";
+import { expectString } from "./runtime/value.validators";
 import { stringOfValue } from "./stringOfValue";
 
 export function evaluateExpression(
@@ -205,7 +202,7 @@ export function evaluateExpression(
     }
 
     case "AnonymousFunctionLiteral": {
-      const func = new AnonymousFunctionInstance(expression);
+      const func = anonymousFunctionInstance(expression);
       return func;
     }
 
@@ -270,7 +267,9 @@ function destructureWithRecordDefintion(
 // }
 
 function callFunction(
-  func: MatchFunctionInstance | AnonymousFunctionInstance,
+  func:
+    | ValueType["MatchFunctionInstance"]
+    | ValueType["AnonymousFunctionInstance"],
   argument: ValueType["Value"],
   context: Context,
   system: System
@@ -281,8 +280,8 @@ function callFunction(
       console.log("called");
 
       const returned = evaluateWithScope(context, () => {
-        destructureWithRecordDefintion(func.src.argument, argument, context);
-        evaluateStatements(func.src.block.statements, context, system);
+        destructureWithRecordDefintion(func.ast.argument, argument, context);
+        evaluateStatements(func.ast.block.statements, context, system);
       });
 
       context.stack.pop();
@@ -300,7 +299,7 @@ function callFunction(
       // TODO: ensure pattern is exhaustive, so we don't have to worry about that here
       // TODO: just executing first case for now
 
-      for (const caseEntry of func.src.block.caseEntries) {
+      for (const caseEntry of func.ast.block.caseEntries) {
         // caseEntry.guard
         context.valueScope.push();
         context.stack.push(func);

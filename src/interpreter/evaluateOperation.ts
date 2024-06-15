@@ -8,15 +8,12 @@ import { evaluateExpression } from "./evaluateExpression";
 import { exhaustive } from "./nullthrows";
 import { System } from "./runtime/System";
 import { factorial } from "./runtime/utils";
+import { ValueType, boolean, number, string } from "./runtime/value";
 import {
-  ValueType,
-  boolean,
   expectBoolean,
   expectNumber,
   expectString,
-  number,
-  string,
-} from "./runtime/value";
+} from "./runtime/value.validators";
 
 export function evaluatePrefixUnaryExpression(
   unex: PrefixUnaryOperation,

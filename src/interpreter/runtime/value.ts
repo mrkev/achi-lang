@@ -1,9 +1,4 @@
 import { LangType } from "../../parser/parser";
-import { ScriptError } from "../interpreterErrors";
-import {
-  AnonymousFunctionInstance,
-  MatchFunctionInstance,
-} from "./runtime.functions";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordInstance,
@@ -27,71 +22,66 @@ export type ValueType = {
     | ValueType["NamedRecordDefinitionGroupInstance"]
     | ValueType["MatchFunctionInstance"]
     | ValueType["AnonymousFunctionInstance"];
+
   /*
    * Primitives
    */
+
+  // 3
   Number: Readonly<{
     kind: "number";
     value: number;
     src: LangType["Expression"] | null;
-  }>; // 3
-  String: Readonly<{ kind: "string"; value: string }>; // "hello"
-  Boolean: Readonly<{ kind: "boolean"; value: boolean }>; // false
-  Nil: Readonly<{ kind: "nil"; value: null }>; // null
+  }>;
+  // "hello"
+  String: Readonly<{ kind: "string"; value: string }>;
+  // false
+  Boolean: Readonly<{ kind: "boolean"; value: boolean }>;
+  // null
+  Nil: Readonly<{ kind: "nil"; value: null }>;
+
   /*
    * Simple Data Structures
    */
+
+  // [1, 2, 3]
   ListInstance: Readonly<{
     kind: "ListInstance";
     value: ValueType["Value"][];
-  }>; // [1, 2, 3]
+  }>;
+  // (x: 3, y: 2)
   RecordInstance: Readonly<{
     kind: "RecordInstance";
     src: LangType["RecordLiteral"];
     props: Map<string, ValueType["Value"]>;
-  }>; // (x: 3, y: 2)
+  }>;
+
   /*
    * Complex Instances
    */
-  NamedRecordInstance: NamedRecordInstance; // Point(x: 3, y: 2)
-  NamedRecordKlass: NamedRecordKlass; // class Point(x: number, y: number)
-  NamedRecordDefinitionGroupInstance: NamedRecordDefinitionGroupInstance; // classes Cards { ... }
+
+  // Point(x: 3, y: 2)
+  NamedRecordInstance: NamedRecordInstance;
+  // class Point(x: number, y: number)
+  NamedRecordKlass: NamedRecordKlass;
+  // classes Cards { ... }
+  NamedRecordDefinitionGroupInstance: NamedRecordDefinitionGroupInstance;
+
   /*
    * Functions
    */
-  MatchFunctionInstance: MatchFunctionInstance; // function printPoint matches (point: Point) { ... }
-  AnonymousFunctionInstance: AnonymousFunctionInstance; // (point: Point) => {...}
+
+  // function printPoint matches (point: Point) { ... }
+  MatchFunctionInstance: Readonly<{
+    kind: "MatchFunctionInstance";
+    ast: LangType["MatchFunction"];
+  }>;
+  // ie, (x: 3) => { return 3 }
+  AnonymousFunctionInstance: Readonly<{
+    kind: "AnonymousFunctionInstance";
+    ast: LangType["AnonymousFunctionLiteral"];
+  }>;
 };
-
-// Validators
-
-function expectNumber(value: ValueType["Value"]): ValueType["Number"] {
-  if (value.kind === "number") {
-    return value;
-  } else {
-    throw new Error("NUMBER EXPECTED");
-  }
-}
-
-function expectString(value: ValueType["Value"]): ValueType["String"] {
-  if (value.kind === "string") {
-    return value;
-  } else {
-    const src = (value as any).src ?? {};
-    const pos = src.pos;
-    throw new ScriptError(`STRING EXPECTED`, pos);
-  }
-}
-
-function expectBoolean(value: ValueType["Value"]): ValueType["Boolean"] {
-  if (value.kind === "boolean") {
-    return value;
-  } else {
-    throw new Error("BOOLEAN EXPECTED");
-  }
-}
-
-export { expectBoolean, expectNumber, expectString };
 
 // Constructors
 
@@ -134,6 +124,18 @@ function namedRecordInstance(
   recordLiteralInstance: ValueType["RecordInstance"]
 ): NamedRecordInstance {
   return new NamedRecordInstance(ast, konstructor, recordLiteralInstance);
+}
+
+export function matchFunctionInstance(
+  literal: LangType["MatchFunction"]
+): ValueType["MatchFunctionInstance"] {
+  return { kind: "MatchFunctionInstance", ast: literal };
+}
+
+export function anonymousFunctionInstance(
+  literal: LangType["AnonymousFunctionLiteral"]
+): ValueType["AnonymousFunctionInstance"] {
+  return { kind: "AnonymousFunctionInstance", ast: literal };
 }
 
 export { namedRecordInstance, record };
