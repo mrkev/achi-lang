@@ -1,8 +1,5 @@
 import { LangType } from "../../parser/parser";
-import {
-  NamedRecordDefinitionGroupInstance,
-  NamedRecordKlass,
-} from "./runtime.namedrecords";
+import { NamedRecordKlass } from "./runtime.namedrecords";
 
 export interface ValueI {
   kind: string;
@@ -68,8 +65,12 @@ export type ValueType = {
   }>;
   // class Point(x: number, y: number)
   NamedRecordKlass: NamedRecordKlass;
-  // classes Cards { ... }
-  NamedRecordDefinitionGroupInstance: NamedRecordDefinitionGroupInstance;
+  // classes Card { King(); Queen(); ...etc }
+  NamedRecordDefinitionGroupInstance: Readonly<{
+    kind: "NamedRecordDefinitionGroupInstance";
+    src: LangType["NamedRecordDefinitionGroup"];
+    klasses: Map<string, NamedRecordKlass>;
+  }>;
 
   /*
    * Functions
@@ -130,6 +131,17 @@ export function namedRecordInstance(
     src: ast,
     konstructor,
     recordLiteral: recordLiteralInstance,
+  };
+}
+
+export function namedRecordDefinitionGroupInstance(
+  ast: LangType["NamedRecordDefinitionGroup"],
+  klasses: Map<string, NamedRecordKlass>
+): ValueType["NamedRecordDefinitionGroupInstance"] {
+  return {
+    kind: "NamedRecordDefinitionGroupInstance",
+    src: ast,
+    klasses,
   };
 }
 

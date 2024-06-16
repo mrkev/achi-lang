@@ -3,11 +3,12 @@ import { Context } from "./Context";
 import { evaluateExpression } from "./evaluateExpression";
 import { exhaustive } from "../nullthrows";
 import { System } from "./runtime/System";
+import { NamedRecordKlass } from "./runtime/runtime.namedrecords";
 import {
-  NamedRecordDefinitionGroupInstance,
-  NamedRecordKlass,
-} from "./runtime/runtime.namedrecords";
-import { ValueType, matchFunctionInstance } from "./runtime/value";
+  ValueType,
+  matchFunctionInstance,
+  namedRecordDefinitionGroupInstance,
+} from "./runtime/value";
 import { expectBoolean } from "./runtime/value.validators";
 import { stringOfValue } from "./stringOfValue";
 import { stringOfType } from "./types";
@@ -97,7 +98,7 @@ export function evaluateStatements(
           klasses.set(namedRecordDefinition.identifier.value, klass);
         }
 
-        const groupInstance = new NamedRecordDefinitionGroupInstance(
+        const groupInstance = namedRecordDefinitionGroupInstance(
           statement,
           klasses
         );

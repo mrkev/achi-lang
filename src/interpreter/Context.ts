@@ -2,10 +2,7 @@ import { Type } from "../checker/types";
 import { nullthrows } from "../nullthrows";
 import { LangType } from "../parser/parser";
 import { InterpreterError } from "./interpreterErrors";
-import {
-  NamedRecordDefinitionGroupInstance,
-  NamedRecordKlass,
-} from "./runtime/runtime.namedrecords";
+import { NamedRecordKlass } from "./runtime/runtime.namedrecords";
 import { ValueType } from "./runtime/value";
 import { printableOfValue } from "./stringOfValue";
 
@@ -14,7 +11,8 @@ import { printableOfValue } from "./stringOfValue";
 
 type RuntimeTypeStructures =
   | NamedRecordKlass
-  | NamedRecordDefinitionGroupInstance;
+  // TODO: make a KindType['NamedRecordDefinitionGroupInstance'] equivalent of this
+  | ValueType["NamedRecordDefinitionGroupInstance"];
 
 /**
  * Context handles variable/ scoping, stack frames (TODO), etc
@@ -51,7 +49,7 @@ export class Context {
   getTypeOrThrow(
     identifer: LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"],
     msg?: string
-  ): NamedRecordKlass | NamedRecordDefinitionGroupInstance {
+  ): RuntimeTypeStructures {
     const { kind } = identifer;
     switch (kind) {
       case "TypeIdentifier": {
@@ -70,7 +68,7 @@ export class Context {
           `Unknown NamedRecordDefinitionGroup ${parent.value}`
         );
 
-        if (!(group instanceof NamedRecordDefinitionGroupInstance)) {
+        if (group instanceof NamedRecordKlass) {
           throw new Error(
             `${parent.value} is not a NamedRecordDefinitionGroup`
           );

@@ -66,17 +66,3 @@ export class NamedRecordKlass implements ValueI {
     `;
   }
 }
-
-// ie, classes Card { King(); Queen(); ...etc }
-export class NamedRecordDefinitionGroupInstance implements ValueI {
-  readonly kind = "NamedRecordDefinitionGroupInstance";
-  readonly src: LangType["NamedRecordDefinitionGroup"];
-  readonly klasses: Map<string, NamedRecordKlass>;
-  constructor(
-    ast: LangType["NamedRecordDefinitionGroup"],
-    klasses: Map<string, NamedRecordKlass>
-  ) {
-    this.src = ast;
-    this.klasses = klasses;
-  }
-}
