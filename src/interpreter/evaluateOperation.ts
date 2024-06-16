@@ -32,8 +32,7 @@ export function evaluatePrefixUnaryExpression(
     case "!":
       return boolean(!expectBoolean(value).value);
     default:
-      exhaustive(unex.operator);
-      throw new Error("unknown operator " + unex.operator);
+      throw exhaustive(unex.operator, "unknown operator " + unex.operator);
   }
 }
 
@@ -51,8 +50,7 @@ export function evaluateSuffixUnaryExpression(
     case "!":
       return number(factorial(expectNumber(value).value));
     default:
-      exhaustive(unex.operator);
-      throw new Error("unknown operator " + unex.operator);
+      throw exhaustive(unex.operator, "unknown operator " + unex.operator);
   }
 }
 
@@ -131,7 +129,6 @@ export function evaluateBinaryExpression(
       return boolean(expectNumber(left).value != expectNumber(right).value);
 
     default:
-      exhaustive(binex.operator);
-      throw new Error("unknown operator " + binex.operator);
+      throw exhaustive(binex.operator, "unknown operator " + binex.operator);
   }
 }

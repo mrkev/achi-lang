@@ -1,6 +1,7 @@
 import { Type } from "../checker/types";
 import { nullthrows } from "../nullthrows";
 import { LangType } from "../parser/parser";
+import { InterpreterError } from "./interpreterErrors";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordKlass,
@@ -87,7 +88,7 @@ export class Context {
   }
 }
 
-class Scope<K, V> {
+class Scope<K extends string, V> {
   // Note, we start with no scopes. We need to make sure we push
   // a sope before we try to define variables
   readonly _stack: Map<K, V>[] = [];
@@ -98,7 +99,7 @@ class Scope<K, V> {
 
   pop() {
     if (this._stack.length === 0) {
-      throw new Error("Can't pop from empty scope stack!");
+      throw new InterpreterError("Can't pop from empty scope stack!");
     }
     // console.log("this", this._stack.length);
     this._stack.pop();
@@ -173,7 +174,9 @@ class Scope<K, V> {
   }
 }
 
-export function stringOfValueScope(scope: Scope<string, ValueType["Value"]>) {
+export function stringOfValueScope<K extends string>(
+  scope: Scope<K, ValueType["Value"]>
+) {
   let res = "Value Scope: ";
   for (const i in scope._stack) {
     const map = scope._stack[i];

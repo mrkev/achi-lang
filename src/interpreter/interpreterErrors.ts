@@ -2,27 +2,27 @@ import { Meta } from "../parser/Node";
 import { LangType } from "../parser/parser";
 
 export class ScriptError extends Error {
-  readonly pos: Meta | null;
-  constructor(message: string, pos?: Meta, options?: any) {
+  readonly pos: Meta;
+  constructor(message: string, pos: Meta, options?: ErrorOptions) {
     super(message, options);
-    this.pos = pos ?? null;
+    this.pos = pos;
   }
 }
 
-export class ScopeError {
+export class ScopeError extends Error {
   readonly identifier: LangType["ValueIdentifier"];
-  constructor(identifier: LangType["ValueIdentifier"]) {
+  constructor(identifier: LangType["ValueIdentifier"], options?: ErrorOptions) {
+    const start = identifier["@"].start;
+    super(
+      `Identifier "${identifier.value}" not found (at ${start.line}:${start.column})`,
+      options
+    );
     this.identifier = identifier;
-  }
-
-  print(): string {
-    const {
-      "@": { start },
-    } = this.identifier;
-    return `Identifier "${this.identifier.value}" not found (at ${start.line}:${start.column})`;
   }
 
   location(): Readonly<Meta> {
     return this.identifier["@"];
   }
 }
+
+export class InterpreterError extends Error {}

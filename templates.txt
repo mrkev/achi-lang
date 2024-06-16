@@ -39,7 +39,7 @@ function resolveExpressionTypes(
       throw new Error("not implemented");
 
     default: {
-      exhaustive(expression);
+      throw exhaustive(expression);
     }
   }
 }

@@ -80,7 +80,7 @@ export function niceError(
     msg.push(`${lineNum(startLine + 3)}| ${lines[startLine + 1]}`);
   }
   msg.push("");
-  msg.push(error.print());
+  msg.push(error.message);
   return msg.join("\n");
 }
 

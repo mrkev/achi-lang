@@ -398,11 +398,22 @@ function checkStatements(
   }
 }
 
-export class TypeMismatchError {
+export class TypeMismatchError extends Error {
   expression: LangType["Expression"];
   expected: Type;
   got: Type;
-  constructor(expression: LangType["Expression"], expected: Type, got: Type) {
+  constructor(
+    expression: LangType["Expression"],
+    expected: Type,
+    got: Type,
+    options?: ErrorOptions
+  ) {
+    super(
+      `Invalid type. Expected ${printType(expected)} but got ${printType(
+        got
+      )}.`,
+      options
+    );
     this.expression = expression;
     this.expected = expected;
     this.got = got;
@@ -415,11 +426,5 @@ export class TypeMismatchError {
       column: 1,
     };
     return { start: loc, end: loc };
-  }
-
-  print(): string {
-    return `Invalid type. Expected ${printType(
-      this.expected
-    )} but got ${printType(this.got)}.`;
   }
 }

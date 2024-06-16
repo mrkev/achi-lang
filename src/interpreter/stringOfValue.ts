@@ -1,11 +1,12 @@
 import { exhaustive } from "../nullthrows";
+import { LangType } from "../parser/parser";
 import { ValueType } from "./runtime/value";
 
 export function stringOfValue(value: ValueType["Value"]): string {
   return String(printableOfValue(value));
 }
 
-type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
+export type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
 
 export function printableOfValue(
   value: ValueType["Value"]
@@ -65,7 +66,7 @@ export function printableOfValue(
     }
 
     case "AnonymousFunctionInstance": {
-      return "<anonymous function>";
+      return `${stringOfAst(value.ast.argument)}`;
     }
 
     case "nil": {
@@ -74,5 +75,18 @@ export function printableOfValue(
 
     default:
       throw exhaustive(kind);
+  }
+}
+
+function stringOfAst(
+  node: LangType["RecordDefinition"] | LangType["NamedDefinition"]
+): string {
+  switch (node.kind) {
+    case "NamedDefinition":
+      return `${node.identifier.value}: ${node.typeTag.identifier.value}`;
+    case "RecordDefinition":
+      return `(${node.definitions.map(stringOfAst).join(", ")}) => <unknown>`;
+    default:
+      throw exhaustive(node);
   }
 }

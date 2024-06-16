@@ -191,7 +191,7 @@ export function evaluateStatements(
       }
 
       default:
-        exhaustive(kind);
+        throw exhaustive(kind);
     }
   }
   return null;
