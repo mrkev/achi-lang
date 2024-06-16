@@ -10,7 +10,7 @@ import {
   evaluateStatements,
   evaluateWithScope,
 } from "./evaluateStatements";
-import { ScopeError } from "./interpreterErrors";
+import { ScopeError, ScriptError } from "./interpreterErrors";
 import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./runtime/System";
 import { evaluateMatch } from "./runtime/runtime.match";
@@ -89,7 +89,7 @@ export function evaluateExpression(
         }
         recordProps.delete(propKey);
 
-        console.log(propKey, type, recordInstance.props.get(propKey));
+        // console.log(propKey, type, recordInstance.props.get(propKey));
 
         // TODO: typecheck
       }
@@ -250,8 +250,9 @@ function destructureWithRecordDefintion(
     const val = props.get(def.identifier.value);
 
     if (val == null) {
-      throw new Error(
-        `Prop ${def.identifier.value} doesn't exist in value to deconstruct`
+      throw new ScriptError(
+        `Prop ${def.identifier.value} doesn't exist in value to deconstruct`,
+        def.identifier["@"]
       );
     }
 
@@ -277,7 +278,11 @@ function callFunction(
   switch (func.kind) {
     case "AnonymousFunctionInstance": {
       context.stack.push(func);
-      console.log("called");
+      // console.log("called");
+
+      // TODO: check if incoming record conforms to argument.
+      // If not, error will show in `destructureWithRecordDefintion` as the
+      // destructuring failing, which is confusing
 
       const returned = evaluateWithScope(context, () => {
         destructureWithRecordDefintion(func.ast.argument, argument, context);

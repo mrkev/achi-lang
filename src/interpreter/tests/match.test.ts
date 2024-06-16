@@ -1,4 +1,4 @@
-import { logsFor } from "./logsFor";
+import { outFor } from "./logsFor";
 
 const COMMON_DEFS = `
 classes Card {
@@ -14,7 +14,7 @@ const litFive = 5;
 `;
 
 test("match.1", () => {
-  const logs = logsFor(`
+  const logs = outFor(`
   ${COMMON_DEFS}
   const result = match (four) {
     case Card.King(): {
@@ -25,11 +25,11 @@ test("match.1", () => {
     }
   };
   `);
-  expect(logs).toEqual(["number card"]);
+  expect(logs).toEqual("number card");
 });
 
 test("match.2", () => {
-  const logs = logsFor(`
+  const logs = outFor(`
   ${COMMON_DEFS}
   const result = match (king) {
     case Card.King(): {
@@ -40,11 +40,11 @@ test("match.2", () => {
     }
   };
   `);
-  expect(logs).toEqual(["king"]);
+  expect(logs).toEqual("king");
 });
 
 test("match.binding", () => {
-  const logs = logsFor(`
+  const logs = outFor(`
   ${COMMON_DEFS}
   const result = match (four) {
     case Card.King(): {
@@ -55,11 +55,11 @@ test("match.binding", () => {
     }
   };
   `);
-  expect(logs).toEqual(["4"]);
+  expect(logs).toEqual("4");
 });
 
 test("match.literals", () => {
-  const logs = logsFor(`
+  const logs = outFor(`
   ${COMMON_DEFS}
   const result = match (litTrue) {
     case false: {
@@ -70,7 +70,7 @@ test("match.literals", () => {
     };
   };
   `);
-  expect(logs).toEqual(["true"]);
+  expect(logs).toEqual("true");
 });
 
 // test("match.error", () => {

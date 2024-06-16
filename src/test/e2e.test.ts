@@ -8,7 +8,7 @@ function exec(script: string, ...extra: ("compile" | "typecheck")[]): string {
   const _features = new Set(extra);
   const system = new System();
   try {
-    interpret(script, system, new Context(), { quietConsoleError: true });
+    interpret(script, system, Context.create(), { quietConsoleError: true });
   } catch (e) {
     if (e instanceof Error) {
       system.console.fail(e);
@@ -18,7 +18,7 @@ function exec(script: string, ...extra: ("compile" | "typecheck")[]): string {
       console.error(e);
     }
   }
-  return system.console._log.join("\n");
+  return system.console.output();
 }
 
 describe("e2e", () => {

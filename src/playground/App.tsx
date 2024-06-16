@@ -256,7 +256,9 @@ export default function App() {
         {log.map((msg, i) => {
           return msg instanceof Error ? (
             <details style={{ color: "red" }} key={`e${i}`}>
-              <summary>{msg.message}</summary>
+              <summary>
+                {msg.constructor.name}: {msg.message}
+              </summary>
               {msg.stack}
             </details>
           ) : (

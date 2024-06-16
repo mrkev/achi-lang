@@ -21,9 +21,10 @@ class Console {
 
   fail(err: Error) {
     this._fatalError = err;
+    this._log.push(err);
   }
 
-  getOut(): string {
+  output(): string {
     return this._log.join("\n");
   }
 }

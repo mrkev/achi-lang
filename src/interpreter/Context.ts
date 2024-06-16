@@ -20,6 +20,7 @@ type RuntimeTypeStructures =
  * Context handles variable/ scoping, stack frames (TODO), etc
  */
 export class Context {
+  private constructor() {}
   static create() {
     return new Context();
   }

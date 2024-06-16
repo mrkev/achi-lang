@@ -1,3 +1,8 @@
+lang
+- closures (function + context)
+- correctly test for errors
+
+
 // TODO: can return from top-level, print that?
 
 

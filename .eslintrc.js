@@ -38,6 +38,10 @@ module.exports = {
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/ban-ts-ignore": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-empty-function": [
+      "warn",
+      { allow: ["private-constructors"] },
+    ],
     "linebreak-style": ["error", "unix"],
     semi: ["error", "always"],
     "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
