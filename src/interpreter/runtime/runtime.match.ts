@@ -5,6 +5,7 @@ import { exhaustive, nullthrows } from "../../nullthrows";
 import { System } from "./System";
 import { aSubsetB } from "./utils";
 import { ValueType } from "./value";
+import { FixmeError } from "../interpreterErrors";
 
 export function evaluateMatch(
   value: ValueType["Value"],
@@ -29,7 +30,7 @@ export function evaluateMatch(
     }
   }
   // TODO runtime or static checks for completeness
-  throw new Error("fixme, no case blocks");
+  throw new FixmeError("fixme, no case blocks", cases["@"]);
 }
 
 function doMatch(

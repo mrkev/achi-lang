@@ -1,4 +1,4 @@
-import { outFor, fatalFor } from "./logsFor";
+import { outFor } from "./logsFor";
 
 test("simple.1", () => {
   const logs = outFor(`#log "hi"`);

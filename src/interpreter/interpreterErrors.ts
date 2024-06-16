@@ -26,3 +26,11 @@ export class ScopeError extends Error {
 }
 
 export class InterpreterError extends Error {}
+
+export class FixmeError extends Error {
+  readonly pos: Meta | null;
+  constructor(message: string, pos?: Meta, options?: ErrorOptions) {
+    super(message, options);
+    this.pos = pos ?? null;
+  }
+}

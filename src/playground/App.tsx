@@ -7,18 +7,18 @@ import { useLocalStorage } from "usehooks-ts";
 import { compileProgram, printTSStatements } from "../compiler/compiler";
 import { Context, stringOfValueScope } from "../interpreter/Context";
 import { interpret } from "../interpreter/interpreter";
-import { ScriptError } from "../interpreter/interpreterErrors";
+import { FixmeError, ScriptError } from "../interpreter/interpreterErrors";
 import { System } from "../interpreter/runtime/System";
+import { nullthrows } from "../nullthrows";
 import { tryParse } from "../parser/parser";
 import { registerLangForMonaco } from "../playground/registerLangForMonaco";
 import "./App.css";
 import { Sidebar } from "./Sidebar";
 import { DEFAULT_SCRIPT } from "./constants";
 import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
+import { transformASTForDisplay } from "./transformASTForDisplay";
 import { useEditor } from "./useEditor";
 import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
-import { nullthrows } from "../nullthrows";
-import { transformASTForDisplay } from "./transformASTForDisplay";
 
 export type SetState<S> = React.Dispatch<React.SetStateAction<S>>;
 
@@ -212,7 +212,11 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (fatalScriptError instanceof ScriptError && fatalScriptError.pos) {
+    if (
+      (fatalScriptError instanceof ScriptError ||
+        fatalScriptError instanceof FixmeError) &&
+      fatalScriptError.pos != null
+    ) {
       const { pos } = fatalScriptError;
       setDecoratorRange(
         new monaco.Range(
@@ -247,12 +251,12 @@ export default function App() {
             {systemError.stack}
           </details>
         )}
-        {fatalScriptError && (
+        {/* {fatalScriptError && (
           <details style={{ color: "red" }}>
             <summary>SCRIPT: {fatalScriptError.message}</summary>
             {fatalScriptError.stack}
           </details>
-        )}
+        )} */}
         {log.map((msg, i) => {
           return msg instanceof Error ? (
             <details style={{ color: "red" }} key={`e${i}`}>

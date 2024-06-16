@@ -1,0 +1,213 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TypeIdentifier 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 7,
+      "line": 1,
+      "offset": 6,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "TypeIdentifier",
+  "value": "string",
+}
+`;
+
+exports[`TypeTag.1 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 9,
+      "line": 1,
+      "offset": 8,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "identifier": {
+    "@": {
+      "end": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+      "start": {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+    },
+    "kind": "TypeIdentifier",
+    "value": "number",
+  },
+  "kind": "TypeTag",
+}
+`;
+
+exports[`TypeTag.2 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 25,
+      "line": 1,
+      "offset": 24,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "identifier": {
+    "@": {
+      "end": {
+        "column": 25,
+        "line": 1,
+        "offset": 24,
+      },
+      "start": {
+        "column": 3,
+        "line": 1,
+        "offset": 2,
+      },
+    },
+    "definitions": [
+      {
+        "@": {
+          "end": {
+            "column": 13,
+            "line": 1,
+            "offset": 12,
+          },
+          "start": {
+            "column": 4,
+            "line": 1,
+            "offset": 3,
+          },
+        },
+        "identifier": {
+          "@": {
+            "end": {
+              "column": 5,
+              "line": 1,
+              "offset": 4,
+            },
+            "start": {
+              "column": 4,
+              "line": 1,
+              "offset": 3,
+            },
+          },
+          "kind": "ValueIdentifier",
+          "value": "x",
+        },
+        "kind": "NamedDefinition",
+        "typeTag": {
+          "@": {
+            "end": {
+              "column": 13,
+              "line": 1,
+              "offset": 12,
+            },
+            "start": {
+              "column": 5,
+              "line": 1,
+              "offset": 4,
+            },
+          },
+          "identifier": {
+            "@": {
+              "end": {
+                "column": 13,
+                "line": 1,
+                "offset": 12,
+              },
+              "start": {
+                "column": 7,
+                "line": 1,
+                "offset": 6,
+              },
+            },
+            "kind": "TypeIdentifier",
+            "value": "number",
+          },
+          "kind": "TypeTag",
+        },
+      },
+      {
+        "@": {
+          "end": {
+            "column": 24,
+            "line": 1,
+            "offset": 23,
+          },
+          "start": {
+            "column": 15,
+            "line": 1,
+            "offset": 14,
+          },
+        },
+        "identifier": {
+          "@": {
+            "end": {
+              "column": 16,
+              "line": 1,
+              "offset": 15,
+            },
+            "start": {
+              "column": 15,
+              "line": 1,
+              "offset": 14,
+            },
+          },
+          "kind": "ValueIdentifier",
+          "value": "y",
+        },
+        "kind": "NamedDefinition",
+        "typeTag": {
+          "@": {
+            "end": {
+              "column": 24,
+              "line": 1,
+              "offset": 23,
+            },
+            "start": {
+              "column": 16,
+              "line": 1,
+              "offset": 15,
+            },
+          },
+          "identifier": {
+            "@": {
+              "end": {
+                "column": 24,
+                "line": 1,
+                "offset": 23,
+              },
+              "start": {
+                "column": 18,
+                "line": 1,
+                "offset": 17,
+              },
+            },
+            "kind": "TypeIdentifier",
+            "value": "number",
+          },
+          "kind": "TypeTag",
+        },
+      },
+    ],
+    "kind": "RecordDefinition",
+  },
+  "kind": "TypeTag",
+}
+`;

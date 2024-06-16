@@ -14,15 +14,13 @@ import { ScopeError, ScriptError } from "./interpreterErrors";
 import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./runtime/System";
 import { evaluateMatch } from "./runtime/runtime.match";
-import {
-  NamedRecordInstance,
-  NamedRecordKlass,
-} from "./runtime/runtime.namedrecords";
+import { NamedRecordKlass } from "./runtime/runtime.namedrecords";
 import {
   ValueType,
   anonymousFunctionInstance,
   boolean,
   list,
+  namedRecordInstance,
   nil,
   number,
   record,
@@ -102,7 +100,7 @@ export function evaluateExpression(
         );
       }
 
-      const instance = new NamedRecordInstance(
+      const instance = namedRecordInstance(
         expression,
         namedRecordKlass,
         recordInstance

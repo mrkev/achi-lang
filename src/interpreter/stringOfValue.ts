@@ -79,13 +79,23 @@ export function printableOfValue(
 }
 
 function stringOfAst(
-  node: LangType["RecordDefinition"] | LangType["NamedDefinition"]
+  node:
+    | LangType["RecordDefinition"]
+    | LangType["NamedDefinition"]
+    | LangType["TypeTag"]
+    | LangType["TypeExpression"]
 ): string {
   switch (node.kind) {
     case "NamedDefinition":
-      return `${node.identifier.value}: ${node.typeTag.identifier.value}`;
+      return `${node.identifier.value}${stringOfAst(node.typeTag)}`;
     case "RecordDefinition":
       return `(${node.definitions.map(stringOfAst).join(", ")}) => <unknown>`;
+    case "TypeTag":
+      return `: ${stringOfAst(node.typeExpression)}`;
+    case "TypeIdentifier":
+      return `${node.value}`;
+    case "NamedRecordDefinition":
+      return `${node.identifier}${stringOfAst(node.record)}`;
     default:
       throw exhaustive(node);
   }

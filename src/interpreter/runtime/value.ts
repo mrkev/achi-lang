@@ -1,7 +1,6 @@
 import { LangType } from "../../parser/parser";
 import {
   NamedRecordDefinitionGroupInstance,
-  NamedRecordInstance,
   NamedRecordKlass,
 } from "./runtime.namedrecords";
 
@@ -61,7 +60,12 @@ export type ValueType = {
    */
 
   // Point(x: 3, y: 2)
-  NamedRecordInstance: NamedRecordInstance;
+  NamedRecordInstance: Readonly<{
+    kind: "NamedRecordInstance";
+    konstructor: NamedRecordKlass;
+    recordLiteral: ValueType["RecordInstance"];
+    src: LangType["NamedRecordLiteral"];
+  }>;
   // class Point(x: number, y: number)
   NamedRecordKlass: NamedRecordKlass;
   // classes Cards { ... }
@@ -120,8 +124,13 @@ export function namedRecordInstance(
   ast: LangType["NamedRecordLiteral"],
   konstructor: NamedRecordKlass,
   recordLiteralInstance: ValueType["RecordInstance"]
-): NamedRecordInstance {
-  return new NamedRecordInstance(ast, konstructor, recordLiteralInstance);
+): ValueType["NamedRecordInstance"] {
+  return {
+    kind: "NamedRecordInstance",
+    src: ast,
+    konstructor,
+    recordLiteral: recordLiteralInstance,
+  };
 }
 
 export function matchFunctionInstance(

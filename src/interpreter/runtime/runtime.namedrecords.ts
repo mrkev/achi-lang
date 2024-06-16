@@ -1,5 +1,6 @@
+import { exhaustive } from "../../nullthrows";
 import type { LangType } from "../../parser/parser";
-import { ValueI, ValueType } from "./value";
+import { ValueI } from "./value";
 
 type ValueID = string; //TODO
 
@@ -29,7 +30,20 @@ export class NamedRecordKlass implements ValueI {
     const classname = def.identifier.value;
     const valueSpec = new Map<string, string>();
     for (const prop of def.record.definitions) {
-      valueSpec.set(prop.identifier.value, prop.typeTag.identifier.value);
+      switch (prop.typeTag.typeExpression.kind) {
+        case "NamedRecordDefinition":
+        case "RecordDefinition":
+          // TODO TYPES: value spec should accept non-identifier types too
+          throw new Error("unimplemented");
+        case "TypeIdentifier":
+          valueSpec.set(
+            prop.identifier.value,
+            prop.typeTag.typeExpression.value
+          );
+          break;
+        default:
+          throw exhaustive(prop.typeTag.typeExpression);
+      }
     }
     const res = new NamedRecordKlass(def, classname, valueSpec);
     // console.log(res.asClass());
@@ -50,23 +64,6 @@ export class NamedRecordKlass implements ValueI {
       }
     }
     `;
-  }
-}
-
-// ie, Point(x: 3, y: 3)
-export class NamedRecordInstance implements ValueI {
-  readonly kind = "NamedRecordInstance";
-  readonly konstructor: NamedRecordKlass;
-  readonly recordLiteral: ValueType["RecordInstance"];
-  readonly src: LangType["NamedRecordLiteral"];
-  constructor(
-    ast: LangType["NamedRecordLiteral"],
-    konstructor: NamedRecordKlass,
-    recordLiteralInstance: ValueType["RecordInstance"]
-  ) {
-    this.src = ast;
-    this.konstructor = konstructor;
-    this.recordLiteral = recordLiteralInstance;
   }
 }
 

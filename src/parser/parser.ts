@@ -127,7 +127,7 @@ export type LangType = LangType_BinOp &
     // :string
     TypeTag: Node<{
       kind: "TypeTag";
-      identifier: LangType["TypeIdentifier"];
+      typeExpression: LangType["TypeExpression"];
     }>;
 
     // #log value
@@ -740,12 +740,12 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       Parsimmon.index,
       Parsimmon.string(":"),
       r._,
-      r.TypeIdentifier,
+      r.TypeExpression,
       Parsimmon.index,
-      (start, _2, _3, identifier, end) => {
+      (start, _2, _3, typeExpression, end) => {
         return {
           kind: "TypeTag",
-          identifier,
+          typeExpression,
           "@": { start, end },
         };
       }

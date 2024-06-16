@@ -76,7 +76,7 @@ export function compileStatement(
       const constructorStatements = [];
       for (const defn of definitions) {
         const propName = defn.identifier.value;
-        const propType = defn.typeTag.identifier.value;
+        const propType = (defn.typeTag.typeExpression as any).value; // todo: support type expressions
 
         const typeRef = ts.factory.createTypeReferenceNode(propType);
 
