@@ -1,5 +1,5 @@
 import { Context } from "../interpreter/Context";
-import { exhaustive } from "../interpreter/nullthrows";
+import { exhaustive } from "../nullthrows";
 import { LangType } from "../parser/parser";
 
 export type Type =

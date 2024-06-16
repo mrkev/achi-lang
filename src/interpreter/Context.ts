@@ -1,6 +1,6 @@
 import { Type } from "../checker/types";
+import { nullthrows } from "../nullthrows";
 import { LangType } from "../parser/parser";
-import { nullthrows } from "./nullthrows";
 import {
   NamedRecordDefinitionGroupInstance,
   NamedRecordKlass,

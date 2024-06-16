@@ -1,5 +1,5 @@
 import { LangType } from "../parser/parser";
-import { exhaustive } from "./nullthrows";
+import { exhaustive } from "../nullthrows";
 
 export function stringOfType(typeExpression: LangType["TypeExpression"]) {
   const { kind } = typeExpression;

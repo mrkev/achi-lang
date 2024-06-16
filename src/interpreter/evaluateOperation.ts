@@ -5,7 +5,7 @@ import {
 } from "../parser/parser.binex";
 import { Context } from "./Context";
 import { evaluateExpression } from "./evaluateExpression";
-import { exhaustive } from "./nullthrows";
+import { exhaustive } from "../nullthrows";
 import { System } from "./runtime/System";
 import { factorial } from "./runtime/utils";
 import { ValueType, boolean, number, string } from "./runtime/value";

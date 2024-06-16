@@ -1,7 +1,7 @@
 import { LangType } from "../parser/parser";
 import { Context } from "./Context";
 import { evaluateExpression } from "./evaluateExpression";
-import { exhaustive } from "./nullthrows";
+import { exhaustive } from "../nullthrows";
 import { System } from "./runtime/System";
 import {
   NamedRecordDefinitionGroupInstance,

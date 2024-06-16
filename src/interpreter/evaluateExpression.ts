@@ -11,7 +11,7 @@ import {
   evaluateWithScope,
 } from "./evaluateStatements";
 import { ScopeError } from "./interpreterErrors";
-import { exhaustive, nullthrows } from "./nullthrows";
+import { exhaustive, nullthrows } from "../nullthrows";
 import { System } from "./runtime/System";
 import { evaluateMatch } from "./runtime/runtime.match";
 import {

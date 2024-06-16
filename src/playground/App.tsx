@@ -17,10 +17,12 @@ import { DEFAULT_SCRIPT } from "./constants";
 import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
 import { useEditor } from "./useEditor";
 import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
+import { nullthrows } from "../nullthrows";
+import { transformASTForDisplay } from "./transformASTForDisplay";
 
 export type SetState<S> = React.Dispatch<React.SetStateAction<S>>;
 
-const COMPACT_AST = true;
+export const COMPACT_AST = true;
 
 const options: editor.IStandaloneEditorConstructionOptions = {
   fontSize: 16,
@@ -145,34 +147,20 @@ export default function App() {
 
   const doEvaluate = useCallback(() => {
     const system = new System();
-    const editor = scriptEditorObj;
+
+    setDecoratorRange(null);
+    setFatalScriptError(null);
+    setSystemError(null);
 
     try {
-      if (editor == null) {
-        throw new Error("no editor");
-      }
-
+      const editor = nullthrows(scriptEditorObj, "no editor");
       const script = editor.getValue();
+
       setScript(script);
-      setDecoratorRange(null);
-      setFatalScriptError(null);
-      setSystemError(null);
 
       const ast = tryParse(script);
-      const replacer = (key: string, value: any) => {
-        if (key === "@") {
-          return `${value.start.line}:${value.start.column}:${value.end.line}:${value.end.column}`;
-        } else {
-          return value;
-        }
-      };
-      const strvalue = JSON.stringify(
-        ast,
-        COMPACT_AST ? replacer : undefined,
-        2
-      );
 
-      astEditorObj?.setValue(strvalue);
+      astEditorObj?.setValue(transformASTForDisplay(ast));
 
       if (features.has("compile")) {
         const tsAst = compileProgram(ast);

@@ -1,6 +1,6 @@
 import { LangType } from "../parser/parser";
 import * as ts from "typescript";
-import { exhaustive } from "../interpreter/nullthrows";
+import { exhaustive } from "../nullthrows";
 
 export function compileExpression(
   expression: LangType["Expression"]

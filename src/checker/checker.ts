@@ -1,11 +1,11 @@
-import Parsimmon, { string } from "parsimmon";
+import Parsimmon from "parsimmon";
 import { Context } from "../interpreter/Context";
 import { niceError } from "../interpreter/interpreter";
-import { exhaustive, nullthrows } from "../interpreter/nullthrows";
-import { System } from "../interpreter/runtime/System";
-import { LangType, tryParse } from "../parser/parser";
-import { isSubtype, Type, printType, RecordType } from "./types";
 import { ScopeError } from "../interpreter/interpreterErrors";
+import { System } from "../interpreter/runtime/System";
+import { exhaustive } from "../nullthrows";
+import { LangType, tryParse } from "../parser/parser";
+import { RecordType, Type, isSubtype, printType } from "./types";
 
 export function check(
   script: string | LangType["Program"],

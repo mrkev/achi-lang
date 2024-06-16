@@ -1,4 +1,4 @@
-import { exhaustive } from "./nullthrows";
+import { exhaustive } from "../nullthrows";
 import { ValueType } from "./runtime/value";
 
 export function stringOfValue(value: ValueType["Value"]): string {

@@ -85,40 +85,38 @@ export type ValueType = {
 
 // Constructors
 
-function number(
+export function number(
   value: number,
   src?: LangType["Expression"]
 ): ValueType["Number"] {
   return { kind: "number", value, src: src ?? null } as const;
 }
 
-function string(value: string): ValueType["String"] {
+export function string(value: string): ValueType["String"] {
   return { kind: "string", value } as const;
 }
 
-function boolean(value: boolean): ValueType["Boolean"] {
+export function boolean(value: boolean): ValueType["Boolean"] {
   return { kind: "boolean", value } as const;
 }
 
-function nil(value: null): ValueType["Nil"] {
+export function nil(value: null): ValueType["Nil"] {
   return { kind: "nil", value } as const;
 }
 
-function list(value: ValueType["Value"][]): ValueType["ListInstance"] {
+export function list(value: ValueType["Value"][]): ValueType["ListInstance"] {
   return { kind: "ListInstance", value: value } as const;
 }
 
-function record(
+export function record(
   src: LangType["RecordLiteral"],
   props: Map<string, ValueType["Value"]>
 ): ValueType["RecordInstance"] {
   return { kind: "RecordInstance", src, props } as const;
 }
 
-export { boolean, list, nil, number, string };
-
 // TODO: kind: "NamedRecordInstance" (and others) lowercase like primitives?
-function namedRecordInstance(
+export function namedRecordInstance(
   ast: LangType["NamedRecordLiteral"],
   konstructor: NamedRecordKlass,
   recordLiteralInstance: ValueType["RecordInstance"]
@@ -137,8 +135,6 @@ export function anonymousFunctionInstance(
 ): ValueType["AnonymousFunctionInstance"] {
   return { kind: "AnonymousFunctionInstance", ast: literal };
 }
-
-export { namedRecordInstance, record };
 
 export function valueOfJavascriptValue(x: unknown) {
   if (typeof x === "number") {

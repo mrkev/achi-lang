@@ -1,4 +1,4 @@
-import { nullthrows } from "../interpreter/nullthrows";
+import { nullthrows } from "../nullthrows";
 import { Lang } from "../parser/parser";
 import { compileExpression } from "./compileExpression";
 import {
