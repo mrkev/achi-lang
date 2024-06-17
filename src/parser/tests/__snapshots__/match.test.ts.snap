@@ -233,7 +233,8 @@ exports[`MatchFunction 1`] = `
               "offset": 32,
             },
           },
-          "identifier": {
+          "kind": "TypeTag",
+          "typeExpression": {
             "@": {
               "end": {
                 "column": 39,
@@ -249,7 +250,6 @@ exports[`MatchFunction 1`] = `
             "kind": "TypeIdentifier",
             "value": "Card",
           },
-          "kind": "TypeTag",
         },
       },
     ],
@@ -441,7 +441,8 @@ exports[`MatchFunction.cases 1`] = `
               "offset": 32,
             },
           },
-          "identifier": {
+          "kind": "TypeTag",
+          "typeExpression": {
             "@": {
               "end": {
                 "column": 39,
@@ -457,7 +458,6 @@ exports[`MatchFunction.cases 1`] = `
             "kind": "TypeIdentifier",
             "value": "Card",
           },
-          "kind": "TypeTag",
         },
       },
     ],
@@ -1059,7 +1059,8 @@ exports[`MatchFunction.fullExample 1`] = `
               "offset": 32,
             },
           },
-          "identifier": {
+          "kind": "TypeTag",
+          "typeExpression": {
             "@": {
               "end": {
                 "column": 39,
@@ -1075,7 +1076,6 @@ exports[`MatchFunction.fullExample 1`] = `
             "kind": "TypeIdentifier",
             "value": "Card",
           },
-          "kind": "TypeTag",
         },
       },
     ],

@@ -33,7 +33,8 @@ exports[`TypeTag.1 1`] = `
       "offset": 0,
     },
   },
-  "identifier": {
+  "kind": "TypeTag",
+  "typeExpression": {
     "@": {
       "end": {
         "column": 9,
@@ -49,7 +50,6 @@ exports[`TypeTag.1 1`] = `
     "kind": "TypeIdentifier",
     "value": "number",
   },
-  "kind": "TypeTag",
 }
 `;
 
@@ -67,7 +67,8 @@ exports[`TypeTag.2 1`] = `
       "offset": 0,
     },
   },
-  "identifier": {
+  "kind": "TypeTag",
+  "typeExpression": {
     "@": {
       "end": {
         "column": 25,
@@ -124,7 +125,8 @@ exports[`TypeTag.2 1`] = `
               "offset": 4,
             },
           },
-          "identifier": {
+          "kind": "TypeTag",
+          "typeExpression": {
             "@": {
               "end": {
                 "column": 13,
@@ -140,7 +142,6 @@ exports[`TypeTag.2 1`] = `
             "kind": "TypeIdentifier",
             "value": "number",
           },
-          "kind": "TypeTag",
         },
       },
       {
@@ -186,7 +187,8 @@ exports[`TypeTag.2 1`] = `
               "offset": 15,
             },
           },
-          "identifier": {
+          "kind": "TypeTag",
+          "typeExpression": {
             "@": {
               "end": {
                 "column": 24,
@@ -202,12 +204,10 @@ exports[`TypeTag.2 1`] = `
             "kind": "TypeIdentifier",
             "value": "number",
           },
-          "kind": "TypeTag",
         },
       },
     ],
     "kind": "RecordDefinition",
   },
-  "kind": "TypeTag",
 }
 `;

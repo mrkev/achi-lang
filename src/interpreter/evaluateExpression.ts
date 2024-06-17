@@ -5,23 +5,20 @@ import {
   evaluatePrefixUnaryExpression,
   evaluateSuffixUnaryExpression,
 } from "./evaluateOperation";
-import {
-  ReturnInterrupt,
-  evaluateStatements,
-  evaluateWithScope,
-} from "./evaluateStatements";
 import { ScopeError, ScriptError } from "./interpreterErrors";
-import { exhaustive, nullthrows } from "../nullthrows";
+import { exhaustive } from "../nullthrows";
 import { System } from "./runtime/System";
 import { evaluateMatch } from "./runtime/runtime.match";
-import { NamedRecordKlass } from "./runtime/runtime.namedrecords";
+import {
+  NamedRecordKlass,
+  checkRecordType,
+} from "./runtime/runtime.namedrecords";
 import {
   ValueType,
   anonymousFunctionInstance,
   boolean,
   list,
   namedRecordInstance,
-  nil,
   number,
   record,
   string,
@@ -29,6 +26,7 @@ import {
 } from "./runtime/value";
 import { expectString } from "./runtime/value.validators";
 import { stringOfValue } from "./stringOfValue";
+import { callFunction } from "./callFunction";
 
 export function evaluateExpression(
   expression: LangType["RecordLiteral"],
@@ -76,29 +74,7 @@ export function evaluateExpression(
         system
       );
 
-      const recordProps = new Set(recordInstance.props.keys());
-
-      for (const [propKey, type] of namedRecordKlass.valueSpec) {
-        const value = recordInstance.props.get(propKey);
-        if (value == null) {
-          throw new Error(
-            `Type ${namedRecordKlass.classname} requires prop ${propKey}`
-          );
-        }
-        recordProps.delete(propKey);
-
-        // console.log(propKey, type, recordInstance.props.get(propKey));
-
-        // TODO: typecheck
-      }
-
-      if (recordProps.size > 0) {
-        throw new Error(
-          `Type ${namedRecordKlass.classname} doesnt expect keys: ${Array.from(
-            recordProps
-          ).join(", ")}`
-        );
-      }
+      checkRecordType(recordInstance, namedRecordKlass);
 
       const instance = namedRecordInstance(
         expression,
@@ -225,7 +201,7 @@ export function evaluateExpression(
 
 // The type of destructuring for function arguments, with types
 // const foo = (a: number, b: string) => {}
-function destructureWithRecordDefintion(
+export function destructureWithRecordDefintion(
   recordDef: LangType["RecordDefinition"],
   value: ValueType["Value"],
   context: Context
@@ -256,78 +232,5 @@ function destructureWithRecordDefintion(
 
     context.valueScope.define(def.identifier.value, val);
     // TODO: anything else?
-  }
-}
-
-// // The type of destructuring for assignments, without types
-// // const (a: foo, b) = thing;
-// function destructureWithRecordLiteral() {
-//   // empty
-// }
-
-function callFunction(
-  func:
-    | ValueType["MatchFunctionInstance"]
-    | ValueType["AnonymousFunctionInstance"],
-  argument: ValueType["Value"],
-  context: Context,
-  system: System
-): ValueType["Value"] {
-  switch (func.kind) {
-    case "AnonymousFunctionInstance": {
-      context.stack.push(func);
-      // console.log("called");
-
-      // TODO: check if incoming record conforms to argument.
-      // If not, error will show in `destructureWithRecordDefintion` as the
-      // destructuring failing, which is confusing
-
-      const returned = evaluateWithScope(context, () => {
-        destructureWithRecordDefintion(func.ast.argument, argument, context);
-        evaluateStatements(func.ast.block.statements, context, system);
-      });
-
-      context.stack.pop();
-
-      if (returned == null) {
-        // TODO: do I really want functions to return an implicit null?
-        return nil(returned);
-      } else {
-        return returned;
-      }
-    }
-
-    case "MatchFunctionInstance": {
-      // TODO: test types
-      // TODO: ensure pattern is exhaustive, so we don't have to worry about that here
-      // TODO: just executing first case for now
-
-      for (const caseEntry of func.ast.block.caseEntries) {
-        // caseEntry.guard
-        context.valueScope.push();
-        context.stack.push(func);
-
-        let result = null;
-        try {
-          evaluateStatements(caseEntry.block.statements, context, system);
-        } catch (interrupt) {
-          if (interrupt instanceof ReturnInterrupt) {
-            result = interrupt.value;
-          } else {
-            throw interrupt;
-          }
-        }
-
-        context.stack.pop();
-        context.valueScope.pop();
-        return nullthrows(result, "fixme, case block returns nothing");
-      }
-
-      throw new Error("fixme, no case blocks");
-    }
-
-    default: {
-      throw exhaustive(func);
-    }
   }
 }

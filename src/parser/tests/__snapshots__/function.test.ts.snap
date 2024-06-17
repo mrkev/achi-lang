@@ -71,7 +71,8 @@ exports[`AnonymousFunctionLiteral 1`] = `
               "offset": 6,
             },
           },
-          "identifier": {
+          "kind": "TypeTag",
+          "typeExpression": {
             "@": {
               "end": {
                 "column": 15,
@@ -87,7 +88,6 @@ exports[`AnonymousFunctionLiteral 1`] = `
             "kind": "TypeIdentifier",
             "value": "number",
           },
-          "kind": "TypeTag",
         },
       },
     ],

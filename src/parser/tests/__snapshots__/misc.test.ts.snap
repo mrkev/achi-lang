@@ -477,7 +477,8 @@ exports[`Program 1`] = `
                     "offset": 16,
                   },
                 },
-                "identifier": {
+                "kind": "TypeTag",
+                "typeExpression": {
                   "@": {
                     "end": {
                       "column": 24,
@@ -493,7 +494,6 @@ exports[`Program 1`] = `
                   "kind": "TypeIdentifier",
                   "value": "number",
                 },
-                "kind": "TypeTag",
               },
             },
             {
@@ -539,7 +539,8 @@ exports[`Program 1`] = `
                     "offset": 27,
                   },
                 },
-                "identifier": {
+                "kind": "TypeTag",
+                "typeExpression": {
                   "@": {
                     "end": {
                       "column": 35,
@@ -555,7 +556,6 @@ exports[`Program 1`] = `
                   "kind": "TypeIdentifier",
                   "value": "number",
                 },
-                "kind": "TypeTag",
               },
             },
           ],
@@ -935,7 +935,8 @@ exports[`Program.2 1`] = `
                     "offset": 16,
                   },
                 },
-                "identifier": {
+                "kind": "TypeTag",
+                "typeExpression": {
                   "@": {
                     "end": {
                       "column": 24,
@@ -951,7 +952,6 @@ exports[`Program.2 1`] = `
                   "kind": "TypeIdentifier",
                   "value": "number",
                 },
-                "kind": "TypeTag",
               },
             },
             {
@@ -997,7 +997,8 @@ exports[`Program.2 1`] = `
                     "offset": 27,
                   },
                 },
-                "identifier": {
+                "kind": "TypeTag",
+                "typeExpression": {
                   "@": {
                     "end": {
                       "column": 35,
@@ -1013,7 +1014,6 @@ exports[`Program.2 1`] = `
                   "kind": "TypeIdentifier",
                   "value": "number",
                 },
-                "kind": "TypeTag",
               },
             },
           ],
@@ -1104,7 +1104,8 @@ exports[`Program.2 1`] = `
                     "offset": 64,
                   },
                 },
-                "identifier": {
+                "kind": "TypeTag",
+                "typeExpression": {
                   "@": {
                     "end": {
                       "column": 34,
@@ -1120,7 +1121,6 @@ exports[`Program.2 1`] = `
                   "kind": "TypeIdentifier",
                   "value": "Point",
                 },
-                "kind": "TypeTag",
               },
             },
           ],

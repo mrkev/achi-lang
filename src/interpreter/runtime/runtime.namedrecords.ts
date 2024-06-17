@@ -1,8 +1,6 @@
-import { exhaustive } from "../../nullthrows";
 import type { LangType } from "../../parser/parser";
-import { ValueI } from "./value";
-
-type ValueID = string; //TODO
+import { RuntimeType, runtimeTypeOfTypeExpression } from "./runtimeType";
+import { ValueI, ValueType } from "./value";
 
 /**
  * Represents the constructor for a named record, as it sits in memory
@@ -12,12 +10,13 @@ export class NamedRecordKlass implements ValueI {
   readonly kind = "NamedRecordKlass";
 
   readonly classname: string;
-  readonly valueSpec: Map<string, ValueID> = new Map(); // identifer => type
+  readonly valueSpec: Map<string, RuntimeType["RuntimeType"]> = new Map(); // identifer => type
   readonly src: LangType["NamedRecordDefinition"];
-  constructor(
+
+  private constructor(
     ast: LangType["NamedRecordDefinition"],
     classname: string,
-    valueSpec: Map<string, string>
+    valueSpec: Map<string, RuntimeType["RuntimeType"]>
   ) {
     this.src = ast;
     this.classname = classname;
@@ -28,41 +27,44 @@ export class NamedRecordKlass implements ValueI {
     def: LangType["NamedRecordDefinition"]
   ): NamedRecordKlass {
     const classname = def.identifier.value;
-    const valueSpec = new Map<string, string>();
+    const valueSpec = new Map<string, RuntimeType["RuntimeType"]>();
     for (const prop of def.record.definitions) {
-      switch (prop.typeTag.typeExpression.kind) {
-        case "NamedRecordDefinition":
-        case "RecordDefinition":
-          // TODO TYPES: value spec should accept non-identifier types too
-          throw new Error("unimplemented");
-        case "TypeIdentifier":
-          valueSpec.set(
-            prop.identifier.value,
-            prop.typeTag.typeExpression.value
-          );
-          break;
-        default:
-          throw exhaustive(prop.typeTag.typeExpression);
-      }
+      valueSpec.set(
+        prop.identifier.value,
+        runtimeTypeOfTypeExpression(prop.typeTag.typeExpression)
+      );
     }
     const res = new NamedRecordKlass(def, classname, valueSpec);
-    // console.log(res.asClass());
     return res;
   }
+}
 
-  // TODO: this is an in-memory runtime object. Compilation should be done from
-  // the AST (or some IR) so it can be done statically.
-  asClass(): string {
-    const props = [...this.valueSpec.keys()];
-    return `
-    class ${this.classname} {
-      ${props.join(";")};
-      constructor(${props.join(",")}) {
-        ${props.map((prop) => {
-          return `this.${prop}=${prop}`;
-        })}
-      }
+// TODO: this should take some record type type, not a named record type type
+export function checkRecordType(
+  recordInstance: ValueType["RecordInstance"],
+  namedRecordKlass: NamedRecordKlass
+) {
+  const recordProps = new Set(recordInstance.props.keys());
+
+  for (const [propKey, type] of namedRecordKlass.valueSpec) {
+    const value = recordInstance.props.get(propKey);
+    if (value == null) {
+      throw new Error(
+        `Type ${namedRecordKlass.classname} requires prop ${propKey}`
+      );
     }
-    `;
+    recordProps.delete(propKey);
+
+    // console.log(propKey, type, recordInstance.props.get(propKey));
+
+    // TODO: typecheck
+  }
+
+  if (recordProps.size > 0) {
+    throw new Error(
+      `Type ${namedRecordKlass.classname} doesnt expect keys: ${Array.from(
+        recordProps
+      ).join(", ")}`
+    );
   }
 }

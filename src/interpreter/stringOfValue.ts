@@ -1,5 +1,6 @@
 import { exhaustive } from "../nullthrows";
 import { LangType } from "../parser/parser";
+import { stringOfRuntimeType } from "./runtime/runtimeType";
 import { ValueType } from "./runtime/value";
 
 export function stringOfValue(value: ValueType["Value"]): string {
@@ -30,9 +31,12 @@ export function printableOfValue(
         str += "\n";
       }
       for (const [key, val] of entries) {
-        str += `  ${key}: ${stringOfValue(
-          val
-        )} (${value.konstructor.valueSpec.get(key)})\n`;
+        const typeExpression = value.konstructor.valueSpec.get(key);
+        str += `  ${key}: ${stringOfValue(val)} (${
+          typeExpression == null
+            ? "<not found>"
+            : stringOfRuntimeType(typeExpression)
+        })\n`;
       }
       str += "}";
       return str;
@@ -78,7 +82,7 @@ export function printableOfValue(
   }
 }
 
-function stringOfAst(
+export function stringOfAst(
   node:
     | LangType["RecordDefinition"]
     | LangType["NamedDefinition"]
@@ -89,7 +93,7 @@ function stringOfAst(
     case "NamedDefinition":
       return `${node.identifier.value}${stringOfAst(node.typeTag)}`;
     case "RecordDefinition":
-      return `(${node.definitions.map(stringOfAst).join(", ")}) => <unknown>`;
+      return `(${node.definitions.map(stringOfAst).join(", ")})`;
     case "TypeTag":
       return `: ${stringOfAst(node.typeExpression)}`;
     case "TypeIdentifier":

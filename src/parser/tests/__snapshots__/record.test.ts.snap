@@ -44,7 +44,8 @@ exports[`NamedDefinition 1`] = `
         "offset": 1,
       },
     },
-    "identifier": {
+    "kind": "TypeTag",
+    "typeExpression": {
       "@": {
         "end": {
           "column": 10,
@@ -60,7 +61,6 @@ exports[`NamedDefinition 1`] = `
       "kind": "TypeIdentifier",
       "value": "number",
     },
-    "kind": "TypeTag",
   },
 }
 `;
@@ -217,7 +217,8 @@ exports[`NamedRecordDefinition 1`] = `
                 "offset": 13,
               },
             },
-            "identifier": {
+            "kind": "TypeTag",
+            "typeExpression": {
               "@": {
                 "end": {
                   "column": 22,
@@ -233,7 +234,6 @@ exports[`NamedRecordDefinition 1`] = `
               "kind": "TypeIdentifier",
               "value": "number",
             },
-            "kind": "TypeTag",
           },
         },
         {
@@ -279,7 +279,8 @@ exports[`NamedRecordDefinition 1`] = `
                 "offset": 24,
               },
             },
-            "identifier": {
+            "kind": "TypeTag",
+            "typeExpression": {
               "@": {
                 "end": {
                   "column": 33,
@@ -295,7 +296,6 @@ exports[`NamedRecordDefinition 1`] = `
               "kind": "TypeIdentifier",
               "value": "number",
             },
-            "kind": "TypeTag",
           },
         },
       ],
@@ -630,7 +630,8 @@ exports[`NamedRecordDefinitionGroup 1`] = `
                   "offset": 76,
                 },
               },
-              "identifier": {
+              "kind": "TypeTag",
+              "typeExpression": {
                 "@": {
                   "end": {
                     "column": 27,
@@ -646,7 +647,6 @@ exports[`NamedRecordDefinitionGroup 1`] = `
                 "kind": "TypeIdentifier",
                 "value": "number",
               },
-              "kind": "TypeTag",
             },
           },
         ],
@@ -1090,7 +1090,8 @@ exports[`RecordDefinition 1`] = `
             "offset": 2,
           },
         },
-        "identifier": {
+        "kind": "TypeTag",
+        "typeExpression": {
           "@": {
             "end": {
               "column": 11,
@@ -1106,7 +1107,6 @@ exports[`RecordDefinition 1`] = `
           "kind": "TypeIdentifier",
           "value": "number",
         },
-        "kind": "TypeTag",
       },
     },
     {
@@ -1152,7 +1152,8 @@ exports[`RecordDefinition 1`] = `
             "offset": 13,
           },
         },
-        "identifier": {
+        "kind": "TypeTag",
+        "typeExpression": {
           "@": {
             "end": {
               "column": 22,
@@ -1168,7 +1169,6 @@ exports[`RecordDefinition 1`] = `
           "kind": "TypeIdentifier",
           "value": "number",
         },
-        "kind": "TypeTag",
       },
     },
   ],
