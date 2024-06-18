@@ -10,7 +10,7 @@ export type RuntimeType = {
 
   PrimitiveType: {
     kind: "PrimitiveType";
-    value: "string" | "number" | "boolean";
+    value: "string" | "number" | "boolean" | "null";
   };
 
   IdentifierType: {
@@ -24,6 +24,8 @@ export type RuntimeType = {
     src: LangType["RecordDefinition"];
     definitions: Map<string, RuntimeType["RuntimeType"]>;
   };
+
+  // Named record definition is both a value and a type. Lives in NamedRecordKlass.
 };
 
 export function runtimeTypeOfTypeExpression(src: LangType["TypeExpression"]) {

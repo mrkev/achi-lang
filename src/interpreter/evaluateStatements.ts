@@ -11,7 +11,7 @@ import {
 } from "./runtime/value";
 import { expectBoolean } from "./runtime/value.validators";
 import { stringOfValue } from "./stringOfValue";
-import { stringOfType } from "./types";
+import { stringOfTypeExpression } from "./types";
 
 export class ReturnInterrupt {
   readonly value: ValueType["Value"];
@@ -148,7 +148,7 @@ export function evaluateStatements(
 
       // evaluates
       case "DEBUG_LogType": {
-        const str = stringOfType(statement.typeExpression);
+        const str = stringOfTypeExpression(statement.typeExpression);
         system.console.log(str);
         break;
       }

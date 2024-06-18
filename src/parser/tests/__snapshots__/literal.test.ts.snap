@@ -466,3 +466,326 @@ exports[`MapLiteral.recursive 1`] = `
   "kind": "MapLiteral",
 }
 `;
+
+exports[`NullLiteral 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 5,
+      "line": 1,
+      "offset": 4,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "NullLiteral",
+  "value": null,
+}
+`;
+
+exports[`literals 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 5,
+      "line": 7,
+      "offset": 134,
+    },
+    "start": {
+      "column": 0,
+      "line": 2,
+      "offset": 0,
+    },
+  },
+  "kind": "Program",
+  "statements": [
+    {
+      "@": {
+        "end": {
+          "column": 21,
+          "line": 2,
+          "offset": 21,
+        },
+        "start": {
+          "column": 7,
+          "line": 2,
+          "offset": 7,
+        },
+      },
+      "expression": {
+        "@": {
+          "end": {
+            "column": 21,
+            "line": 2,
+            "offset": 21,
+          },
+          "start": {
+            "column": 17,
+            "line": 2,
+            "offset": 17,
+          },
+        },
+        "kind": "NullLiteral",
+        "value": null,
+      },
+      "identifier": {
+        "@": {
+          "end": {
+            "column": 14,
+            "line": 2,
+            "offset": 14,
+          },
+          "start": {
+            "column": 13,
+            "line": 2,
+            "offset": 13,
+          },
+        },
+        "kind": "ValueIdentifier",
+        "value": "a",
+      },
+      "kind": "ConstantDefinition",
+    },
+    {
+      "@": {
+        "end": {
+          "column": 21,
+          "line": 3,
+          "offset": 43,
+        },
+        "start": {
+          "column": 7,
+          "line": 3,
+          "offset": 29,
+        },
+      },
+      "expression": {
+        "@": {
+          "end": {
+            "column": 21,
+            "line": 3,
+            "offset": 43,
+          },
+          "start": {
+            "column": 17,
+            "line": 3,
+            "offset": 39,
+          },
+        },
+        "kind": "BooleanLiteral",
+        "value": true,
+      },
+      "identifier": {
+        "@": {
+          "end": {
+            "column": 14,
+            "line": 3,
+            "offset": 36,
+          },
+          "start": {
+            "column": 13,
+            "line": 3,
+            "offset": 35,
+          },
+        },
+        "kind": "ValueIdentifier",
+        "value": "b",
+      },
+      "kind": "ConstantDefinition",
+    },
+    {
+      "@": {
+        "end": {
+          "column": 22,
+          "line": 4,
+          "offset": 66,
+        },
+        "start": {
+          "column": 7,
+          "line": 4,
+          "offset": 51,
+        },
+      },
+      "expression": {
+        "@": {
+          "end": {
+            "column": 22,
+            "line": 4,
+            "offset": 66,
+          },
+          "start": {
+            "column": 17,
+            "line": 4,
+            "offset": 61,
+          },
+        },
+        "kind": "BooleanLiteral",
+        "value": false,
+      },
+      "identifier": {
+        "@": {
+          "end": {
+            "column": 14,
+            "line": 4,
+            "offset": 58,
+          },
+          "start": {
+            "column": 13,
+            "line": 4,
+            "offset": 57,
+          },
+        },
+        "kind": "ValueIdentifier",
+        "value": "c",
+      },
+      "kind": "ConstantDefinition",
+    },
+    {
+      "@": {
+        "end": {
+          "column": 25,
+          "line": 5,
+          "offset": 92,
+        },
+        "start": {
+          "column": 7,
+          "line": 5,
+          "offset": 74,
+        },
+      },
+      "expression": {
+        "@": {
+          "end": {
+            "column": 25,
+            "line": 5,
+            "offset": 92,
+          },
+          "start": {
+            "column": 17,
+            "line": 5,
+            "offset": 84,
+          },
+        },
+        "kind": "StringLiteral",
+        "value": "string",
+      },
+      "identifier": {
+        "@": {
+          "end": {
+            "column": 14,
+            "line": 5,
+            "offset": 81,
+          },
+          "start": {
+            "column": 13,
+            "line": 5,
+            "offset": 80,
+          },
+        },
+        "kind": "ValueIdentifier",
+        "value": "d",
+      },
+      "kind": "ConstantDefinition",
+    },
+    {
+      "@": {
+        "end": {
+          "column": 35,
+          "line": 6,
+          "offset": 128,
+        },
+        "start": {
+          "column": 7,
+          "line": 6,
+          "offset": 100,
+        },
+      },
+      "expression": {
+        "@": {
+          "end": {
+            "column": 35,
+            "line": 6,
+            "offset": 128,
+          },
+          "start": {
+            "column": 17,
+            "line": 6,
+            "offset": 110,
+          },
+        },
+        "expressions": [
+          {
+            "@": {
+              "end": {
+                "column": 19,
+                "line": 6,
+                "offset": 112,
+              },
+              "start": {
+                "column": 18,
+                "line": 6,
+                "offset": 111,
+              },
+            },
+            "kind": "NumberLiteral",
+            "value": 3,
+          },
+          {
+            "@": {
+              "end": {
+                "column": 25,
+                "line": 6,
+                "offset": 118,
+              },
+              "start": {
+                "column": 20,
+                "line": 6,
+                "offset": 113,
+              },
+            },
+            "kind": "BooleanLiteral",
+            "value": false,
+          },
+          {
+            "@": {
+              "end": {
+                "column": 34,
+                "line": 6,
+                "offset": 127,
+              },
+              "start": {
+                "column": 26,
+                "line": 6,
+                "offset": 119,
+              },
+            },
+            "kind": "StringLiteral",
+            "value": "string",
+          },
+        ],
+        "kind": "ListLiteral",
+      },
+      "identifier": {
+        "@": {
+          "end": {
+            "column": 14,
+            "line": 6,
+            "offset": 107,
+          },
+          "start": {
+            "column": 13,
+            "line": 6,
+            "offset": 106,
+          },
+        },
+        "kind": "ValueIdentifier",
+        "value": "e",
+      },
+      "kind": "ConstantDefinition",
+    },
+  ],
+}
+`;

@@ -21,6 +21,7 @@ export type LangType = LangType_BinOp &
     NumberLiteral: Node<{ kind: "NumberLiteral"; value: number }>;
     StringLiteral: Node<{ kind: "StringLiteral"; value: string }>;
     BooleanLiteral: Node<{ kind: "BooleanLiteral"; value: boolean }>;
+    NullLiteral: Node<{ kind: "NullLiteral"; value: null }>;
 
     // Card.Number
     NestedTypeIdentifier: Node<{
@@ -44,6 +45,7 @@ export type LangType = LangType_BinOp &
 
     Expression:
       | LangType["BooleanLiteral"]
+      | LangType["NullLiteral"]
       // | LangType["FunctionDefinition"]
       | LangType["MatchExpression"]
       | LangType["NumberLiteral"]
@@ -246,6 +248,15 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     );
   },
 
+  NullLiteral: () => {
+    return withAt(
+      Parsimmon.regexp(/null/).map(() => ({
+        kind: "NullLiteral",
+        value: null,
+      }))
+    );
+  },
+
   ...LangDef_BinOp,
 
   // Card, Point, SomeDataStructure, number
@@ -274,7 +285,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // card, point, doThisOrThat
   ValueIdentifier: () => {
     return Parsimmon.regexp(
-      /(?!string|number|boolean|object|array|true|false)[a-z][a-zA-Z0-9]*/
+      /(?!string|number|boolean|object|array|true|false|null)[a-z][a-zA-Z0-9]*/
     )
       .mark()
       .map(({ start, end, value }) => ({
@@ -332,6 +343,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
       OperationExpression: r.OperationExpression,
       FunctionCall: r.FunctionCall,
       BooleanLiteral: r.BooleanLiteral,
+      NullLiteral: r.NullLiteral,
       NumberLiteral: r.NumberLiteral,
       NamedRecordLiteral: r.NamedRecordLiteral,
       ValueIdentifier: r.ValueIdentifier,

@@ -34,7 +34,7 @@ export type ValueType = {
   // false
   Boolean: Readonly<{ kind: "boolean"; value: boolean }>;
   // null
-  Nil: Readonly<{ kind: "nil"; value: null }>;
+  Nil: Readonly<{ kind: "nil" }>;
 
   /*
    * Simple Data Structures
@@ -105,8 +105,8 @@ export function boolean(value: boolean): ValueType["Boolean"] {
   return { kind: "boolean", value } as const;
 }
 
-export function nil(value: null): ValueType["Nil"] {
-  return { kind: "nil", value } as const;
+export function nil(): ValueType["Nil"] {
+  return { kind: "nil" } as const;
 }
 
 export function list(value: ValueType["Value"][]): ValueType["ListInstance"] {
@@ -165,7 +165,7 @@ export function valueOfJavascriptValue(x: unknown) {
   } else if (typeof x === "boolean") {
     return boolean(x);
   } else if (x == null) {
-    return nil(null);
+    return nil();
   } else if (Array.isArray(x)) {
     throw new Error("ARRAY");
   } else if (typeof x === "object") {

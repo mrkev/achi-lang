@@ -1,5 +1,16 @@
 import { Lang } from "../parser";
 
+test("literals", () => {
+  const result = Lang.Program.tryParse(`
+      const a = null;
+      const b = true;
+      const c = false;
+      const d = "string";
+      const e = [3,false,"string"];
+    `);
+  expect(result).toMatchSnapshot();
+});
+
 test("BooleanLiteral.true", () => {
   const result = Lang.BooleanLiteral.tryParse("true");
   expect(result).toMatchSnapshot();
@@ -7,6 +18,11 @@ test("BooleanLiteral.true", () => {
 
 test("BooleanLiteral.false", () => {
   const result = Lang.BooleanLiteral.tryParse("false");
+  expect(result).toMatchSnapshot();
+});
+
+test("NullLiteral", () => {
+  const result = Lang.NullLiteral.tryParse("null");
   expect(result).toMatchSnapshot();
 });
 

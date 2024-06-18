@@ -126,6 +126,9 @@ function resolveExpressionTypes(
       return selfType;
     }
 
+    case "NullLiteral":
+      throw new Error("NullLiteral: Unimplemented");
+
     case "RecordLiteral": {
       const shape = new Map<string, Type>();
       // 1. definitions

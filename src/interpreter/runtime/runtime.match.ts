@@ -4,7 +4,7 @@ import { evaluateStatements } from "../evaluateStatements";
 import { exhaustive, nullthrows } from "../../nullthrows";
 import { System } from "./System";
 import { aSubsetB } from "./utils";
-import { ValueType } from "./value";
+import { ValueType, nil } from "./value";
 import { FixmeError } from "../interpreterErrors";
 
 export function evaluateMatch(
@@ -26,7 +26,7 @@ export function evaluateMatch(
         system
       );
       context.valueScope.pop();
-      return result ?? { kind: "nil", value: null };
+      return result ?? nil();
     }
   }
   // TODO runtime or static checks for completeness
@@ -62,6 +62,11 @@ function doMatch(
     case "BooleanLiteral": {
       const isMatch =
         value.kind === "boolean" && value.value === expression.value;
+      return isMatch ? { isMatch, bindings: [] } : { isMatch };
+    }
+
+    case "NullLiteral": {
+      const isMatch = value.kind === "nil";
       return isMatch ? { isMatch, bindings: [] } : { isMatch };
     }
 

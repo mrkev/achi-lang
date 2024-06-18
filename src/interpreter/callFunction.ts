@@ -42,7 +42,7 @@ export function callFunction(
 
       if (returned == null) {
         // TODO: do I really want functions to return an implicit null?
-        return nil(returned);
+        return nil();
       } else {
         return returned;
       }

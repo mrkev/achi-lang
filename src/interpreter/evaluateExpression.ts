@@ -17,6 +17,7 @@ import {
   ValueType,
   anonymousFunctionInstance,
   boolean,
+  nil,
   list,
   namedRecordInstance,
   number,
@@ -95,6 +96,10 @@ export function evaluateExpression(
 
     case "BooleanLiteral": {
       return boolean(expression.value);
+    }
+
+    case "NullLiteral": {
+      return nil();
     }
 
     case "MapLiteral": {

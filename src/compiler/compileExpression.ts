@@ -27,6 +27,9 @@ export function compileExpression(
       return ts.factory.createIdentifier(expression.value);
     }
 
+    case "NullLiteral":
+      throw new Error("NullLiteral: Unimplemented");
+
     // (x: 3) -> {x: 3}
     case "RecordLiteral": {
       const props = [];

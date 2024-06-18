@@ -52,6 +52,8 @@ function typeOf(expression: LangType["Expression"], scope: Context): Type {
       return { kind: "numberLiteral", value: expression.value };
     case "StringLiteral":
       return { kind: "stringLiteral", value: expression.value };
+    case "NullLiteral":
+      throw new Error("NullLiteral: Unimplemented");
 
     case "ValueIdentifier":
     case "NamedRecordLiteral":
