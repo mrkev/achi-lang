@@ -70,7 +70,7 @@ export function printableOfValue(
     }
 
     case "AnonymousFunctionInstance": {
-      return `${stringOfAst(value.ast.argument)}`;
+      return `${stringOfAst(value.ast.argument)} => ...`;
     }
 
     case "nil": {

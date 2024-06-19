@@ -11,7 +11,6 @@ import { FixmeError, ScriptError } from "../interpreter/interpreterErrors";
 import { System } from "../interpreter/runtime/System";
 import { nullthrows } from "../nullthrows";
 import { tryParse } from "../parser/parser";
-import { registerLangForMonaco } from "../playground/registerLangForMonaco";
 import "./App.css";
 import { Sidebar } from "./Sidebar";
 import { DEFAULT_SCRIPT } from "./constants";
@@ -19,18 +18,20 @@ import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
 import { transformASTForDisplay } from "./transformASTForDisplay";
 import { useEditor } from "./useEditor";
 import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
+import { useScriptEditor } from "./useScriptEditor";
 
 export type SetState<S> = React.Dispatch<React.SetStateAction<S>>;
 
 export const COMPACT_AST = true;
 
-const options: editor.IStandaloneEditorConstructionOptions = {
-  fontSize: 16,
-  insertSpaces: true,
-  tabSize: 2,
-  detectIndentation: false,
-  minimap: { enabled: false },
-} as const;
+export const defaultEditorOptions: editor.IStandaloneEditorConstructionOptions =
+  {
+    fontSize: 16,
+    insertSpaces: true,
+    tabSize: 2,
+    detectIndentation: false,
+    minimap: { enabled: false },
+  } as const;
 
 export type Feature = "compile" | "typecheck" | "interpret" | "ast";
 
@@ -46,6 +47,7 @@ export default function App() {
   const [systemError, setSystemError] = useState<Error | null>(null);
   const [finalContext, setFinalContext] = useState<Context | null>(null);
 
+  const [breakpoints, setBreakpoints] = useState<Set<number>>(() => new Set());
   const [decoratorRange, setDecoratorRange] = useState<null | monaco.Range>(
     null
   );
@@ -64,7 +66,7 @@ export default function App() {
     language: "typescript",
     height: "50vh",
     theme: "vs-dark",
-    options,
+    options: defaultEditorOptions,
   });
 
   const [astEditor, astEditorObj] = useEditor({
@@ -77,20 +79,23 @@ export default function App() {
     },
   });
 
-  const [scriptEditor, scriptEditorObj] = useEditor(
-    {
-      onChange: () => setDecoratorRange(null),
-      language: "achi",
-      theme: "vs-dark",
-      options: options,
-      height: "100%",
-      defaultValue: script,
-      // try "same", "indent" or "none"
-      // wrappingIndent: "indent",
-      beforeMount: registerLangForMonaco,
+  const [scriptEditor, scriptEditorObj] = useScriptEditor({
+    onChange: () => setDecoratorRange(null),
+    defaultValue: script,
+    decoration: decoratorRange,
+    breakpoints,
+    onToggleBreakpoint: (line) => {
+      setBreakpoints((prev) => {
+        if (prev.has(line)) {
+          prev.delete(line);
+          return new Set(prev);
+        } else {
+          prev.add(line);
+          return new Set(prev);
+        }
+      });
     },
-    decoratorRange
-  );
+  });
 
   useEffect(() => {
     if (!astEditorObj) {
