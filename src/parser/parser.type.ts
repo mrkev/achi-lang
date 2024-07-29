@@ -1,78 +1,45 @@
 import * as Parsimmon from "parsimmon";
+import { Node } from "./Node";
 import { LangType } from "./parser";
-import { Node, withAt } from "./Node";
+import { sublang } from "./sublang";
 
-type PrefixUnaryOperator = "-" | "!";
-export type PrefixUnaryOperation = Node<{
-  kind: "PrefixUnaryOperation";
-  operator: PrefixUnaryOperator;
-  value: NEXT_PARSER;
-}>;
-
-type SuffixUnaryOperator = "!";
-export type SuffixUnaryOperation = Node<{
-  kind: "SuffixUnaryOperation";
-  operator: SuffixUnaryOperator;
-  value: NEXT_PARSER;
-}>;
-
-type BinaryOperator =
-  // String + Numerial
-  | "+"
-  // Numerical
+type PrefixUnaryTypeOperator =
+  // for numbers
   | "-"
-  | "*"
-  | "/"
-  | "^"
-  // Boolean
-  | "&&"
-  | "||"
-  // Comparison
-  | ">"
-  | "<"
-  | ">="
-  | "<="
-  | "=="
-  | "!=";
+  // to make readonly
+  | "+";
+export type PrefixUnaryTypeOperation = Node<{
+  kind: "PrefixUnaryTypeOperation";
+  operator: PrefixUnaryTypeOperator;
+  value: NEXT_PARSER;
+}>;
 
-export type BinaryOperation = Node<{
-  kind: "BinaryOperation";
-  operator: BinaryOperator;
+type BinaryTypeOperator = "|" | "&";
+export type BinaryTypeOperation = Node<{
+  kind: "BinaryTypeOperation";
+  operator: BinaryTypeOperator;
   left: NEXT_PARSER;
   right: NEXT_PARSER;
 }>;
 
-export type OperatableExpression =
+export type OperatableTypeExpression =
   | LangType["NumberLiteral"]
-  | LangType["ValueIdentifier"]
+  | LangType["TypeIdentifier"]
   | LangType["StringLiteral"]
   | LangType["BooleanLiteral"]
-  | LangType["FunctionCall"];
-
-// This parser supports basic math with + - * / ^, unary negation, factorial,
-// and parentheses. It does not evaluate the math, just turn it into a series of
-// nested lists that are easy to evaluate.
-
-// You might think that parsing math would be easy since people learn it early
-// in school, but dealing with precedence and associativity of operators is
-// actually one of the hardest and most tedious things you can do in a parser!
-// If you look at a language like JavaScript, it has even more operators than
-// math, like = and && and || and ++ and so many more...
-
-///////////////////////////////////////////////////////////////////////
+  | LangType["RecordDefinition"];
 
 type NEXT_PARSER =
-  | OperatableExpression
-  | PrefixUnaryOperation
-  | SuffixUnaryOperation
-  | BinaryOperation;
+  | OperatableTypeExpression
+  | PrefixUnaryTypeOperation
+  | BinaryTypeOperation;
 
 // Takes a parser for the prefix operator, and a parser for the base thing being
 // parsed, and parses as many occurrences as possible of the prefix operator.
 // Note that the parser is created using `Parsimmon.lazy` because it's recursive. It's
 // valid for there to be zero occurrences of the prefix operator.
 function PREFIX(
-  operatorsParser: Parsimmon.Parser<OpLoc<PrefixUnaryOperator>>,
+  operatorsParser: Parsimmon.Parser<OpLoc<PrefixUnaryTypeOperator>>,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ): Parsimmon.Parser<NEXT_PARSER> {
   const parser = Parsimmon.lazy<NEXT_PARSER>(() => {
@@ -83,7 +50,7 @@ function PREFIX(
       Parsimmon.index,
       (start, operator, value, end) =>
         ({
-          kind: "PrefixUnaryOperation",
+          kind: "PrefixUnaryTypeOperation",
           operator: operator.op,
           value,
           "@": { start, end },
@@ -100,80 +67,12 @@ type OpLoc<T extends string> = {
   end: Parsimmon.Index;
 };
 
-// Ideally this function would be just like `PREFIX` but reordered like
-// `Parsimmon.seq(parser, operatorsParser).or(nextParser)`, but that doesn't work. The
-// reason for that is that Parsimmon will get stuck in infinite recursion, since
-// the very first rule. Inside `parser` is to match parser again. Alternatively,
-// you might think to try `nextParser.or(Parsimmon.seq(parser, operatorsParser))`, but
-// that won't work either because in a call to `.or` (aka `Parsimmon.alt`), Parsimmon
-// takes the first possible match, even if subsequent matches are longer, so the
-// parser will never actually look far enough ahead to see the postfix
-// operators.
-function POSTFIX(
-  operatorsParser: Parsimmon.Parser<OpLoc<"!">>,
-  nextParser: Parsimmon.Parser<NEXT_PARSER>
-) {
-  // Because we can't use recursion like stated above, we just match a flat list
-  // of as many occurrences of the postfix operator as possible, then use
-  // `.reduce` to manually nest the list.
-  //
-  // Example:
-  //
-  // INPUT  :: "4!!!"
-  // PARSE  :: [4, "factorial", "factorial", "factorial"]
-  // REDUCE :: ["factorial", ["factorial", ["factorial", 4]]]
-  return Parsimmon.seqMap(nextParser, operatorsParser.many(), (x, suffixes) =>
-    suffixes.reduce((acc, { op, end }) => {
-      return {
-        kind: "SuffixUnaryOperation",
-        operator: op,
-        value: acc,
-        "@": {
-          start: acc["@"].start,
-          end,
-        },
-      } as const;
-    }, x)
-  );
-}
-
-// Takes a parser for all the operators at this precedence level, and a parser
-// that parsers everything at the next precedence level, and returns a parser
-// that parses as many binary operations as possible, associating them to the
-// right. (e.g. 1^2^3 is 1^(2^3) not (1^2)^3)
-function BINARY_RIGHT(
-  operatorsParser: Parsimmon.Parser<OpLoc<BinaryOperator>>,
-  nextParser: Parsimmon.Parser<NEXT_PARSER>
-): Parsimmon.Parser<NEXT_PARSER> {
-  const parser = Parsimmon.lazy<NEXT_PARSER>(() => {
-    const chainRes: Parsimmon.Parser<NEXT_PARSER> = nextParser.chain((next) =>
-      withAt(
-        Parsimmon.seqMap(
-          operatorsParser,
-          Parsimmon.of(next),
-          parser,
-          (operator, next, p) =>
-            ({
-              kind: "BinaryOperation",
-              operator: operator.op,
-              left: next,
-              right: p,
-            } as const)
-        )
-      ).or(Parsimmon.of(next))
-    );
-
-    return chainRes;
-  });
-  return parser;
-}
-
 // Takes a parser for all the operators at this precedence level, and a parser
 // that parsers everything at the next precedence level, and returns a parser
 // that parses as many binary operations as possible, associating them to the
 // left. (e.g. 1-2-3 is (1-2)-3 not 1-(2-3))
 function BINARY_LEFT(
-  operatorsParser: Parsimmon.Parser<OpLoc<BinaryOperator>>,
+  operatorsParser: Parsimmon.Parser<OpLoc<BinaryTypeOperator>>,
   nextParser: Parsimmon.Parser<NEXT_PARSER>
 ) {
   // We run into a similar problem as with the `POSTFIX` parser above where we
@@ -193,7 +92,7 @@ function BINARY_LEFT(
       return rest.reduce((acc, ch) => {
         const [op, another] = ch;
         return {
-          kind: "BinaryOperation",
+          kind: "BinaryTypeOperation",
           operator: op.op,
           left: acc,
           right: another,
@@ -240,11 +139,11 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
     Parsimmon.string("(")
       .then(MyMath)
       .skip(Parsimmon.string(")"))
+      .or(r.RecordDefinition)
       .or(r.NumberLiteral)
       .or(r.StringLiteral)
       .or(r.BooleanLiteral)
-      .or(r.FunctionCall)
-      .or(r.ValueIdentifier)
+      .or(r.TypeIdentifier)
   );
 
   // Now we can describe the operators in order by precedence. You just need to
@@ -266,15 +165,8 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
   const table: Array<
     (next: Parsimmon.Parser<NEXT_PARSER>) => Parsimmon.Parser<NEXT_PARSER>
   > = [
-    (next) => BINARY_LEFT(operators(["==", "!="] as const), next),
-    (next) => POSTFIX(operators(["!"] as const), next),
-    (next) => PREFIX(operators(["-", "!"] as const), next),
-    (next) => BINARY_RIGHT(operators(["^"] as const), next),
-    (next) => BINARY_LEFT(operators(["*", "/"] as const), next),
-    (next) => BINARY_LEFT(operators(["+", "-"] as const), next),
-    (next) => BINARY_LEFT(operators(["&&"] as const), next),
-    (next) => BINARY_LEFT(operators(["||"] as const), next),
-    (next) => BINARY_LEFT(operators([">=", "<=", ">", "<"] as const), next),
+    (next) => PREFIX(operators(["-", "+"] as const), next),
+    (next) => BINARY_LEFT(operators(["&", "|"] as const), next),
   ];
 
   // Start off with Num as the base parser for numbers and thread that through the
@@ -296,3 +188,41 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
   const MyMath = tableParser.trim(r._);
   return MyMath;
 }
+
+export type LangType_Type = {
+  TypeExpression:
+    | OperatableTypeExpression
+    | PrefixUnaryTypeOperation
+    | BinaryTypeOperation;
+
+  // :string
+  TypeTag: Node<{
+    kind: "TypeTag";
+    typeExpression: LangType["TypeExpression"];
+  }>;
+};
+
+/**
+ * Defines type expressions and operations
+ */
+export const LangDef_Type = sublang<LangType, LangType_Type>({
+  TypeExpression: OperatorParser,
+
+  // :string
+  TypeTag: (r) => {
+    return Parsimmon.seqMap(
+      Parsimmon.index,
+      Parsimmon.string(":"),
+      r._,
+      r.TypeExpression,
+      Parsimmon.index,
+      (start, _2, _3, typeExpression, end) => {
+        return {
+          kind: "TypeTag",
+          typeExpression,
+          "@": { start, end },
+        };
+      }
+    );
+  },
+});

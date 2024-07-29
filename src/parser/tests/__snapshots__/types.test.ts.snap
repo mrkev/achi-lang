@@ -1,5 +1,202 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`TypeExpression.boolean 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 5,
+      "line": 1,
+      "offset": 4,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "BooleanLiteral",
+  "value": true,
+}
+`;
+
+exports[`TypeExpression.identifier 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 7,
+      "line": 1,
+      "offset": 6,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "TypeIdentifier",
+  "value": "number",
+}
+`;
+
+exports[`TypeExpression.identifier2 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 4,
+      "line": 1,
+      "offset": 3,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "TypeIdentifier",
+  "value": "Foo",
+}
+`;
+
+exports[`TypeExpression.intersection 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 14,
+      "line": 1,
+      "offset": 13,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "BinaryTypeOperation",
+  "left": {
+    "@": {
+      "end": {
+        "column": 4,
+        "line": 1,
+        "offset": 3,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "kind": "TypeIdentifier",
+    "value": "Foo",
+  },
+  "operator": "&",
+  "right": {
+    "@": {
+      "end": {
+        "column": 14,
+        "line": 1,
+        "offset": 13,
+      },
+      "start": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
+    "kind": "TypeIdentifier",
+    "value": "boolean",
+  },
+}
+`;
+
+exports[`TypeExpression.number 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 2,
+      "line": 1,
+      "offset": 1,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "NumberLiteral",
+  "value": 3,
+}
+`;
+
+exports[`TypeExpression.string 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 6,
+      "line": 1,
+      "offset": 5,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "StringLiteral",
+  "value": "foo",
+}
+`;
+
+exports[`TypeExpression.union 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 10,
+      "line": 1,
+      "offset": 9,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "BinaryTypeOperation",
+  "left": {
+    "@": {
+      "end": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "kind": "StringLiteral",
+    "value": "foo",
+  },
+  "operator": "|",
+  "right": {
+    "@": {
+      "end": {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+      "start": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+}
+`;
+
 exports[`TypeIdentifier 1`] = `
 {
   "@": {

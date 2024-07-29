@@ -49,7 +49,7 @@ test("MatchExpression", () => {
   expect(result).toMatchSnapshot();
 });
 
-test("MatchFunction.fullExample", () => {
+test("MatchExpression.fullExample", () => {
   const result = Lang.MatchExpression.tryParse(
     `match (card) {
         case King(): {

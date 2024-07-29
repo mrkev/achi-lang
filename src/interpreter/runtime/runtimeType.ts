@@ -1,12 +1,35 @@
 import { exhaustive } from "../../nullthrows";
 import { LangType } from "../../parser/parser";
+import { BinaryTypeOperation } from "../../parser/parser.type";
 import { stringOfAst } from "../stringOfValue";
+
+function evaluateBinaryTypeOperation(
+  src: BinaryTypeOperation
+): RuntimeType["RuntimeType"] {
+  switch (src.operator) {
+    case "&":
+      throw new Error("UNIMPLEMETNED: runtime interesection type");
+    case "|": {
+      const left = runtimeTypeOfTypeExpression(src.left);
+      const right = runtimeTypeOfTypeExpression(src.right);
+
+      return {
+        kind: "UnionType",
+        src: src,
+        values: [left, right],
+      };
+    }
+    default:
+      throw exhaustive(src.operator);
+  }
+}
 
 export type RuntimeType = {
   RuntimeType:
     | RuntimeType["PrimitiveType"]
     | RuntimeType["IdentifierType"]
-    | RuntimeType["RecordDefinitionType"];
+    | RuntimeType["RecordDefinitionType"]
+    | RuntimeType["UnionType"];
 
   PrimitiveType: {
     kind: "PrimitiveType";
@@ -25,22 +48,32 @@ export type RuntimeType = {
     definitions: Map<string, RuntimeType["RuntimeType"]>;
   };
 
+  UnionType: {
+    kind: "UnionType";
+    src: LangType["TypeExpression"];
+    values: Array<RuntimeType["RuntimeType"]>;
+  };
+
   // Named record definition is both a value and a type. Lives in NamedRecordKlass.
 };
 
-export function runtimeTypeOfTypeExpression(src: LangType["TypeExpression"]) {
+export function runtimeTypeOfTypeExpression(
+  src: LangType["TypeExpression"]
+): RuntimeType["RuntimeType"] {
   switch (src.kind) {
-    // case "NumberLiteral":
-    //   return runtimePrimitiveType("number");
-    // case "StringLiteral":
-    //   return runtimePrimitiveType("string");
-    // case "BooleanLiteral":
-    //   return runtimePrimitiveType("boolean");
+    case "NumberLiteral":
+      return runtimePrimitiveType("number");
+    case "StringLiteral":
+      return runtimePrimitiveType("string");
+    case "BooleanLiteral":
+      return runtimePrimitiveType("boolean");
     case "TypeIdentifier":
       return runtimeTypeIdentifier(src);
     case "RecordDefinition":
       return runtimeRecordDefinitionType(src);
-    case "NamedRecordDefinition":
+    case "BinaryTypeOperation":
+      return evaluateBinaryTypeOperation(src);
+    case "PrefixUnaryTypeOperation":
       throw new Error("Unimplemented");
     default:
       throw exhaustive(src);

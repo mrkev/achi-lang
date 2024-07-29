@@ -23,13 +23,18 @@ export function dynamicTypecheck(
         return dynamicTypecheckRecord(value, type);
       }
     }
-    case "NamedRecordDefinition": {
-      if (value.kind !== "NamedRecordInstance") {
-        throw new DynamicTypeError(type, value);
-      } else {
-        return dynamicTypecheckNamedRecord(value, type);
-      }
-    }
+    // case "NamedRecordDefinition": {
+    //   if (value.kind !== "NamedRecordInstance") {
+    //     throw new DynamicTypeError(type, value);
+    //   } else {
+    //     return dynamicTypecheckNamedRecord(value, type);
+    //   }
+    // }
+    case "BinaryTypeOperation":
+    case "BooleanLiteral":
+    case "NumberLiteral":
+    case "PrefixUnaryTypeOperation":
+    case "StringLiteral":
     case "TypeIdentifier": {
       // TODO
       break;

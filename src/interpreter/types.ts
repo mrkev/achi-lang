@@ -6,9 +6,12 @@ export function stringOfTypeExpression(
 ) {
   const { kind } = typeExpression;
   switch (kind) {
-    case "NamedRecordDefinition": {
-      return "[NamedRecordDefinition]";
-    }
+    case "BinaryTypeOperation":
+    case "BooleanLiteral":
+    case "NumberLiteral":
+    case "PrefixUnaryTypeOperation":
+    case "StringLiteral":
+      return "UNIMPLEMENTED";
 
     case "TypeIdentifier": {
       return "[TypeIdentifier]";

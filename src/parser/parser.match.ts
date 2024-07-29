@@ -66,14 +66,14 @@ export const LangDef_Match = sublang<LangType, LangType_Match>({
         Parsimmon.string("matches"),
         r.__,
         r.TypeExpression,
-        r.__,
+        r._,
         r.BlockOfCases,
         function (_0, _1, identifier, _3, _4, _5, type, _7, block) {
           return {
             kind: "MatchFunction",
             identifier,
             matchType: type,
-            block: block,
+            block,
           };
         }
       )

@@ -98,8 +98,14 @@ export function stringOfAst(
       return `: ${stringOfAst(node.typeExpression)}`;
     case "TypeIdentifier":
       return `${node.value}`;
-    case "NamedRecordDefinition":
-      return `${node.identifier}${stringOfAst(node.record)}`;
+    // case "NamedRecordDefinition":
+    //   return `${node.identifier}${stringOfAst(node.record)}`;
+    case "BinaryTypeOperation":
+    case "BooleanLiteral":
+    case "NumberLiteral":
+    case "PrefixUnaryTypeOperation":
+    case "StringLiteral":
+      return "UNIMPLEMENTED";
     default:
       throw exhaustive(node);
   }

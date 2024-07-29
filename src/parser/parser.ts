@@ -4,10 +4,12 @@ import { LangType_BinOp, LangDef_BinOp } from "./parser.operations";
 import { LangDef_Function, LangType_Function } from "./parser.function";
 import { LangType_Match, LangDef_Match } from "./parser.match";
 import { Node, withAt } from "./Node";
+import { LangDef_Type, LangType_Type } from "./parser.type";
 
 export type LangType = LangType_BinOp &
   LangType_Match &
-  LangType_Function & {
+  LangType_Function &
+  LangType_Type & {
     _: string[];
     __: string;
     _comma: string;
@@ -119,17 +121,6 @@ export type LangType = LangType_BinOp &
       kind: "NamedDefinition";
       identifier: LangType["ValueIdentifier"];
       typeTag: LangType["TypeTag"];
-    }>;
-
-    TypeExpression:
-      | LangType["NamedRecordDefinition"]
-      | LangType["RecordDefinition"]
-      | LangType["TypeIdentifier"];
-
-    // :string
-    TypeTag: Node<{
-      kind: "TypeTag";
-      typeExpression: LangType["TypeExpression"];
     }>;
 
     // #log value
@@ -258,6 +249,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   },
 
   ...LangDef_BinOp,
+  ...LangDef_Type,
 
   // Card, Point, SomeDataStructure, number
   TypeIdentifier: () => {
@@ -599,8 +591,9 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return withAt(
       Parsimmon.seqMap(
         r.TypeIdentifier,
+        r._,
         r.RecordDefinition,
-        function (identifier, record) {
+        function (identifier, _, record) {
           return {
             kind: "NamedRecordDefinition",
             identifier,
@@ -729,35 +722,6 @@ export const Lang = Parsimmon.createLanguage<LangType>({
           kind: "NamedDefinition",
           identifier,
           typeTag,
-          "@": { start, end },
-        };
-      }
-    );
-  },
-
-  TypeExpression: (r) => {
-    const typeParsers: ExhaustiveParsers<LangType["TypeExpression"]> = {
-      TypeIdentifier: r.TypeIdentifier,
-      RecordDefinition: r.RecordDefinition,
-      NamedRecordDefinition: r.NamedRecordDefinition,
-    };
-    return Parsimmon.alt<LangType["TypeExpression"]>(
-      ...Object.values(typeParsers)
-    );
-  },
-
-  // :string
-  TypeTag: (r) => {
-    return Parsimmon.seqMap(
-      Parsimmon.index,
-      Parsimmon.string(":"),
-      r._,
-      r.TypeExpression,
-      Parsimmon.index,
-      (start, _2, _3, typeExpression, end) => {
-        return {
-          kind: "TypeTag",
-          typeExpression,
           "@": { start, end },
         };
       }

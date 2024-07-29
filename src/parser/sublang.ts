@@ -18,7 +18,9 @@ type LT_NonNodeKey = {
 type LT_KindsButNotKeys =
   | "PrefixUnaryOperation"
   | "SuffixUnaryOperation"
-  | "BinaryOperation";
+  | "BinaryOperation"
+  | "PrefixUnaryTypeOperation"
+  | "BinaryTypeOperation";
 
 // LangType, but skipping any entry that isn't an object
 type LT_OnlyNodes = Omit<LangType, LT_NonNodeKey>;
