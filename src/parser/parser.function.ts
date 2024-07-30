@@ -50,19 +50,16 @@ export const LangDef_Function = sublang<LangType, LangType_Function>({
   AnonymousFunctionLiteral: (r) => {
     return withAt(
       Parsimmon.seqMap(
-        Parsimmon.index,
         r.RecordDefinition,
         r.__,
         Parsimmon.string("=>"),
         r.__,
         r.Block,
-        Parsimmon.index,
-        (start, argument, _1, _2, _3, block, end) => {
+        (argument, _1, _2, _3, block) => {
           return {
             kind: "AnonymousFunctionLiteral",
             argument,
             block,
-            "@": { start, end },
           };
         }
       )

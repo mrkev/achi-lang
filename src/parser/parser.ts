@@ -81,6 +81,19 @@ export type LangType = LangType_BinOp &
     NamedRecordDefinitionStatement: Node<{
       kind: "NamedRecordDefinitionStatement";
       namedRecordDefinition: LangType["NamedRecordDefinition"];
+      methods: LangType["NamedRecordDefinitionMethodBlock"] | null;
+    }>;
+
+    NamedRecordDefinitionMethodBlock: Node<{
+      kind: "NamedRecordDefinitionMethodBlock";
+      methods: Array<LangType["MethodDefinition"]>;
+    }>;
+
+    MethodDefinition: Node<{
+      kind: "MethodDefinition";
+      identifier: LangType["ValueIdentifier"];
+      argument: LangType["RecordDefinition"];
+      block: LangType["Block"];
     }>;
 
     // classes Card { King(); Queen(); Jack(); Number(value: number) }
@@ -611,10 +624,56 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         Parsimmon.string("class"),
         r._,
         r.NamedRecordDefinition,
-        function (_0, _1, namedRecordDefinition) {
+        r.NamedRecordDefinitionMethodBlock.or(Parsimmon.of(null)).trim(r._),
+
+        // todo: optional with
+        function (_0, _1, namedRecordDefinition, methods) {
           return {
             kind: "NamedRecordDefinitionStatement",
             namedRecordDefinition,
+            methods,
+          };
+        }
+      )
+    );
+  },
+
+  //* with { foo() {...} }
+  NamedRecordDefinitionMethodBlock: (r) => {
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("with"),
+        r._,
+        Parsimmon.string("{"),
+        r._,
+        Parsimmon.sepBy(r.MethodDefinition, r.__nl),
+        r._,
+        Parsimmon.string("}"),
+        (_0, _1, _2, _3, methods, _4, _5) => {
+          return {
+            kind: "NamedRecordDefinitionMethodBlock",
+            methods,
+          };
+        }
+      )
+    );
+  },
+
+  // foo() {}
+  MethodDefinition: (r) => {
+    return withAt(
+      Parsimmon.seqMap(
+        r.ValueIdentifier,
+        r._,
+        r.RecordDefinition,
+        r.__,
+        r.Block,
+        (identifier, _0, argument, _1, block) => {
+          return {
+            kind: "MethodDefinition",
+            identifier,
+            argument,
+            block,
           };
         }
       )

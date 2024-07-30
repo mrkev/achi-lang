@@ -390,6 +390,7 @@ exports[`Program 1`] = `
         },
       },
       "kind": "NamedRecordDefinitionStatement",
+      "methods": null,
       "namedRecordDefinition": {
         "@": {
           "end": {
@@ -848,6 +849,7 @@ exports[`Program.2 1`] = `
         },
       },
       "kind": "NamedRecordDefinitionStatement",
+      "methods": null,
       "namedRecordDefinition": {
         "@": {
           "end": {

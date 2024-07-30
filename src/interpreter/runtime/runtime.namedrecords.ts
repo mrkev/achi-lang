@@ -10,19 +10,25 @@ export class NamedRecordKlass implements ValueI {
   readonly kind = "NamedRecordKlass";
 
   readonly classname: string;
-  readonly valueSpec: Map<string, RuntimeType["RuntimeType"]> = new Map(); // identifer => type
-  readonly src: LangType["NamedRecordDefinition"];
+  readonly valueSpec: Map<string, RuntimeType["RuntimeType"]>; // identifer => type
+  readonly methods: Map<string, null>;
+  readonly src:
+    | LangType["NamedRecordDefinition"]
+    | LangType["NamedRecordDefinitionStatement"];
 
   private constructor(
     ast: LangType["NamedRecordDefinition"],
     classname: string,
-    valueSpec: Map<string, RuntimeType["RuntimeType"]>
+    valueSpec: Map<string, RuntimeType["RuntimeType"]>,
+    methods: Map<string, null> = new Map()
   ) {
     this.src = ast;
     this.classname = classname;
     this.valueSpec = valueSpec;
+    this.methods = methods;
   }
 
+  // Creates a class object from a NamedRecordDefinition. Attatches methods if necessary
   static fromNamedRecordDefinition(
     def: LangType["NamedRecordDefinition"]
   ): NamedRecordKlass {
@@ -35,6 +41,30 @@ export class NamedRecordKlass implements ValueI {
       );
     }
     const res = new NamedRecordKlass(def, classname, valueSpec);
+    return res;
+  }
+
+  static fromNamedRecordDefinitionStatement(
+    def: LangType["NamedRecordDefinitionStatement"]
+  ): NamedRecordKlass {
+    const classname = def.namedRecordDefinition.identifier.value;
+    const valueSpec = new Map<string, RuntimeType["RuntimeType"]>();
+    const methods = new Map<string, null>();
+
+    // TODO: set types for methods
+    for (const prop of def.namedRecordDefinition.record.definitions) {
+      valueSpec.set(
+        prop.identifier.value,
+        runtimeTypeOfTypeExpression(prop.typeTag.typeExpression)
+      );
+    }
+
+    const res = new NamedRecordKlass(
+      def.namedRecordDefinition,
+      classname,
+      valueSpec,
+      methods
+    );
     return res;
   }
 }

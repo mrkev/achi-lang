@@ -69,6 +69,7 @@ export function evaluateStatements(
             statement.namedRecordDefinition.identifier.value
           );
         }
+
         const klass = NamedRecordKlass.fromNamedRecordDefinition(
           statement.namedRecordDefinition
         );

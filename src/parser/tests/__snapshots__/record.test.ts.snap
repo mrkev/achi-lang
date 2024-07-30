@@ -130,6 +130,7 @@ exports[`NamedRecordDefinition 1`] = `
     },
   },
   "kind": "NamedRecordDefinitionStatement",
+  "methods": null,
   "namedRecordDefinition": {
     "@": {
       "end": {
@@ -320,6 +321,7 @@ exports[`NamedRecordDefinition.empty 1`] = `
     },
   },
   "kind": "NamedRecordDefinitionStatement",
+  "methods": null,
   "namedRecordDefinition": {
     "@": {
       "end": {
