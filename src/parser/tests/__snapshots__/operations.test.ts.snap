@@ -511,6 +511,57 @@ exports[`BinaryOperation.identifier 1`] = `
 }
 `;
 
+exports[`BinaryOperation.null 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 10,
+      "line": 1,
+      "offset": 9,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "BinaryOperation",
+  "left": {
+    "@": {
+      "end": {
+        "column": 5,
+        "line": 1,
+        "offset": 4,
+      },
+      "start": {
+        "column": 1,
+        "line": 1,
+        "offset": 0,
+      },
+    },
+    "kind": "NullLiteral",
+    "value": null,
+  },
+  "operator": "!=",
+  "right": {
+    "@": {
+      "end": {
+        "column": 10,
+        "line": 1,
+        "offset": 9,
+      },
+      "start": {
+        "column": 9,
+        "line": 1,
+        "offset": 8,
+      },
+    },
+    "kind": "NumberLiteral",
+    "value": 3,
+  },
+}
+`;
+
 exports[`UnaryOperation 1`] = `
 {
   "@": {

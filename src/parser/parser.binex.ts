@@ -47,7 +47,8 @@ export type OperatableExpression =
   | LangType["ValueIdentifier"]
   | LangType["StringLiteral"]
   | LangType["BooleanLiteral"]
-  | LangType["FunctionCall"];
+  | LangType["FunctionCall"]
+  | LangType["NullLiteral"];
 
 // This parser supports basic math with + - * / ^, unary negation, factorial,
 // and parentheses. It does not evaluate the math, just turn it into a series of
@@ -244,6 +245,7 @@ export function OperatorParser(r: Parsimmon.TypedLanguage<LangType>) {
       .or(r.StringLiteral)
       .or(r.BooleanLiteral)
       .or(r.FunctionCall)
+      .or(r.NullLiteral)
       .or(r.ValueIdentifier)
   );
 

@@ -292,6 +292,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     return Parsimmon.regexp(
       /(?!string|number|boolean|object|array|true|false|null)[a-z][a-zA-Z0-9]*/
     )
+      .desc("ValueIdentifier")
       .mark()
       .map(({ start, end, value }) => ({
         kind: "ValueIdentifier",

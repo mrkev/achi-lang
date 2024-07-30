@@ -37,3 +37,7 @@ test("BinaryOperation", () => {
 test("BinaryOperation.identifier", () => {
   expect(Lang.OperationExpression.tryParse("hello + 3")).toMatchSnapshot();
 });
+
+test("BinaryOperation.null", () => {
+  expect(Lang.OperationExpression.tryParse("null != 3")).toMatchSnapshot();
+});
