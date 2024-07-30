@@ -773,6 +773,7 @@ exports[`MatchFunction 1`] = `
             },
           },
           "kind": "TypeTag",
+          "optional": false,
           "typeExpression": {
             "@": {
               "end": {
@@ -981,6 +982,7 @@ exports[`MatchFunction.cases 1`] = `
             },
           },
           "kind": "TypeTag",
+          "optional": false,
           "typeExpression": {
             "@": {
               "end": {
@@ -1599,6 +1601,7 @@ exports[`MatchFunction.fullExample 1`] = `
             },
           },
           "kind": "TypeTag",
+          "optional": false,
           "typeExpression": {
             "@": {
               "end": {

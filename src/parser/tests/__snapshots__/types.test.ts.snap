@@ -231,6 +231,7 @@ exports[`TypeTag.1 1`] = `
     },
   },
   "kind": "TypeTag",
+  "optional": false,
   "typeExpression": {
     "@": {
       "end": {
@@ -265,6 +266,7 @@ exports[`TypeTag.2 1`] = `
     },
   },
   "kind": "TypeTag",
+  "optional": false,
   "typeExpression": {
     "@": {
       "end": {
@@ -323,6 +325,7 @@ exports[`TypeTag.2 1`] = `
             },
           },
           "kind": "TypeTag",
+          "optional": false,
           "typeExpression": {
             "@": {
               "end": {
@@ -385,6 +388,7 @@ exports[`TypeTag.2 1`] = `
             },
           },
           "kind": "TypeTag",
+          "optional": false,
           "typeExpression": {
             "@": {
               "end": {
@@ -396,6 +400,168 @@ exports[`TypeTag.2 1`] = `
                 "column": 18,
                 "line": 1,
                 "offset": 17,
+              },
+            },
+            "kind": "TypeIdentifier",
+            "value": "number",
+          },
+        },
+      },
+    ],
+    "kind": "RecordDefinition",
+  },
+}
+`;
+
+exports[`TypeTag.optional 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 27,
+      "line": 1,
+      "offset": 26,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "TypeTag",
+  "optional": true,
+  "typeExpression": {
+    "@": {
+      "end": {
+        "column": 27,
+        "line": 1,
+        "offset": 26,
+      },
+      "start": {
+        "column": 4,
+        "line": 1,
+        "offset": 3,
+      },
+    },
+    "definitions": [
+      {
+        "@": {
+          "end": {
+            "column": 14,
+            "line": 1,
+            "offset": 13,
+          },
+          "start": {
+            "column": 5,
+            "line": 1,
+            "offset": 4,
+          },
+        },
+        "identifier": {
+          "@": {
+            "end": {
+              "column": 6,
+              "line": 1,
+              "offset": 5,
+            },
+            "start": {
+              "column": 5,
+              "line": 1,
+              "offset": 4,
+            },
+          },
+          "kind": "ValueIdentifier",
+          "value": "x",
+        },
+        "kind": "NamedDefinition",
+        "typeTag": {
+          "@": {
+            "end": {
+              "column": 14,
+              "line": 1,
+              "offset": 13,
+            },
+            "start": {
+              "column": 6,
+              "line": 1,
+              "offset": 5,
+            },
+          },
+          "kind": "TypeTag",
+          "optional": false,
+          "typeExpression": {
+            "@": {
+              "end": {
+                "column": 14,
+                "line": 1,
+                "offset": 13,
+              },
+              "start": {
+                "column": 8,
+                "line": 1,
+                "offset": 7,
+              },
+            },
+            "kind": "TypeIdentifier",
+            "value": "number",
+          },
+        },
+      },
+      {
+        "@": {
+          "end": {
+            "column": 26,
+            "line": 1,
+            "offset": 25,
+          },
+          "start": {
+            "column": 16,
+            "line": 1,
+            "offset": 15,
+          },
+        },
+        "identifier": {
+          "@": {
+            "end": {
+              "column": 17,
+              "line": 1,
+              "offset": 16,
+            },
+            "start": {
+              "column": 16,
+              "line": 1,
+              "offset": 15,
+            },
+          },
+          "kind": "ValueIdentifier",
+          "value": "y",
+        },
+        "kind": "NamedDefinition",
+        "typeTag": {
+          "@": {
+            "end": {
+              "column": 26,
+              "line": 1,
+              "offset": 25,
+            },
+            "start": {
+              "column": 17,
+              "line": 1,
+              "offset": 16,
+            },
+          },
+          "kind": "TypeTag",
+          "optional": true,
+          "typeExpression": {
+            "@": {
+              "end": {
+                "column": 26,
+                "line": 1,
+                "offset": 25,
+              },
+              "start": {
+                "column": 20,
+                "line": 1,
+                "offset": 19,
               },
             },
             "kind": "TypeIdentifier",

@@ -10,6 +10,11 @@ test("TypeTag.2", () => {
   expect(result).toMatchSnapshot();
 });
 
+test("TypeTag.optional", () => {
+  const result = Lang.TypeTag.tryParse("?: (x: number, y?: number)");
+  expect(result).toMatchSnapshot();
+});
+
 test("TypeExpression.string", () => {
   const result = Lang.TypeExpression.tryParse('"foo"');
   expect(result).toMatchSnapshot();

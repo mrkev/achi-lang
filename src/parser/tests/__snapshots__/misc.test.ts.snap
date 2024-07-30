@@ -479,6 +479,7 @@ exports[`Program 1`] = `
                   },
                 },
                 "kind": "TypeTag",
+                "optional": false,
                 "typeExpression": {
                   "@": {
                     "end": {
@@ -541,6 +542,7 @@ exports[`Program 1`] = `
                   },
                 },
                 "kind": "TypeTag",
+                "optional": false,
                 "typeExpression": {
                   "@": {
                     "end": {
@@ -938,6 +940,7 @@ exports[`Program.2 1`] = `
                   },
                 },
                 "kind": "TypeTag",
+                "optional": false,
                 "typeExpression": {
                   "@": {
                     "end": {
@@ -1000,6 +1003,7 @@ exports[`Program.2 1`] = `
                   },
                 },
                 "kind": "TypeTag",
+                "optional": false,
                 "typeExpression": {
                   "@": {
                     "end": {
@@ -1107,6 +1111,7 @@ exports[`Program.2 1`] = `
                   },
                 },
                 "kind": "TypeTag",
+                "optional": false,
                 "typeExpression": {
                   "@": {
                     "end": {

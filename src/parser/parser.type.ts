@@ -198,6 +198,7 @@ export type LangType_Type = {
   // :string
   TypeTag: Node<{
     kind: "TypeTag";
+    optional: boolean;
     typeExpression: LangType["TypeExpression"];
   }>;
 };
@@ -212,13 +213,15 @@ export const LangDef_Type = sublang<LangType, LangType_Type>({
   TypeTag: (r) => {
     return Parsimmon.seqMap(
       Parsimmon.index,
-      Parsimmon.string(":"),
+      Parsimmon.alt(Parsimmon.string("?:"), Parsimmon.string(":")),
       r._,
       r.TypeExpression,
       Parsimmon.index,
-      (start, _2, _3, typeExpression, end) => {
+      (start, tagger, _3, typeExpression, end) => {
+        const optional = tagger === "?:";
         return {
           kind: "TypeTag",
+          optional,
           typeExpression,
           "@": { start, end },
         };
