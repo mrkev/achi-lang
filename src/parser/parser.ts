@@ -101,6 +101,7 @@ export type LangType = LangType_BinOp &
       kind: "MethodDefinition";
       identifier: LangType["ValueIdentifier"];
       argument: LangType["RecordDefinition"];
+      returnType: LangType["TypeTag"] | null;
       block: LangType["Block"];
     }>;
 
@@ -688,13 +689,16 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         r.ValueIdentifier,
         r._,
         r.RecordDefinition,
-        r.__,
+        r._,
+        r.TypeTag.or(Parsimmon.of(null)),
+        r._,
         r.Block,
-        (identifier, _0, argument, _1, block) => {
+        (identifier, _0, argument, _1, typeTag, _2, block) => {
           return {
             kind: "MethodDefinition",
             identifier,
             argument,
+            returnType: typeTag,
             block,
           };
         }

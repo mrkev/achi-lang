@@ -12,16 +12,38 @@ test("NamedRecordDefinitionGroup", () => {
   expect(result).toMatchSnapshot();
 });
 
-test("NamedRecordDefinition", () => {
+test("NamedRecordDefinitionStatement", () => {
   const result = Lang.NamedRecordDefinitionStatement.tryParse(
     "class Point(x: number, y: number)"
   );
   expect(result).toMatchSnapshot();
 });
 
-test("NamedRecordDefinition.empty", () => {
+test("NamedRecordDefinitionStatement.empty", () => {
   expect(
     Lang.NamedRecordDefinitionStatement.tryParse("class True()")
+  ).toMatchSnapshot();
+});
+
+test("NamedRecordDefinitionStatement.withMethods", () => {
+  expect(
+    Lang.NamedRecordDefinitionStatement.tryParse(
+      "class Foo() with { set() {} }"
+    )
+  ).toMatchSnapshot();
+});
+
+test("NamedRecordDefinitionStatement.withMethods2", () => {
+  expect(
+    Lang.NamedRecordDefinitionStatement.tryParse(
+      `class TimelinePoint(
+        t: number,
+        u: "seconds" | "puleses"
+      ) with {
+        set(t: number, u: TimeUnit) {};
+        unit(): "seconds" | "puleses" {}
+      }`
+    )
   ).toMatchSnapshot();
 });
 

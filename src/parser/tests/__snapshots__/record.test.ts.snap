@@ -116,265 +116,6 @@ exports[`NamedLiteral 1`] = `
 }
 `;
 
-exports[`NamedRecordDefinition 1`] = `
-{
-  "@": {
-    "end": {
-      "column": 34,
-      "line": 1,
-      "offset": 33,
-    },
-    "start": {
-      "column": 1,
-      "line": 1,
-      "offset": 0,
-    },
-  },
-  "kind": "NamedRecordDefinitionStatement",
-  "methods": null,
-  "namedRecordDefinition": {
-    "@": {
-      "end": {
-        "column": 34,
-        "line": 1,
-        "offset": 33,
-      },
-      "start": {
-        "column": 7,
-        "line": 1,
-        "offset": 6,
-      },
-    },
-    "identifier": {
-      "@": {
-        "end": {
-          "column": 12,
-          "line": 1,
-          "offset": 11,
-        },
-        "start": {
-          "column": 7,
-          "line": 1,
-          "offset": 6,
-        },
-      },
-      "kind": "TypeIdentifier",
-      "value": "Point",
-    },
-    "kind": "NamedRecordDefinition",
-    "record": {
-      "@": {
-        "end": {
-          "column": 34,
-          "line": 1,
-          "offset": 33,
-        },
-        "start": {
-          "column": 12,
-          "line": 1,
-          "offset": 11,
-        },
-      },
-      "definitions": [
-        {
-          "@": {
-            "end": {
-              "column": 22,
-              "line": 1,
-              "offset": 21,
-            },
-            "start": {
-              "column": 13,
-              "line": 1,
-              "offset": 12,
-            },
-          },
-          "identifier": {
-            "@": {
-              "end": {
-                "column": 14,
-                "line": 1,
-                "offset": 13,
-              },
-              "start": {
-                "column": 13,
-                "line": 1,
-                "offset": 12,
-              },
-            },
-            "kind": "ValueIdentifier",
-            "value": "x",
-          },
-          "kind": "NamedDefinition",
-          "typeTag": {
-            "@": {
-              "end": {
-                "column": 22,
-                "line": 1,
-                "offset": 21,
-              },
-              "start": {
-                "column": 14,
-                "line": 1,
-                "offset": 13,
-              },
-            },
-            "kind": "TypeTag",
-            "optional": false,
-            "typeExpression": {
-              "@": {
-                "end": {
-                  "column": 22,
-                  "line": 1,
-                  "offset": 21,
-                },
-                "start": {
-                  "column": 16,
-                  "line": 1,
-                  "offset": 15,
-                },
-              },
-              "kind": "TypeIdentifier",
-              "value": "number",
-            },
-          },
-        },
-        {
-          "@": {
-            "end": {
-              "column": 33,
-              "line": 1,
-              "offset": 32,
-            },
-            "start": {
-              "column": 24,
-              "line": 1,
-              "offset": 23,
-            },
-          },
-          "identifier": {
-            "@": {
-              "end": {
-                "column": 25,
-                "line": 1,
-                "offset": 24,
-              },
-              "start": {
-                "column": 24,
-                "line": 1,
-                "offset": 23,
-              },
-            },
-            "kind": "ValueIdentifier",
-            "value": "y",
-          },
-          "kind": "NamedDefinition",
-          "typeTag": {
-            "@": {
-              "end": {
-                "column": 33,
-                "line": 1,
-                "offset": 32,
-              },
-              "start": {
-                "column": 25,
-                "line": 1,
-                "offset": 24,
-              },
-            },
-            "kind": "TypeTag",
-            "optional": false,
-            "typeExpression": {
-              "@": {
-                "end": {
-                  "column": 33,
-                  "line": 1,
-                  "offset": 32,
-                },
-                "start": {
-                  "column": 27,
-                  "line": 1,
-                  "offset": 26,
-                },
-              },
-              "kind": "TypeIdentifier",
-              "value": "number",
-            },
-          },
-        },
-      ],
-      "kind": "RecordDefinition",
-    },
-  },
-}
-`;
-
-exports[`NamedRecordDefinition.empty 1`] = `
-{
-  "@": {
-    "end": {
-      "column": 13,
-      "line": 1,
-      "offset": 12,
-    },
-    "start": {
-      "column": 1,
-      "line": 1,
-      "offset": 0,
-    },
-  },
-  "kind": "NamedRecordDefinitionStatement",
-  "methods": null,
-  "namedRecordDefinition": {
-    "@": {
-      "end": {
-        "column": 13,
-        "line": 1,
-        "offset": 12,
-      },
-      "start": {
-        "column": 7,
-        "line": 1,
-        "offset": 6,
-      },
-    },
-    "identifier": {
-      "@": {
-        "end": {
-          "column": 11,
-          "line": 1,
-          "offset": 10,
-        },
-        "start": {
-          "column": 7,
-          "line": 1,
-          "offset": 6,
-        },
-      },
-      "kind": "TypeIdentifier",
-      "value": "True",
-    },
-    "kind": "NamedRecordDefinition",
-    "record": {
-      "@": {
-        "end": {
-          "column": 13,
-          "line": 1,
-          "offset": 12,
-        },
-        "start": {
-          "column": 11,
-          "line": 1,
-          "offset": 10,
-        },
-      },
-      "definitions": [],
-      "kind": "RecordDefinition",
-    },
-  },
-}
-`;
-
 exports[`NamedRecordDefinitionGroup 1`] = `
 {
   "@": {
@@ -660,6 +401,970 @@ exports[`NamedRecordDefinitionGroup 1`] = `
       },
     },
   ],
+}
+`;
+
+exports[`NamedRecordDefinitionStatement 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 34,
+      "line": 1,
+      "offset": 33,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "NamedRecordDefinitionStatement",
+  "methods": null,
+  "namedRecordDefinition": {
+    "@": {
+      "end": {
+        "column": 34,
+        "line": 1,
+        "offset": 33,
+      },
+      "start": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
+    "identifier": {
+      "@": {
+        "end": {
+          "column": 12,
+          "line": 1,
+          "offset": 11,
+        },
+        "start": {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+      },
+      "kind": "TypeIdentifier",
+      "value": "Point",
+    },
+    "kind": "NamedRecordDefinition",
+    "record": {
+      "@": {
+        "end": {
+          "column": 34,
+          "line": 1,
+          "offset": 33,
+        },
+        "start": {
+          "column": 12,
+          "line": 1,
+          "offset": 11,
+        },
+      },
+      "definitions": [
+        {
+          "@": {
+            "end": {
+              "column": 22,
+              "line": 1,
+              "offset": 21,
+            },
+            "start": {
+              "column": 13,
+              "line": 1,
+              "offset": 12,
+            },
+          },
+          "identifier": {
+            "@": {
+              "end": {
+                "column": 14,
+                "line": 1,
+                "offset": 13,
+              },
+              "start": {
+                "column": 13,
+                "line": 1,
+                "offset": 12,
+              },
+            },
+            "kind": "ValueIdentifier",
+            "value": "x",
+          },
+          "kind": "NamedDefinition",
+          "typeTag": {
+            "@": {
+              "end": {
+                "column": 22,
+                "line": 1,
+                "offset": 21,
+              },
+              "start": {
+                "column": 14,
+                "line": 1,
+                "offset": 13,
+              },
+            },
+            "kind": "TypeTag",
+            "optional": false,
+            "typeExpression": {
+              "@": {
+                "end": {
+                  "column": 22,
+                  "line": 1,
+                  "offset": 21,
+                },
+                "start": {
+                  "column": 16,
+                  "line": 1,
+                  "offset": 15,
+                },
+              },
+              "kind": "TypeIdentifier",
+              "value": "number",
+            },
+          },
+        },
+        {
+          "@": {
+            "end": {
+              "column": 33,
+              "line": 1,
+              "offset": 32,
+            },
+            "start": {
+              "column": 24,
+              "line": 1,
+              "offset": 23,
+            },
+          },
+          "identifier": {
+            "@": {
+              "end": {
+                "column": 25,
+                "line": 1,
+                "offset": 24,
+              },
+              "start": {
+                "column": 24,
+                "line": 1,
+                "offset": 23,
+              },
+            },
+            "kind": "ValueIdentifier",
+            "value": "y",
+          },
+          "kind": "NamedDefinition",
+          "typeTag": {
+            "@": {
+              "end": {
+                "column": 33,
+                "line": 1,
+                "offset": 32,
+              },
+              "start": {
+                "column": 25,
+                "line": 1,
+                "offset": 24,
+              },
+            },
+            "kind": "TypeTag",
+            "optional": false,
+            "typeExpression": {
+              "@": {
+                "end": {
+                  "column": 33,
+                  "line": 1,
+                  "offset": 32,
+                },
+                "start": {
+                  "column": 27,
+                  "line": 1,
+                  "offset": 26,
+                },
+              },
+              "kind": "TypeIdentifier",
+              "value": "number",
+            },
+          },
+        },
+      ],
+      "kind": "RecordDefinition",
+    },
+  },
+}
+`;
+
+exports[`NamedRecordDefinitionStatement.empty 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 13,
+      "line": 1,
+      "offset": 12,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "NamedRecordDefinitionStatement",
+  "methods": null,
+  "namedRecordDefinition": {
+    "@": {
+      "end": {
+        "column": 13,
+        "line": 1,
+        "offset": 12,
+      },
+      "start": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
+    "identifier": {
+      "@": {
+        "end": {
+          "column": 11,
+          "line": 1,
+          "offset": 10,
+        },
+        "start": {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+      },
+      "kind": "TypeIdentifier",
+      "value": "True",
+    },
+    "kind": "NamedRecordDefinition",
+    "record": {
+      "@": {
+        "end": {
+          "column": 13,
+          "line": 1,
+          "offset": 12,
+        },
+        "start": {
+          "column": 11,
+          "line": 1,
+          "offset": 10,
+        },
+      },
+      "definitions": [],
+      "kind": "RecordDefinition",
+    },
+  },
+}
+`;
+
+exports[`NamedRecordDefinitionStatement.withMethods 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 30,
+      "line": 1,
+      "offset": 29,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "NamedRecordDefinitionStatement",
+  "methods": {
+    "@": {
+      "end": {
+        "column": 30,
+        "line": 1,
+        "offset": 29,
+      },
+      "start": {
+        "column": 13,
+        "line": 1,
+        "offset": 12,
+      },
+    },
+    "kind": "NamedRecordDefinitionMethodBlock",
+    "methods": [
+      {
+        "@": {
+          "end": {
+            "column": 28,
+            "line": 1,
+            "offset": 27,
+          },
+          "start": {
+            "column": 20,
+            "line": 1,
+            "offset": 19,
+          },
+        },
+        "argument": {
+          "@": {
+            "end": {
+              "column": 25,
+              "line": 1,
+              "offset": 24,
+            },
+            "start": {
+              "column": 23,
+              "line": 1,
+              "offset": 22,
+            },
+          },
+          "definitions": [],
+          "kind": "RecordDefinition",
+        },
+        "block": {
+          "@": {
+            "end": {
+              "column": 28,
+              "line": 1,
+              "offset": 27,
+            },
+            "start": {
+              "column": 26,
+              "line": 1,
+              "offset": 25,
+            },
+          },
+          "kind": "Block",
+          "statements": [],
+        },
+        "identifier": {
+          "@": {
+            "end": {
+              "column": 23,
+              "line": 1,
+              "offset": 22,
+            },
+            "start": {
+              "column": 20,
+              "line": 1,
+              "offset": 19,
+            },
+          },
+          "kind": "ValueIdentifier",
+          "value": "set",
+        },
+        "kind": "MethodDefinition",
+        "returnType": null,
+      },
+    ],
+  },
+  "namedRecordDefinition": {
+    "@": {
+      "end": {
+        "column": 12,
+        "line": 1,
+        "offset": 11,
+      },
+      "start": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
+    "identifier": {
+      "@": {
+        "end": {
+          "column": 10,
+          "line": 1,
+          "offset": 9,
+        },
+        "start": {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+      },
+      "kind": "TypeIdentifier",
+      "value": "Foo",
+    },
+    "kind": "NamedRecordDefinition",
+    "record": {
+      "@": {
+        "end": {
+          "column": 12,
+          "line": 1,
+          "offset": 11,
+        },
+        "start": {
+          "column": 10,
+          "line": 1,
+          "offset": 9,
+        },
+      },
+      "definitions": [],
+      "kind": "RecordDefinition",
+    },
+  },
+}
+`;
+
+exports[`NamedRecordDefinitionStatement.withMethods2 1`] = `
+{
+  "@": {
+    "end": {
+      "column": 8,
+      "line": 7,
+      "offset": 176,
+    },
+    "start": {
+      "column": 1,
+      "line": 1,
+      "offset": 0,
+    },
+  },
+  "kind": "NamedRecordDefinitionStatement",
+  "methods": {
+    "@": {
+      "end": {
+        "column": 8,
+        "line": 7,
+        "offset": 176,
+      },
+      "start": {
+        "column": 9,
+        "line": 4,
+        "offset": 81,
+      },
+    },
+    "kind": "NamedRecordDefinitionMethodBlock",
+    "methods": [
+      {
+        "@": {
+          "end": {
+            "column": 39,
+            "line": 5,
+            "offset": 126,
+          },
+          "start": {
+            "column": 9,
+            "line": 5,
+            "offset": 96,
+          },
+        },
+        "argument": {
+          "@": {
+            "end": {
+              "column": 36,
+              "line": 5,
+              "offset": 123,
+            },
+            "start": {
+              "column": 12,
+              "line": 5,
+              "offset": 99,
+            },
+          },
+          "definitions": [
+            {
+              "@": {
+                "end": {
+                  "column": 22,
+                  "line": 5,
+                  "offset": 109,
+                },
+                "start": {
+                  "column": 13,
+                  "line": 5,
+                  "offset": 100,
+                },
+              },
+              "identifier": {
+                "@": {
+                  "end": {
+                    "column": 14,
+                    "line": 5,
+                    "offset": 101,
+                  },
+                  "start": {
+                    "column": 13,
+                    "line": 5,
+                    "offset": 100,
+                  },
+                },
+                "kind": "ValueIdentifier",
+                "value": "t",
+              },
+              "kind": "NamedDefinition",
+              "typeTag": {
+                "@": {
+                  "end": {
+                    "column": 22,
+                    "line": 5,
+                    "offset": 109,
+                  },
+                  "start": {
+                    "column": 14,
+                    "line": 5,
+                    "offset": 101,
+                  },
+                },
+                "kind": "TypeTag",
+                "optional": false,
+                "typeExpression": {
+                  "@": {
+                    "end": {
+                      "column": 22,
+                      "line": 5,
+                      "offset": 109,
+                    },
+                    "start": {
+                      "column": 16,
+                      "line": 5,
+                      "offset": 103,
+                    },
+                  },
+                  "kind": "TypeIdentifier",
+                  "value": "number",
+                },
+              },
+            },
+            {
+              "@": {
+                "end": {
+                  "column": 35,
+                  "line": 5,
+                  "offset": 122,
+                },
+                "start": {
+                  "column": 24,
+                  "line": 5,
+                  "offset": 111,
+                },
+              },
+              "identifier": {
+                "@": {
+                  "end": {
+                    "column": 25,
+                    "line": 5,
+                    "offset": 112,
+                  },
+                  "start": {
+                    "column": 24,
+                    "line": 5,
+                    "offset": 111,
+                  },
+                },
+                "kind": "ValueIdentifier",
+                "value": "u",
+              },
+              "kind": "NamedDefinition",
+              "typeTag": {
+                "@": {
+                  "end": {
+                    "column": 35,
+                    "line": 5,
+                    "offset": 122,
+                  },
+                  "start": {
+                    "column": 25,
+                    "line": 5,
+                    "offset": 112,
+                  },
+                },
+                "kind": "TypeTag",
+                "optional": false,
+                "typeExpression": {
+                  "@": {
+                    "end": {
+                      "column": 35,
+                      "line": 5,
+                      "offset": 122,
+                    },
+                    "start": {
+                      "column": 27,
+                      "line": 5,
+                      "offset": 114,
+                    },
+                  },
+                  "kind": "TypeIdentifier",
+                  "value": "TimeUnit",
+                },
+              },
+            },
+          ],
+          "kind": "RecordDefinition",
+        },
+        "block": {
+          "@": {
+            "end": {
+              "column": 39,
+              "line": 5,
+              "offset": 126,
+            },
+            "start": {
+              "column": 37,
+              "line": 5,
+              "offset": 124,
+            },
+          },
+          "kind": "Block",
+          "statements": [],
+        },
+        "identifier": {
+          "@": {
+            "end": {
+              "column": 12,
+              "line": 5,
+              "offset": 99,
+            },
+            "start": {
+              "column": 9,
+              "line": 5,
+              "offset": 96,
+            },
+          },
+          "kind": "ValueIdentifier",
+          "value": "set",
+        },
+        "kind": "MethodDefinition",
+        "returnType": null,
+      },
+      {
+        "@": {
+          "end": {
+            "column": 0,
+            "line": 7,
+            "offset": 168,
+          },
+          "start": {
+            "column": 9,
+            "line": 6,
+            "offset": 136,
+          },
+        },
+        "argument": {
+          "@": {
+            "end": {
+              "column": 15,
+              "line": 6,
+              "offset": 142,
+            },
+            "start": {
+              "column": 13,
+              "line": 6,
+              "offset": 140,
+            },
+          },
+          "definitions": [],
+          "kind": "RecordDefinition",
+        },
+        "block": {
+          "@": {
+            "end": {
+              "column": 0,
+              "line": 7,
+              "offset": 168,
+            },
+            "start": {
+              "column": 39,
+              "line": 6,
+              "offset": 166,
+            },
+          },
+          "kind": "Block",
+          "statements": [],
+        },
+        "identifier": {
+          "@": {
+            "end": {
+              "column": 13,
+              "line": 6,
+              "offset": 140,
+            },
+            "start": {
+              "column": 9,
+              "line": 6,
+              "offset": 136,
+            },
+          },
+          "kind": "ValueIdentifier",
+          "value": "unit",
+        },
+        "kind": "MethodDefinition",
+        "returnType": {
+          "@": {
+            "end": {
+              "column": 39,
+              "line": 6,
+              "offset": 166,
+            },
+            "start": {
+              "column": 15,
+              "line": 6,
+              "offset": 142,
+            },
+          },
+          "kind": "TypeTag",
+          "optional": false,
+          "typeExpression": {
+            "@": {
+              "end": {
+                "column": 39,
+                "line": 6,
+                "offset": 166,
+              },
+              "start": {
+                "column": 17,
+                "line": 6,
+                "offset": 144,
+              },
+            },
+            "kind": "BinaryTypeOperation",
+            "left": {
+              "@": {
+                "end": {
+                  "column": 27,
+                  "line": 6,
+                  "offset": 154,
+                },
+                "start": {
+                  "column": 17,
+                  "line": 6,
+                  "offset": 144,
+                },
+              },
+              "kind": "StringLiteral",
+              "value": "seconds",
+            },
+            "operator": "|",
+            "right": {
+              "@": {
+                "end": {
+                  "column": 39,
+                  "line": 6,
+                  "offset": 166,
+                },
+                "start": {
+                  "column": 29,
+                  "line": 6,
+                  "offset": 156,
+                },
+              },
+              "kind": "StringLiteral",
+              "value": "puleses",
+            },
+          },
+        },
+      },
+    ],
+  },
+  "namedRecordDefinition": {
+    "@": {
+      "end": {
+        "column": 8,
+        "line": 4,
+        "offset": 80,
+      },
+      "start": {
+        "column": 7,
+        "line": 1,
+        "offset": 6,
+      },
+    },
+    "identifier": {
+      "@": {
+        "end": {
+          "column": 20,
+          "line": 1,
+          "offset": 19,
+        },
+        "start": {
+          "column": 7,
+          "line": 1,
+          "offset": 6,
+        },
+      },
+      "kind": "TypeIdentifier",
+      "value": "TimelinePoint",
+    },
+    "kind": "NamedRecordDefinition",
+    "record": {
+      "@": {
+        "end": {
+          "column": 8,
+          "line": 4,
+          "offset": 80,
+        },
+        "start": {
+          "column": 20,
+          "line": 1,
+          "offset": 19,
+        },
+      },
+      "definitions": [
+        {
+          "@": {
+            "end": {
+              "column": 18,
+              "line": 2,
+              "offset": 38,
+            },
+            "start": {
+              "column": 9,
+              "line": 2,
+              "offset": 29,
+            },
+          },
+          "identifier": {
+            "@": {
+              "end": {
+                "column": 10,
+                "line": 2,
+                "offset": 30,
+              },
+              "start": {
+                "column": 9,
+                "line": 2,
+                "offset": 29,
+              },
+            },
+            "kind": "ValueIdentifier",
+            "value": "t",
+          },
+          "kind": "NamedDefinition",
+          "typeTag": {
+            "@": {
+              "end": {
+                "column": 18,
+                "line": 2,
+                "offset": 38,
+              },
+              "start": {
+                "column": 10,
+                "line": 2,
+                "offset": 30,
+              },
+            },
+            "kind": "TypeTag",
+            "optional": false,
+            "typeExpression": {
+              "@": {
+                "end": {
+                  "column": 18,
+                  "line": 2,
+                  "offset": 38,
+                },
+                "start": {
+                  "column": 12,
+                  "line": 2,
+                  "offset": 32,
+                },
+              },
+              "kind": "TypeIdentifier",
+              "value": "number",
+            },
+          },
+        },
+        {
+          "@": {
+            "end": {
+              "column": 7,
+              "line": 4,
+              "offset": 79,
+            },
+            "start": {
+              "column": 9,
+              "line": 3,
+              "offset": 48,
+            },
+          },
+          "identifier": {
+            "@": {
+              "end": {
+                "column": 10,
+                "line": 3,
+                "offset": 49,
+              },
+              "start": {
+                "column": 9,
+                "line": 3,
+                "offset": 48,
+              },
+            },
+            "kind": "ValueIdentifier",
+            "value": "u",
+          },
+          "kind": "NamedDefinition",
+          "typeTag": {
+            "@": {
+              "end": {
+                "column": 7,
+                "line": 4,
+                "offset": 79,
+              },
+              "start": {
+                "column": 10,
+                "line": 3,
+                "offset": 49,
+              },
+            },
+            "kind": "TypeTag",
+            "optional": false,
+            "typeExpression": {
+              "@": {
+                "end": {
+                  "column": 7,
+                  "line": 4,
+                  "offset": 79,
+                },
+                "start": {
+                  "column": 12,
+                  "line": 3,
+                  "offset": 51,
+                },
+              },
+              "kind": "BinaryTypeOperation",
+              "left": {
+                "@": {
+                  "end": {
+                    "column": 22,
+                    "line": 3,
+                    "offset": 61,
+                  },
+                  "start": {
+                    "column": 12,
+                    "line": 3,
+                    "offset": 51,
+                  },
+                },
+                "kind": "StringLiteral",
+                "value": "seconds",
+              },
+              "operator": "|",
+              "right": {
+                "@": {
+                  "end": {
+                    "column": 7,
+                    "line": 4,
+                    "offset": 79,
+                  },
+                  "start": {
+                    "column": 24,
+                    "line": 3,
+                    "offset": 63,
+                  },
+                },
+                "kind": "StringLiteral",
+                "value": "puleses",
+              },
+            },
+          },
+        },
+      ],
+      "kind": "RecordDefinition",
+    },
+  },
 }
 `;
 
