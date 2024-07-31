@@ -87,7 +87,7 @@ export class Context {
   }
 }
 
-class Scope<K extends string, V> {
+export class Scope<K extends string, V> {
   // Note, we start with no scopes. We need to make sure we push
   // a sope before we try to define variables
   readonly _stack: Map<K, V>[] = [];
@@ -171,19 +171,4 @@ class Scope<K extends string, V> {
       this.set(key, value);
     }
   }
-}
-
-export function stringOfValueScope<K extends string>(
-  scope: Scope<K, ValueType["Value"]>
-) {
-  let res = "Value Scope: ";
-  for (const i in scope._stack) {
-    const map = scope._stack[i];
-    const mapRes: Record<string, any> = {};
-    for (const [key, value] of map.entries()) {
-      mapRes[key] = printableOfValue(value);
-    }
-    res += `(${i}): ${JSON.stringify(mapRes, null, 2)}\n`;
-  }
-  return res;
 }

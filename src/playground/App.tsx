@@ -5,20 +5,21 @@ import { editor } from "monaco-editor";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { compileProgram, printTSStatements } from "../compiler/compiler";
-import { Context, stringOfValueScope } from "../interpreter/Context";
+import { Context } from "../interpreter/Context";
 import { interpret } from "../interpreter/interpreter";
 import { FixmeError, ScriptError } from "../interpreter/interpreterErrors";
 import { System } from "../interpreter/runtime/System";
 import { nullthrows } from "../nullthrows";
 import { tryParse } from "../parser/parser";
 import "./App.css";
-import { Sidebar } from "./Sidebar";
 import { DEFAULT_SCRIPT } from "./constants";
 import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";
+import { Sidebar } from "./Sidebar";
 import { transformASTForDisplay } from "./transformASTForDisplay";
 import { useEditor } from "./useEditor";
 import { useKeyboardShortcuts } from "./useKeyboardShortcuts";
 import { useScriptEditor } from "./useScriptEditor";
+import { ValueScope } from "./ValueScope";
 
 export type SetState<S> = React.Dispatch<React.SetStateAction<S>>;
 
@@ -247,7 +248,7 @@ export default function App() {
       <button onClick={doEvaluate}>Evaluate</button>
       <button onClick={doSave}>Save</button>
 
-      {valueScope && <pre>{stringOfValueScope(valueScope)}</pre>}
+      {valueScope && <ValueScope scope={valueScope} />}
 
       <pre>
         {systemError && (
