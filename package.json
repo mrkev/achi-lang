@@ -10,18 +10,18 @@
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",
-    "@typescript-eslint/eslint-plugin": "^5.57.0",
-    "@typescript-eslint/parser": "^5.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
     "allotment": "^1.20.2",
-    "eslint": "^8.37.0",
+    "eslint": "^9.8.0",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "monaco-editor": "^0.48.0",
+    "monaco-editor": "^0.50.0",
     "parsimmon": "^1.18.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-jss": "^10.10.0",
     "react-use-localstorage": "^3.5.3",
-    "usehooks-ts": "^2.9.1"
+    "usehooks-ts": "^3.1.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
@@ -32,10 +32,10 @@
     "create-temp-directory": "^2.4.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "ts-jest": "^29.1.4",
+    "ts-jest": "^29.2.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "vite": "^5.3.1"
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5"
   },
   "packageManager": "yarn@3.3.1+sha256.1d2760eb5c0e525abe9c5306fac5fe0b5628c0955072a0da2f4043524497526a"
 }
