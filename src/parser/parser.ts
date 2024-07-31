@@ -1,10 +1,10 @@
 import * as Parsimmon from "parsimmon";
-import { ExhaustiveParsers } from "./sublang";
-import { LangType_BinOp, LangDef_BinOp } from "./parser.operations";
-import { LangDef_Function, LangType_Function } from "./parser.function";
-import { LangType_Match, LangDef_Match } from "./parser.match";
 import { Node, withAt } from "./Node";
+import { LangDef_Function, LangType_Function } from "./parser.function";
+import { LangDef_Match, LangType_Match } from "./parser.match";
+import { LangDef_BinOp, LangType_BinOp } from "./parser.operations";
 import { LangDef_Type, LangType_Type } from "./parser.type";
+import { ExhaustiveParsers } from "./sublang";
 
 export type LangType = LangType_BinOp &
   LangType_Match &
@@ -24,6 +24,13 @@ export type LangType = LangType_BinOp &
     StringLiteral: Node<{ kind: "StringLiteral"; value: string }>;
     BooleanLiteral: Node<{ kind: "BooleanLiteral"; value: boolean }>;
     NullLiteral: Node<{ kind: "NullLiteral"; value: null }>;
+
+    // foo.bar
+    // MemberAccess: Node<{
+    //   kind: "MemberAccess";
+    //   object: LangType["Expression"];
+    //   property: LangType["ValueIdentifier"];
+    // }>;
 
     // Card.Number
     NestedTypeIdentifier: Node<{
@@ -60,7 +67,6 @@ export type LangType = LangType_BinOp &
       | LangType["MapLiteral"]
       | LangType["AnonymousFunctionLiteral"]
       | LangType["OperationExpression"];
-    // | BinaryExpression;
 
     ConstantDefinition: Node<{
       kind: "ConstantDefinition";
@@ -84,11 +90,13 @@ export type LangType = LangType_BinOp &
       methods: LangType["NamedRecordDefinitionMethodBlock"] | null;
     }>;
 
+    // with { set() { ... } }
     NamedRecordDefinitionMethodBlock: Node<{
       kind: "NamedRecordDefinitionMethodBlock";
       methods: Array<LangType["MethodDefinition"]>;
     }>;
 
+    // set() { ... }
     MethodDefinition: Node<{
       kind: "MethodDefinition";
       identifier: LangType["ValueIdentifier"];
@@ -300,6 +308,19 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         "@": { start, end },
       }));
   },
+
+  // MemberAccess: () => {
+  //   // right associativity
+  //   return withAt(
+  //     Parsimmon.regexp(
+  //       /(?!string|number|boolean|object|array|true|false|null)[a-z][a-zA-Z0-9]*/
+  //     ).map((value) => ({
+  //       kind: "MemberAccess",
+  //       Object
+  //       value: value,
+  //     }))
+  //   );
+  // },
 
   // [2,3,4]
   ListLiteral: (r) => {
