@@ -14,6 +14,7 @@ export function ValueScope({
         const map = scope._stack[i];
         return (
           <div
+            key={i}
             style={{
               display: "flex",
               flexDirection: "row",
@@ -22,7 +23,7 @@ export function ValueScope({
             }}
           >
             {i}:
-            <ValueMap map={map} key={i} />
+            <ValueMap map={map} />
           </div>
         );
       })}
@@ -34,9 +35,9 @@ export function ValueMap({ map }: { map: Map<string, ValueType["Value"]> }) {
   return (
     <table>
       <tbody>
-        {[...map.entries()].map(([key, value]) => {
+        {[...map.entries()].map(([key, value], i) => {
           return (
-            <tr>
+            <tr key={key}>
               <td
                 // https://stackoverflow.com/questions/69486887/styling-table-borders-with-css
                 style={{

@@ -1,3 +1,8 @@
+import {
+  VSCodePanels,
+  VSCodePanelTab,
+  VSCodePanelView,
+} from "@vscode/webview-ui-toolkit/react";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import * as monaco from "monaco-editor";
@@ -55,15 +60,15 @@ export default function App() {
 
   // TODO: make linked set its own package and use it here
   const [featureArr, setFeatures] = useLocalStorage<Feature[]>("features", [
-    "compile",
-    "typecheck",
+    // "compile",
+    // "typecheck",
     "interpret",
     "ast",
   ]);
 
   const features = useMemo(() => new Set(featureArr), [featureArr]);
 
-  const [_tsEditor, tsEditorObj] = useEditor({
+  const [tsEditor, tsEditorObj] = useEditor({
     language: "typescript",
     height: "50vh",
     theme: "vs-dark",
@@ -300,7 +305,27 @@ export default function App() {
           <Allotment.Pane>{scriptEditor}</Allotment.Pane>
           <Allotment.Pane>{evaluationBox}</Allotment.Pane>
         </Allotment>
-        <Allotment.Pane>{astEditor}</Allotment.Pane>
+
+        <Allotment.Pane>
+          <VSCodePanels
+            activeid="tab-1"
+            aria-label="With Active Tab"
+            style={{ height: "100%" }}
+          >
+            <VSCodePanelTab id="tab-1" style={{ paddingTop: 0 }}>
+              PARSED AST
+            </VSCodePanelTab>
+            <VSCodePanelTab id="tab-2" style={{ paddingTop: 0 }}>
+              COMPILED TS
+            </VSCodePanelTab>
+            <VSCodePanelView id="view-1" style={{ height: "100%", padding: 0 }}>
+              {astEditor}
+            </VSCodePanelView>
+            <VSCodePanelView id="view-2" style={{ height: "100%", padding: 0 }}>
+              {tsEditor}
+            </VSCodePanelView>
+          </VSCodePanels>
+        </Allotment.Pane>
       </Allotment>
     </Allotment>
   );
