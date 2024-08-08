@@ -1,6 +1,7 @@
-import { LangType } from "../parser/parser";
 import * as ts from "typescript";
+import { LangType } from "../parser/parser";
 import { compileExpression } from "./compileExpression";
+import { compileTypeExpression } from "./compileTypeExpression";
 
 export function generateEmptyExports() {
   return ts.factory.createExportDeclaration(
@@ -76,9 +77,7 @@ export function compileStatement(
       const constructorStatements = [];
       for (const defn of definitions) {
         const propName = defn.identifier.value;
-        const propType = (defn.typeTag.typeExpression as any).value; // todo: support type expressions
-
-        const typeRef = ts.factory.createTypeReferenceNode(propType);
+        const propType = compileTypeExpression(defn.typeTag.typeExpression);
 
         // class { <<x: number;>> }
         classMembers.push(
@@ -86,7 +85,7 @@ export function compileStatement(
             [],
             defn.identifier.value,
             undefined,
-            typeRef,
+            propType,
             undefined
           )
         );
@@ -97,7 +96,7 @@ export function compileStatement(
             undefined,
             propName,
             undefined,
-            typeRef
+            propType
           )
         );
 
@@ -118,6 +117,7 @@ export function compileStatement(
           )
         );
       }
+
       // props: {x: number}
       const constructorParam = ts.factory.createParameterDeclaration(
         undefined,
