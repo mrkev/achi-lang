@@ -1,4 +1,4 @@
-import ts from "typescript";
+import * as ts from "typescript";
 import { LangType } from "../parser/parser";
 import { exhaustive } from "../nullthrows";
 

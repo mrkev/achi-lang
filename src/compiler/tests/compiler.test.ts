@@ -1,7 +1,7 @@
 import {
   expectExpressionCompilation,
   expectStatementCompilation,
-} from "./expectCompilation";
+} from "../expectCompilation";
 
 test("compiler.NamedRecordDefinitionStatement", async () => {
   await expectStatementCompilation(
