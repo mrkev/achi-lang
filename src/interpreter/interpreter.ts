@@ -3,6 +3,7 @@ import { LangType, tryParse } from "../parser/parser";
 import { Context } from "./Context";
 import { evaluateStatements } from "./evaluateStatements";
 import { ScopeError, ScriptError } from "./interpreterErrors";
+import { globalScope } from "./runtime/runtime.globals";
 import { System } from "./runtime/System";
 
 // // Importing and exporting makes this easier, can define things in the lang itself
@@ -20,7 +21,7 @@ export function interpret(
 ): Context {
   try {
     const ast = typeof script === "string" ? tryParse(script) : script;
-    context.valueScope.push();
+    context.valueScope.push(globalScope());
     // populateGlobalScope(context);
     evaluateStatements(ast.statements, context, system);
     // NOTE: we don't pop this top-level Scope, because we want to return the

@@ -18,7 +18,8 @@ import { dynamicTypecheck } from "./dynamicTypechecker";
 export function callFunction(
   func:
     | ValueType["MatchFunctionInstance"]
-    | ValueType["AnonymousFunctionInstance"],
+    | ValueType["AnonymousFunctionInstance"]
+    | ValueType["NativeFunctionInstance"],
   argument: ValueType["Value"],
   context: Context,
   system: System
@@ -74,6 +75,13 @@ export function callFunction(
       }
 
       throw new Error("fixme, no case blocks");
+    }
+
+    case "NativeFunctionInstance": {
+      context.stack.push(func);
+      const result = func.func(argument, context, system);
+      context.stack.pop();
+      return result;
     }
 
     default: {

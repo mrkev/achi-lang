@@ -163,7 +163,8 @@ export function evaluateExpression(
       const instKind = funcInstance.kind;
       if (
         instKind !== "MatchFunctionInstance" &&
-        instKind !== "AnonymousFunctionInstance"
+        instKind !== "AnonymousFunctionInstance" &&
+        instKind !== "NativeFunctionInstance"
       ) {
         throw new Error(
           `${identifier.value} is a ${funcInstance.kind}, not a function`

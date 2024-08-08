@@ -74,8 +74,11 @@ export function printableOfValue(
     }
 
     case "nil": {
-      return null;
+      return "null";
     }
+
+    case "NativeFunctionInstance":
+      return ["[native function]"];
 
     default:
       throw exhaustive(kind);

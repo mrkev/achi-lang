@@ -1,5 +1,7 @@
 import { LangType } from "../../parser/parser";
+import { Context } from "../Context";
 import { NamedRecordKlass } from "./runtime.namedrecords";
+import { System } from "./System";
 
 export interface ValueI {
   kind: string;
@@ -17,7 +19,8 @@ export type ValueType = {
     | ValueType["NamedRecordKlass"]
     | ValueType["NamedRecordDefinitionGroupInstance"]
     | ValueType["MatchFunctionInstance"]
-    | ValueType["AnonymousFunctionInstance"];
+    | ValueType["AnonymousFunctionInstance"]
+    | ValueType["NativeFunctionInstance"];
 
   /*
    * Primitives
@@ -85,6 +88,16 @@ export type ValueType = {
   AnonymousFunctionInstance: Readonly<{
     kind: "AnonymousFunctionInstance";
     ast: LangType["AnonymousFunctionLiteral"];
+  }>;
+
+  // log, memGet, memSet
+  NativeFunctionInstance: Readonly<{
+    kind: "NativeFunctionInstance";
+    func: (
+      argument: ValueType["Value"],
+      context: Context,
+      system: System
+    ) => ValueType["Value"];
   }>;
 };
 
@@ -155,6 +168,12 @@ export function anonymousFunctionInstance(
   literal: LangType["AnonymousFunctionLiteral"]
 ): ValueType["AnonymousFunctionInstance"] {
   return { kind: "AnonymousFunctionInstance", ast: literal };
+}
+
+export function nativeFunction(
+  func: ValueType["NativeFunctionInstance"]["func"]
+): ValueType["NativeFunctionInstance"] {
+  return { kind: "NativeFunctionInstance", func };
 }
 
 export function valueOfJavascriptValue(x: unknown) {

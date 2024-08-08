@@ -1,5 +1,5 @@
 import { exhaustive } from "../../nullthrows";
-import { LangType } from "../../parser/parser";
+import { Lang, LangType } from "../../parser/parser";
 import { BinaryTypeOperation } from "../../parser/parser.type";
 import { stringOfAst } from "../stringOfValue";
 
@@ -125,4 +125,8 @@ export function stringOfRuntimeType(type: RuntimeType["RuntimeType"]) {
     case "RecordDefinition":
       return stringOfAst(type.src);
   }
+}
+
+export function runtimeTypeOf(str: string): RuntimeType["RuntimeType"] {
+  return runtimeTypeOfTypeExpression(Lang.TypeExpression.tryParse(str));
 }

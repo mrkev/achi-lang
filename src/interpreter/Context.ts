@@ -4,7 +4,6 @@ import { LangType } from "../parser/parser";
 import { InterpreterError } from "./interpreterErrors";
 import { NamedRecordKlass } from "./runtime/runtime.namedrecords";
 import { ValueType } from "./runtime/value";
-import { printableOfValue } from "./stringOfValue";
 
 // Node => Type
 // string => Value
@@ -18,19 +17,21 @@ type RuntimeTypeStructures =
  * Context handles variable/ scoping, stack frames (TODO), etc
  */
 export class Context {
-  private constructor() {}
+  private constructor(
+    // Identifier "string" => Value
+    // Operates at a block level
+    readonly valueScope: Scope<string, ValueType["Value"]>
+  ) {}
   static create() {
-    return new Context();
+    return new Context(new Scope());
   }
 
   // Currently unused
   readonly stack: Array<
-    ValueType["AnonymousFunctionInstance"] | ValueType["MatchFunctionInstance"]
+    | ValueType["AnonymousFunctionInstance"]
+    | ValueType["MatchFunctionInstance"]
+    | ValueType["NativeFunctionInstance"] // does it make sense to have native functions in the stack?
   > = [];
-
-  // Identifier "string" => Value
-  // Operates at a block level
-  readonly valueScope: Scope<string, ValueType["Value"]> = new Scope();
 
   // string -> OGIdentifier
   // OGIdentifier -> value
@@ -92,8 +93,8 @@ export class Scope<K extends string, V> {
   // a sope before we try to define variables
   readonly _stack: Map<K, V>[] = [];
 
-  push() {
-    this._stack.push(new Map());
+  push(map: Map<K, V> = new Map()) {
+    this._stack.push(map);
   }
 
   pop() {
