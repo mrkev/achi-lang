@@ -52,12 +52,10 @@ export const LangDef_Function = sublang<LangType, LangType_Function>({
       Parsimmon.seqMap(
         Parsimmon.index,
         r.RecordDefinition,
-        r.__,
-        Parsimmon.string("=>"),
-        r.__,
+        Parsimmon.string("=>").wrap(r.__, r.__),
         r.Block,
         Parsimmon.index,
-        (start, argument, _1, _2, _3, block, end) => {
+        (start, argument, _1, block, end) => {
           return {
             kind: "AnonymousFunctionLiteral",
             argument,

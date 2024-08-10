@@ -26,7 +26,8 @@ export type LangType = LangType_BinOp &
     // Card.Number
     NestedTypeIdentifier: Node<{
       kind: "NestedTypeIdentifier";
-      path: Array<LangType["TypeIdentifier"]>;
+      left: LangType["TypeIdentifier"] | LangType["NestedTypeIdentifier"];
+      right: LangType["TypeIdentifier"];
     }>;
 
     // return 3
@@ -272,14 +273,18 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // TODO: test
   NestedTypeIdentifier: (r) => {
-    return withAt(
-      Parsimmon.sepBy1(r.TypeIdentifier, Parsimmon.string(".")).map((path) => {
-        return {
-          kind: "NestedTypeIdentifier",
-          path,
-        };
-      })
-    );
+    return Parsimmon.alt(
+      r.NestedTypeIdentifier,
+    )
+    
+    // return withAt(
+    //   Parsimmon.sepBy1(r.TypeIdentifier, Parsimmon.string(".")).map((path) => {
+    //     return {
+    //       kind: "NestedTypeIdentifier",
+    //       path,
+    //     };
+    //   })
+    // );
   },
 
   // card, point, doThisOrThat
