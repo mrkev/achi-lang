@@ -1,7 +1,7 @@
 import * as ts from "typescript";
 import { LangType } from "../parser/parser";
-import { compileExpression } from "./compileExpression";
-import { compileTypeExpression } from "./compileTypeExpression";
+import { compileStatement } from "./compileStatement";
+import { exhaustive } from "../nullthrows";
 
 export function generateEmptyExports() {
   return ts.factory.createExportDeclaration(
@@ -40,113 +40,20 @@ export function compileProgram(
   return resultStatements;
 }
 
-export function compileStatement(
-  statement: LangType["Statement"]
-): ts.Statement {
-  switch (statement.kind) {
-    /**
-     * const x = ...
-     */
-    case "ConstantDefinition": {
-      const variableDecl = ts.factory.createVariableDeclaration(
-        statement.identifier.value,
-        undefined,
-        undefined, // todo type
-        compileExpression(statement.expression)
-      );
-
-      return ts.factory.createVariableStatement(
-        undefined,
-        ts.factory.createVariableDeclarationList(
-          [variableDecl],
-          ts.NodeFlags.Const
-        )
-      );
+export function compileBlock(
+  ast: LangType["Block"] | LangType["StatementList"]
+) {
+  switch (ast.kind) {
+    case "Block":
+    case "StatementList": {
+      const statements = ast.statements.map((statement) => {
+        return compileStatement(statement);
+      });
+      return ts.factory.createBlock(statements, true);
     }
-
-    // TODO: add constructor to initialize props
-    // class Point(x: number, y: number) => class Point { x: number; y: number}
-    case "NamedRecordDefinitionStatement": {
-      const {
-        identifier,
-        record: { definitions },
-      } = statement.namedRecordDefinition;
-
-      const classMembers = [];
-      const constructorTypeLiteralParams = [];
-      const constructorStatements = [];
-      for (const defn of definitions) {
-        const propName = defn.identifier.value;
-        const propType = compileTypeExpression(defn.typeTag.typeExpression);
-
-        // class { <<x: number;>> }
-        classMembers.push(
-          ts.factory.createPropertyDeclaration(
-            [],
-            defn.identifier.value,
-            undefined,
-            propType,
-            undefined
-          )
-        );
-
-        // constructor( <<x: number,>> )
-        constructorTypeLiteralParams.push(
-          ts.factory.createPropertySignature(
-            undefined,
-            propName,
-            undefined,
-            propType
-          )
-        );
-
-        // this.x = x
-        constructorStatements.push(
-          ts.factory.createExpressionStatement(
-            ts.factory.createBinaryExpression(
-              ts.factory.createPropertyAccessExpression(
-                ts.factory.createThis(),
-                propName
-              ),
-              ts.SyntaxKind.EqualsToken,
-              ts.factory.createPropertyAccessExpression(
-                ts.factory.createIdentifier("props"),
-                ts.factory.createIdentifier(propName)
-              )
-            )
-          )
-        );
-      }
-
-      // props: {x: number}
-      const constructorParam = ts.factory.createParameterDeclaration(
-        undefined,
-        undefined,
-        "props",
-        undefined,
-        ts.factory.createTypeLiteralNode(constructorTypeLiteralParams),
-        undefined
-      );
-
-      const constructorDeclaration = ts.factory.createConstructorDeclaration(
-        undefined,
-        [constructorParam],
-        ts.factory.createBlock(constructorStatements, true)
-      );
-      classMembers.push(constructorDeclaration);
-
-      const classDeclaration = ts.factory.createClassDeclaration(
-        undefined,
-        ts.factory.createIdentifier(identifier.value),
-        undefined,
-        undefined,
-        classMembers
-      );
-      return classDeclaration;
-    }
+    default:
+      throw exhaustive(ast);
   }
-
-  throw new Error("NOT IMPLEMENTED");
 }
 
 export function printTSStatements(tsStatements: ts.Statement[]): string {

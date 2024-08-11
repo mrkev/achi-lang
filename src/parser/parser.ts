@@ -219,7 +219,23 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   // /* ... */
   blockComment: () => {
-    return Parsimmon.regex(/\/\*[\s\S]*\*\//).desc("block comment");
+    return Parsimmon.string("/*")
+      .then(Parsimmon.any)
+      .chain(function (_start) {
+        const end = "*/";
+        // takes until 2-char sequence of */
+        let seq = "/*";
+        return (
+          Parsimmon.takeWhile(function (c) {
+            seq = seq[1] + c;
+            return seq !== end;
+          })
+            // skip the "/" of "*/" (last char)
+            .skip(Parsimmon.string("/"))
+        );
+      });
+
+    // return Parsimmon.regex(/\/\*[\s\S]*\*\//).desc("block comment");
   },
 
   ////////////////////////////////////////////////////////////// Expressions ///

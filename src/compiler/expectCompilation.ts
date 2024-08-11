@@ -1,11 +1,8 @@
 import { nullthrows } from "../nullthrows";
 import { Lang } from "../parser/parser";
 import { compileExpression } from "./compileExpression";
-import {
-  compileStatement,
-  generateEmptyExports,
-  printTSStatements,
-} from "./compiler";
+import { generateEmptyExports, printTSStatements } from "./compiler";
+import { compileStatement } from "./compileStatement";
 import { typecheck } from "./typecheck";
 import * as ts from "typescript";
 
