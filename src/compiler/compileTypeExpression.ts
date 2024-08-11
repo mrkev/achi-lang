@@ -1,6 +1,6 @@
 import * as ts from "typescript";
-import { LangType } from "../parser/parser";
 import { exhaustive } from "../nullthrows";
+import { LangType } from "../parser/parser";
 
 export function compileTypeExpression(
   texpr: LangType["TypeExpression"]
@@ -28,8 +28,20 @@ export function compileTypeExpression(
     case "BinaryTypeOperation": {
       return compileBinaryTypeOperation(texpr);
     }
+    case "RecordDefinition": {
+      const members = texpr.definitions.map((defn) => {
+        const name = ts.factory.createIdentifier(defn.identifier.value);
+        const typeNode = compileTypeExpression(defn.typeTag.typeExpression);
+        return ts.factory.createPropertySignature(
+          undefined,
+          name,
+          undefined,
+          typeNode
+        );
+      });
+      return ts.factory.createTypeLiteralNode(members);
+    }
     case "PrefixUnaryTypeOperation":
-    case "RecordDefinition":
       throw new Error("Unimplemented");
 
     default:

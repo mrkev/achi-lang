@@ -24,3 +24,8 @@ test("compiler.TypeExpression.StringLiteral", async () => {
   const node = Lang.TypeExpression.tryParse('"foo"');
   expect(compileTypeExpression(node)).toMatchSnapshot();
 });
+
+test("compiler.TypeExpression.RecordDefinition", async () => {
+  const node = Lang.TypeExpression.tryParse('(foo: number, bar: "x" | "y")');
+  expect(compileTypeExpression(node)).toMatchSnapshot();
+});
