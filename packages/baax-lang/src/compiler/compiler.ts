@@ -2,6 +2,7 @@ import * as ts from "typescript";
 import { LangType } from "../parser/parser";
 import { compileStatement } from "./compileStatement";
 import { exhaustive } from "../nullthrows";
+import { expr } from "./compileExpression";
 
 export function generateEmptyExports() {
   return ts.factory.createExportDeclaration(
@@ -18,20 +19,36 @@ export function compileProgram(
 ): ts.Statement[] | Error {
   const resultStatements = [];
   for (const statement of ast.statements) {
-    if (
-      statement.kind === "NamedRecordDefinitionStatement" ||
-      statement.kind === "ConstantDefinition"
-    ) {
-      try {
-        const tsStatement = compileStatement(statement);
-        resultStatements.push(tsStatement);
-      } catch (e) {
-        if (e instanceof Error) {
-          return e;
-        } else {
-          return new Error(String(e));
+    switch (statement.kind) {
+      case "ImportStatement":
+        {
+          const clause = ts.factory.createImportClause(
+            false,
+            expr.identifier(statement.identifier),
+            undefined
+          );
+
+          const importStatement = ts.factory.createImportDeclaration(
+            undefined,
+            clause,
+            expr.string(statement.src),
+            undefined
+          );
+          resultStatements.push(importStatement);
         }
-      }
+        break;
+      case "NamedRecordDefinitionStatement":
+      case "ConstantDefinition":
+        try {
+          const tsStatement = compileStatement(statement);
+          resultStatements.push(tsStatement);
+        } catch (e) {
+          if (e instanceof Error) {
+            return e;
+          } else {
+            return new Error(String(e));
+          }
+        }
     }
   }
 

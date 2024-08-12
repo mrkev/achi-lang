@@ -25,20 +25,20 @@ export function printableOfValue(
     }
 
     case "NamedRecordInstance": {
-      let str = value.konstructor.classname + " {";
+      let str = value.konstructor.classname + " (";
       const entries = [...value.recordLiteral.props.entries()];
       if (entries.length > 0) {
         str += "\n";
       }
       for (const [key, val] of entries) {
         const typeExpression = value.konstructor.valueSpec.get(key);
-        str += `  ${key}: ${stringOfValue(val)} (${
+        str += `  ${key}: ${stringOfValue(val)} <${
           typeExpression == null
             ? "<not found>"
             : stringOfRuntimeType(typeExpression)
-        })\n`;
+        }>\n`;
       }
-      str += "}";
+      str += ")";
       return str;
     }
 

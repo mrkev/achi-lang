@@ -116,7 +116,7 @@ export function runtimeRecordDefinitionType(
   };
 }
 
-export function stringOfRuntimeType(type: RuntimeType["RuntimeType"]) {
+export function stringOfRuntimeType(type: RuntimeType["RuntimeType"]): string {
   switch (type.kind) {
     case "IdentifierType":
       return type.value;
@@ -124,6 +124,10 @@ export function stringOfRuntimeType(type: RuntimeType["RuntimeType"]) {
       return type.value;
     case "RecordDefinition":
       return stringOfAst(type.src);
+    case "UnionType":
+      return type.values.map((t) => stringOfRuntimeType(t)).join(" | ");
+    default:
+      throw exhaustive(type);
   }
 }
 

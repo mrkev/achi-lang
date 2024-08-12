@@ -2,6 +2,18 @@ import { LangType } from "../parser/parser";
 import * as ts from "typescript";
 import { exhaustive } from "../nullthrows";
 
+export const expr = {
+  string: (str: LangType["StringLiteral"]) =>
+    ts.factory.createStringLiteral(str.value, false),
+
+  identifier: (
+    id:
+      | LangType["ValueIdentifier"]
+      | LangType["TypeIdentifier"]
+      | LangType["AnyIdentifier"]
+  ) => ts.factory.createIdentifier(id.value),
+};
+
 export function compileExpression(
   expression: LangType["Expression"]
 ): ts.Expression {
