@@ -2,7 +2,7 @@ import { EditorProps } from "@monaco-editor/react";
 import * as monaco from "monaco-editor";
 import { editor } from "monaco-editor";
 import { useEffect } from "react";
-import { registerLangForMonaco } from "../playground/registerLangForMonaco";
+import { registerLangForMonaco } from "./registerLangForMonaco";
 import { defaultEditorOptions } from "./App";
 import { useEditor } from "./useEditor";
 

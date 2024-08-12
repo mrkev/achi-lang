@@ -16,10 +16,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "packages/baax-lang/src",
-    "packages/site/src/main.tsx",
-    "packages/site/src/vite-env.d.ts"
-  ],
+  "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

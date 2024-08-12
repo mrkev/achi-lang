@@ -1,4 +1,4 @@
-import { LangType } from "../parser/parser";
+import { LangType } from "../../../baax-lang/src/parser/parser";
 import { COMPACT_AST } from "./App";
 
 const replacer = (key: string, value: any) => {

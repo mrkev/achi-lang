@@ -9,13 +9,19 @@ import * as monaco from "monaco-editor";
 import { editor } from "monaco-editor";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { compileProgram, printTSStatements } from "../compiler/compiler";
-import { Context } from "../interpreter/Context";
-import { interpret } from "../interpreter/interpreter";
-import { FixmeError, ScriptError } from "../interpreter/interpreterErrors";
-import { System } from "../interpreter/runtime/System";
-import { nullthrows } from "../nullthrows";
-import { tryParse } from "../parser/parser";
+import {
+  compileProgram,
+  printTSStatements,
+} from "../../../baax-lang/src/compiler/compiler";
+import { Context } from "../../../baax-lang/src/interpreter/Context";
+import { interpret } from "../../../baax-lang/src/interpreter/interpreter";
+import {
+  FixmeError,
+  ScriptError,
+} from "../../../baax-lang/src/interpreter/interpreterErrors";
+import { System } from "../../../baax-lang/src/interpreter/runtime/System";
+import { nullthrows } from "../../../baax-lang/src/nullthrows";
+import { tryParse } from "../../../baax-lang/src/parser/parser";
 import "./App.css";
 import { DEFAULT_SCRIPT } from "./constants";
 import { getJSONObjectAtPosition } from "./getJSONObjectAtPosition";

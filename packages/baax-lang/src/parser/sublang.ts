@@ -41,7 +41,7 @@ export type ExhaustiveParsers<T extends ValueOf<LT_OnlyNodes>> = {
 
 /** Sublang helpers, to split LangType into multiple files */
 
-type SublangTypedRule<TLanguageSpec, TSubLangSpec> = {
+export type SublangTypedRule<TLanguageSpec, TSubLangSpec> = {
   [P in keyof TSubLangSpec]: (
     r: Parsimmon.TypedLanguage<TLanguageSpec>
   ) => Parsimmon.Parser<TSubLangSpec[P]>;

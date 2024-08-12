@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 
 .yarn
+docs
+
+
+.nx/cache
+.nx/workspace-data

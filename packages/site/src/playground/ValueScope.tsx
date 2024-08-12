@@ -1,6 +1,6 @@
-import { Scope } from "../interpreter/Context";
-import { ValueType } from "../interpreter/runtime/value";
-import { printableOfValue } from "../interpreter/stringOfValue";
+import { Scope } from "../../../baax-lang/src/interpreter/Context";
+import { ValueType } from "../../../baax-lang/src/interpreter/runtime/value";
+import { printableOfValue } from "../../../baax-lang/src/interpreter/stringOfValue";
 
 export function ValueScope({
   scope,
