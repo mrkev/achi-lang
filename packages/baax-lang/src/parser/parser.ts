@@ -38,6 +38,17 @@ export type LangType = LangType_BinOp &
       path: Array<LangType["TypeIdentifier"]>;
     }>;
 
+    AnyIdentifier: Node<{
+      kind: "AnyIdentifier";
+      value: string;
+    }>;
+
+    ImportStatement: Node<{
+      kind: "ImportStatement";
+      identifier: LangType["AnyIdentifier"];
+      src: LangType["StringLiteral"];
+    }>;
+
     // return 3
     ReturnStatement: Node<{
       kind: "ReturnStatement";
@@ -157,6 +168,8 @@ export type LangType = LangType_BinOp &
       typeExpression: LangType["TypeExpression"];
     }>;
 
+    TopLevelStatement: LangType["ImportStatement"] | LangType["Statement"];
+
     Statement:
       | LangType["ReturnStatement"]
       | LangType["IfStatement"]
@@ -171,7 +184,12 @@ export type LangType = LangType_BinOp &
 
     Program: Node<{
       kind: "Program";
-      statements: Array<LangType["Statement"]>;
+      statements: Array<LangType["TopLevelStatement"]>;
+    }>;
+
+    TopLevelStatementList: Node<{
+      kind: "TopLevelStatementList";
+      statements: Array<LangType["TopLevelStatement"]>;
     }>;
 
     StatementList: Node<{
@@ -315,7 +333,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   // card, point, doThisOrThat
   ValueIdentifier: () => {
     return Parsimmon.regexp(
-      /(?!string|number|boolean|object|array|true|false|null)[a-z][a-zA-Z0-9]*/
+      /(?!string|number|boolean|object|array|true|false|null|import)[a-z][a-zA-Z0-9]*/
     )
       .desc("ValueIdentifier")
       .mark()
@@ -324,6 +342,18 @@ export const Lang = Parsimmon.createLanguage<LangType>({
         value: value,
         "@": { start, end },
       }));
+  },
+
+  // Foo, foo, etc
+  AnyIdentifier: () => {
+    return withAt(
+      Parsimmon.regexp(/string|number|boolean|object|array|[a-zA-Z]*/).map(
+        (value) => ({
+          kind: "AnyIdentifier",
+          value,
+        })
+      )
+    );
   },
 
   // MemberAccess: () => {
@@ -406,7 +436,7 @@ export const Lang = Parsimmon.createLanguage<LangType>({
 
   Program: (r) => {
     return withAt(
-      r.StatementList.map(({ statements }) => {
+      r.TopLevelStatementList.map(({ statements }) => {
         return {
           kind: "Program",
           statements,
@@ -429,6 +459,39 @@ export const Lang = Parsimmon.createLanguage<LangType>({
     );
   },
 
+  // return 5; f(); class Point()
+  TopLevelStatementList: (r) => {
+    return withAt(
+      Parsimmon.sepBy(r.TopLevelStatement, r.__nl)
+        .trim(r._nl)
+        .map((statements) => {
+          return {
+            kind: "TopLevelStatementList",
+            statements,
+          };
+        })
+    );
+  },
+
+  TopLevelStatement: (r) => {
+    const tls: ExhaustiveParsers<LangType["TopLevelStatement"]> = {
+      ImportStatement: r.ImportStatement,
+
+      // keep in sync (incl order) with below
+      ReturnStatement: r.ReturnStatement,
+      IfStatement: r.IfStatement,
+      MatchFunction: r.MatchFunction,
+      MatchExpression: r.MatchExpression,
+      NamedRecordDefinitionStatement: r.NamedRecordDefinitionStatement,
+      NamedRecordDefinitionGroup: r.NamedRecordDefinitionGroup,
+      ConstantDefinition: r.ConstantDefinition,
+      FunctionCall: r.FunctionCall,
+      DEBUG_LogType: r.DEBUG_LogType,
+      DEBUG_Log: r.DEBUG_Log,
+    };
+    return Parsimmon.alt<LangType["TopLevelStatement"]>(...Object.values(tls));
+  },
+
   Statement: (r) => {
     const statementParsers: ExhaustiveParsers<LangType["Statement"]> = {
       ReturnStatement: r.ReturnStatement,
@@ -448,6 +511,28 @@ export const Lang = Parsimmon.createLanguage<LangType>({
   },
 
   ...LangDef_Match,
+
+  // import Foo from './bar';
+  ImportStatement: (r) => {
+    return withAt(
+      Parsimmon.seqMap(
+        Parsimmon.string("import"),
+        r.__,
+        r.AnyIdentifier,
+        r.__,
+        Parsimmon.string("from"),
+        r.__,
+        r.StringLiteral,
+        (_0, _1, identifier, _2, _3, _4, src) => {
+          return {
+            kind: "ImportStatement",
+            identifier,
+            src,
+          };
+        }
+      )
+    );
+  },
 
   // return 5
   ReturnStatement: (r) => {

@@ -11,13 +11,13 @@ export type ValueOrArray<T> = T | Array<ValueOrArray<T>>;
 
 export function printableOfValue(
   value: ValueType["Value"]
-): ValueOrArray<number | string | boolean | null> {
+): ValueOrArray<string> {
   const { kind } = value;
   switch (kind) {
     case "number":
     case "string":
     case "boolean": {
-      return value.value;
+      return JSON.stringify(value.value);
     }
 
     case "ListInstance": {

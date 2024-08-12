@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "npm run --workspace=site dev",
     "build": "npm run --workspace=baax-lang build && npm run --workspace=site build",
-    "preview": "vite preview",
-    "test": "jest --watch"
+    "preview": "npm run --workspace=site vite preview",
+    "test": "npm run --workspace=baax-lang test"
   },
   "devDependencies": {
     "@eslint/compat": "^1.1.1",

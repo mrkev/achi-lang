@@ -1,10 +1,16 @@
 import { ScriptError } from "../interpreterErrors";
+import { string } from "./value";
 
 /**
  * System handles I/O, other APIs
  */
 export class System {
   readonly console: Console = new Console();
+  readonly module = {
+    read(name: string) {
+      return string(name);
+    },
+  };
 }
 
 class Console {

@@ -1,7 +1,7 @@
 import { TypeMismatchError } from "../checker/checker";
 import { LangType, tryParse } from "../parser/parser";
 import { Context } from "./Context";
-import { evaluateStatements } from "./evaluateStatements";
+import { evaluateTopLevelStatements } from "./evaluateStatements";
 import { ScopeError, ScriptError } from "./interpreterErrors";
 import { globalScope } from "./runtime/runtime.globals";
 import { System } from "./runtime/System";
@@ -23,7 +23,7 @@ export function interpret(
     const ast = typeof script === "string" ? tryParse(script) : script;
     context.valueScope.push(globalScope());
     // populateGlobalScope(context);
-    evaluateStatements(ast.statements, context, system);
+    evaluateTopLevelStatements(ast, context, system);
     // NOTE: we don't pop this top-level Scope, because we want to return the
     // final context. When we implement `export const ...` we can pop it, since
     // we will have saved exported values in a separate list and it's probably
