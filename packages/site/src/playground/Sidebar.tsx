@@ -1,6 +1,7 @@
 import { editor } from "monaco-editor";
 import React from "react";
 import { Feature, SetState } from "./App";
+import { useLocalStorage } from "usehooks-ts";
 
 export function Sidebar({
   features,
@@ -19,10 +20,22 @@ export function Sidebar({
   setOpenScript: SetState<number | null>;
   scriptEditorObj: editor.IStandaloneCodeEditor | null;
 }) {
+  const [configOpen, setConfigOpen] = useLocalStorage(
+    "sidebar.config.open",
+    false
+  );
   return (
     <div style={{ height: "100%" }}>
-      <details>
-        <summary>configure</summary>
+      <details open={configOpen}>
+        <summary
+          style={{ userSelect: "none" }}
+          onClick={(e) => {
+            e.preventDefault();
+            setConfigOpen((prev) => !prev);
+          }}
+        >
+          configure
+        </summary>
         {(["compile", "interpret", "ast"] as const).map((feature, i) => {
           const isOn = features.has(feature);
           return (

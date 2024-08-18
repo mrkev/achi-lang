@@ -58,6 +58,10 @@ export default function App() {
   const [fatalScriptError, setFatalScriptError] = useState<Error | null>(null);
   const [systemError, setSystemError] = useState<Error | null>(null);
   const [finalContext, setFinalContext] = useState<Context | null>(null);
+  const [activeResultTab, setActiveResultTab] = useLocalStorage(
+    "baax.activeResultTab",
+    "tab-1"
+  );
 
   const [breakpoints, setBreakpoints] = useState<Set<number>>(() => new Set());
   const [decoratorRange, setDecoratorRange] = useState<null | monaco.Range>(
@@ -314,7 +318,8 @@ export default function App() {
 
         <Allotment.Pane>
           <VSCodePanels
-            activeid="tab-1"
+            onChange={(e) => setActiveResultTab((e as any).detail.id)}
+            activeid={activeResultTab}
             aria-label="With Active Tab"
             style={{ height: "100%" }}
           >
