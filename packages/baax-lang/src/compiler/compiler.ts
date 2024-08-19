@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { LangType } from "../parser/parser";
+import { LangType, tryParse } from "../parser/parser";
 import { compileStatement } from "./compileStatement";
 import { exhaustive } from "../nullthrows";
 import { expr } from "./compileExpression";
@@ -12,6 +12,15 @@ export function generateEmptyExports() {
     undefined,
     undefined
   );
+}
+
+export function tryCompile(script: LangType["Program"] | string): string {
+  const ast = typeof script === "string" ? tryParse(script) : script;
+  const tsAst = compileProgram(ast);
+  if (tsAst instanceof Error) {
+    throw tsAst;
+  }
+  return printTSStatements(tsAst);
 }
 
 export function compileProgram(

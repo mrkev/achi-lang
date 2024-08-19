@@ -6,6 +6,32 @@ import { ScopeError, ScriptError } from "./interpreterErrors";
 import { globalScope } from "./runtime/runtime.globals";
 import { System } from "./runtime/System";
 
+/** Script errors end in console, implementation errors are thrown */
+export function tryRun(
+  script: string | LangType["Program"],
+  system: System = new System(),
+  context: Context = Context.create()
+): { system: System; context: Context } {
+  try {
+    const ast = typeof script === "string" ? tryParse(script) : script;
+    context.valueScope.push(globalScope());
+    evaluateTopLevelStatements(ast, context, system);
+    return { system, context };
+  } catch (e) {
+    if (e instanceof ScopeError) {
+      if (typeof script === "string") {
+        const nice = niceError(script, e);
+        system.console.log(nice);
+      }
+    } else if (e instanceof ScriptError) {
+      system.console.fail(e);
+    } else {
+      throw e;
+    }
+  }
+  return { system, context };
+}
+
 // // Importing and exporting makes this easier, can define things in the lang itself
 // function populateGlobalScope(context: Context) {
 //   context.valueScope.define('log', )

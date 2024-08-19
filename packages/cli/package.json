@@ -1,0 +1,23 @@
+{
+  "name": "baax",
+  "version": "0.0.0",
+  "bin": {
+    "baax": "baax.ts",
+    "bx": "baax.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@commander-js/extra-typings": "^12.1.0",
+    "@types/node": "^22.4.0",
+    "commander": "^12.1.0",
+    "fb-watchman": "^2.0.2"
+  },
+  "devDependencies": {
+    "jest-haste-map": "^29.7.0"
+  }
+}
