@@ -1,13 +1,39 @@
 import HasteMap from "jest-haste-map";
 import os from "os";
+import path from "path";
 
 type Config = {
   project: string;
 };
 
-function watch({ project: root }: Config) {}
+export async function watchFile(file: string, onChange: () => void) {
+  const dirname = path.dirname(file);
+  const map = await HasteMap.create({
+    id: "foobar", //Used for caching.
+    extensions: ["bx"], // Tells jest-haste-map to only crawl .js files.
+    maxWorkers: os.availableParallelism(), //Parallelizes across all available CPUs.
+    platforms: [], // This is only used for React Native, you can leave it empty.
+    rootDir: dirname, //The project root.
+    roots: [dirname], // Can be used to only search a subset of files within `rootDir`
+    retainAllFiles: true,
+    useWatchman: true,
+    watch: true,
+  });
 
-main().catch(console.error);
+  console.log("dirname hi", dirname);
+
+  map.on("change", (e) => {
+    console.log("event", e);
+    onChange();
+  });
+
+  const { hasteFS } = await map.build();
+  const files = hasteFS.getAllFiles();
+  console.log(files);
+  console.log("now watchig.");
+}
+
+// main().catch(console.error);
 async function main() {
   const root = __dirname;
   const map = await HasteMap.create({
